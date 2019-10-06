@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++.exe build active2 file",
+            "command": "C:\\MinGW\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "${workspaceRoot}\\main.cpp",
+                "${workspaceRoot}\\Framework\\Map\\FloorMap.cpp",
+                "${workspaceRoot}\\Framework\\Character\\Character.cpp",
+                "${workspaceRoot}\\Framework\\UserInterface\\BaseUI.cpp",
+                "${workspaceRoot}\\Framework\\Render\\CLI\\Renderer_CLI.cpp",
+                "${workspaceRoot}\\Framework\\Input\\InputCtrl.cpp",
+                "${workspaceRoot}\\Source\\GameMain.cpp",                
+                "-o",
+                "${workspaceRoot}\\EscapeLab.exe"
+            ],
+            "options": {
+                "cwd": "C:\\MinGW\\bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "g++.exe build active file",
+            "command": "C:\\MinGW\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "${workspaceRoot}\\main.cpp",
+                "${workspaceRoot}\\Framework\\Map\\FloorMap.cpp",
+                "${workspaceRoot}\\Framework\\Character\\Character.cpp",
+                "${workspaceRoot}\\Framework\\UserInterface\\BaseUI.cpp",
+                "${workspaceRoot}\\Framework\\Render\\CLI\\Renderer_CLI.cpp",
+                "${workspaceRoot}\\Source\\GameMain.cpp",    
+                "-o",
+                "${workspaceRoot}\\Debug.exe"
+            ],
+            "options": {
+                "cwd": "C:\\MinGW\\bin"
+            }
+        }
+    ]
+}
