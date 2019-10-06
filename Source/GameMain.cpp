@@ -15,12 +15,16 @@ GameMain::~GameMain(){
 bool GameMain::Initialize(){
     renderer = new Renderer_CLI();
     sampleMap = new FloorMap();
-    player = new Character();
+    player = new Player("Lavumi");
     inputCtrl = new InputController();
 
+    DataController::getInstance()->setCharacter(player);
+
+    player->Initialize();
     renderer->Initialize();
-    renderer->setPlayerData(player);
     renderer->inputMapData(sampleMap);
+
+
 }
 
 bool GameMain::Update(){

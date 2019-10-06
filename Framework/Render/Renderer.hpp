@@ -10,7 +10,6 @@ class Renderer{
         virtual bool ClearScreen() = 0;
         virtual bool inputMapData(void* mapData ) = 0;
         virtual bool Render( ) = 0;
-        virtual bool setPlayerData(void* character) = 0;
 
 };
 

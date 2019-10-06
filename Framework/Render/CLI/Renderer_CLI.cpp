@@ -8,33 +8,7 @@ Renderer_CLI::Renderer_CLI(){
 
     uiStartPos = MaxMapWidth + 1;
 
-    ui = new BaseUI();
-
-    ui->InitStringData("Name");
-    ui->InitPercentData( "HP" );
-    ui->InitPercentData("MP");
-    ui->InitValueData ("STR");
-    ui->InitValueData ("EVA");
-    ui->InitValueData ("DEX");
-    ui->InitValueData ("DEF");
-    ui->InitValueData ("INT");
-
-    ui->InitValueData ("GLD");
-
-    ui->SetStringData("Name", "Lavumi");
-    ui->SetPercentData( "HP" , 23, 100);
-    ui->SetPercentData("MP", 40, 80);
-
-
-    ui->SetValueData ("STR", 17);
-    ui->SetValueData ("EV ", 9);
-    ui->SetValueData ("DEX", 12);
-    ui->SetValueData ("DEF", 12);
-    ui->SetValueData ("INT", 23);
-
-    ui->SetValueData ("GLD", 993);
-
-
+    ui = DataController::getInstance();
 
 }
 
@@ -59,6 +33,24 @@ bool Renderer_CLI::Initialize(){
 }
 
 
+/*   UI 형태
+
+    Lavumi - Magician
+    HP : 100/100 ##########
+    MP :  10/ 30 ####------
+    STR : 10    | AC : 10
+    DEX : 5     | EV : 15
+    INT : 11    |    
+    Gold : 100
+
+
+
+    Rule
+    1. Single StringData -> PercentData -> Single Data 순서대로 위에서부터 나열된다
+    2. SingleData 는 2줄로 나뉘어서 표현해준다.
+
+
+*/
 bool Renderer_CLI::initUIFrame(){
     for( int i = 0;i < MaxMapWidth ; i++){ 
         for( int j = 0;j < uiStartPos ; j++){
@@ -98,9 +90,9 @@ bool Renderer_CLI::initUIFrame(){
 
     int InitUICursorPosX = uiStartPos + 2, InitUICursorPosY = 2;
     
-    auto stringUIData = ui->GetstringUIOrder();
+    auto stringUIData = ui->GetUIstringOrder();
     for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){
-        std::string value = ui->GetStringData(*iter);
+        std::string value = ui->GetStringUIData(*iter);
 
 
         moveCursor(InitUICursorPosX, InitUICursorPosY );
@@ -108,10 +100,10 @@ bool Renderer_CLI::initUIFrame(){
         InitUICursorPosY++;
     }
 
-    auto percentUIData = ui->GetpercentUIOrder(); 
+    auto percentUIData = ui->GetUIpercentOrder(); 
     for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
 
-        Vector2 value = ui->GetPercentData(*iter);
+        Vector2 value = ui->GetPercentUIData(*iter);
         int curValue = value.x;
         int maxValue = value.y;
 
@@ -150,9 +142,9 @@ bool Renderer_CLI::initUIFrame(){
         InitUICursorPosY++;
     }
 
-    auto valueUIData = ui->GetvalueUIOrder(); 
+    auto valueUIData = ui->GetUIvalueOrder(); 
     for( auto iter = valueUIData.begin();iter != valueUIData.end();iter++){
-        int value = ui->GetValueData(*iter);
+        int value = ui->GetValueUIData(*iter);
         std::string parsedData = *iter;
         
         parsedData += " : ";
@@ -162,7 +154,7 @@ bool Renderer_CLI::initUIFrame(){
         std::cout << parsedData;
         iter++;
         if( iter != valueUIData.end()){
-            int value = ui->GetValueData(*iter);
+            int value = ui->GetValueUIData(*iter);
             std::string parsedData =  *iter + " : " + std::to_string(value) ;
 
             moveCursor(InitUICursorPosX + MaxMapWidth / 2 - 2 , InitUICursorPosY );
@@ -209,7 +201,7 @@ bool Renderer_CLI::inputMapData(void* pMapData){
 }
 
 bool Renderer_CLI::drawTile(){
-    Vector2 pPos = player->GetPos();
+    Vector2 pPos = ui->GetPlayerPos();
 
     int drawStartPosX = pPos.x - MaxMapWidth / 2;
     int drawStartPosY = pPos.y - MaxMapHeight / 2;
@@ -249,11 +241,6 @@ bool Renderer_CLI::drawPlayer(){
 bool Renderer_CLI::refreshUI(){
 
     
-}
-
-bool Renderer_CLI::setPlayerData(void* character ){
-    player = (Character*)character;
-    return true;
 }
 
 char Renderer_CLI::convertToASCII(int id){

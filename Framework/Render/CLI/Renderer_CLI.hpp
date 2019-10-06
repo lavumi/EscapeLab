@@ -4,8 +4,8 @@
 
 #include "../Renderer.hpp"
 #include "../../Map/FloorMap.hpp"
-#include "../../Character/Character.hpp"
-#include "../../UserInterface/BaseUI.hpp"
+
+#include "../../UserInterface/DataController.hpp"
 #include "../../Variables.hpp"
 
 
@@ -19,7 +19,6 @@ class Renderer_CLI : public Renderer{
         bool Initialize();
         bool ClearScreen();
         bool inputMapData(void* pMapData );
-        bool setPlayerData(void* character);
         bool Render();
 
     private: 
@@ -44,8 +43,7 @@ class Renderer_CLI : public Renderer{
 
         HANDLE cliHandle;
 
-        Character* player;
-        BaseUI* ui;
+        DataController* ui;
 
 
         int* mapTileData;
