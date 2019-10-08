@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <conio.h>
+#include "conio.h"
 #include "Source/GameMain.hpp"
 
 
@@ -18,4 +18,6 @@ int main(){
         gameMain->Update();
 
     }
+    
+    system("pause");
 }
