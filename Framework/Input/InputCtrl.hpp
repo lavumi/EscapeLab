@@ -1,4 +1,8 @@
-#include <conio.h>
+#ifdef _WIN32
+    #include <conio.h>
+#else
+    #include "conio.h"
+#endif
 #include "../Character/Character.hpp"
 
 class InputController{
