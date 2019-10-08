@@ -26,4 +26,5 @@ class GameMain{
         BaseCharacter* player;
         Renderer* renderer; 
         InputController* inputCtrl;
+        DataController* dataCtrl;
 };

@@ -12,7 +12,7 @@ class DataController{
                 instance = new DataController();
             return instance;
         }
-        static bool Delete();
+        static void Delete();
 
         bool setCharacter( BaseCharacter* character);
 

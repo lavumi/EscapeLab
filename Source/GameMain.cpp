@@ -9,16 +9,21 @@ GameMain::~GameMain(){
     delete renderer;
     delete sampleMap;
     delete player;
-    delete inputCtrl;
+
+    InputController::Delete();
+    DataController::Delete();
 }
 
 bool GameMain::Initialize(){
     renderer = new Renderer_CLI();
     sampleMap = new FloorMap();
     player = new Player("Lavumi");
-    inputCtrl = new InputController();
+    inputCtrl = InputController::getInstance();
+    dataCtrl = DataController::getInstance();
 
-    DataController::getInstance()->setCharacter(player);
+
+    inputCtrl->SetPlayer( player );
+    dataCtrl->setCharacter(player);
 
     player->Initialize();
     renderer->Initialize();
@@ -30,15 +35,6 @@ bool GameMain::Initialize(){
 bool GameMain::Update(){
 
     renderer->Render();
+    inputCtrl->WairForInput();
 
-
-    int ch = inputCtrl->WairForInput();
-    if(ch == 'a')
-        player->Move(-1,0);
-    if(ch == 'd')
-        player->Move(1,0);
-    if(ch == 'w')
-        player->Move(0,-1);
-    if(ch == 's')
-        player->Move(0,1);
 }

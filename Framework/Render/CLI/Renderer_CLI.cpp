@@ -19,7 +19,6 @@ Renderer_CLI::~Renderer_CLI(){
 
 bool Renderer_CLI::Initialize(){
     system( "mode con lines=42 cols=84" );
-    //SetConsoleCP(437);
     SetConsoleOutputCP(437);
     cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
 
@@ -88,7 +87,7 @@ bool Renderer_CLI::initUIFrame(){
 
 
 
-    int InitUICursorPosX = uiStartPos + 2, InitUICursorPosY = 2;
+    int InitUICursorPosX = uiStartPos + 2, InitUICursorPosY = 1;
     
     auto stringUIData = ui->GetUIstringOrder();
     for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){

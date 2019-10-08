@@ -3,6 +3,10 @@
 
 DataController* DataController::instance = nullptr;
 
+void DataController::Delete(){
+    delete instance;
+}
+
 DataController::DataController(){
 
 }
@@ -12,6 +16,8 @@ DataController::~DataController(){
     percentUIOrder.clear();
     valueUIOrder.clear();
 }
+
+
 
 bool DataController::setCharacter( BaseCharacter* character){
     characters.push_back( character);

@@ -18,6 +18,4 @@ int main(){
         gameMain->Update();
 
     }
-    
-    system("pause");
 }
