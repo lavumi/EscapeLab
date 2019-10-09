@@ -1,8 +1,5 @@
 #pragma once
-#include <iostream>
-#include <map>
-#include "../Variables.hpp"
-#include "../Map/FloorMap.hpp"
+#include "../precompiled.hpp"
 
 class FloorMap;
 class BaseCharacter{
@@ -10,11 +7,12 @@ class BaseCharacter{
         BaseCharacter(std::string name);
         ~BaseCharacter();
 
-        virtual bool Initialize() = 0;
-        virtual bool Move(int x, int y) = 0;
 
-        virtual bool goUpstair() = 0;
-        virtual bool goDownstair() = 0;
+        bool Move(int x, int y) ;
+
+        virtual bool Initialize() = 0;
+        bool goUpstair(FloorMap* targetMap);
+        bool goDownstair(FloorMap* targetMap);
         
         Vector2 GetPos(){
             return position;

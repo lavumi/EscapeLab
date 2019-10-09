@@ -21,6 +21,8 @@ bool GameMain::Initialize(){
     inputCtrl = InputController::getInstance();
     dataCtrl = DataController::getInstance();
 
+    LogController::Initialize( renderer );
+
 
     inputCtrl->SetPlayer( player );
     dataCtrl->setCharacter(player);
@@ -28,8 +30,7 @@ bool GameMain::Initialize(){
     player->Initialize();
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
-
-
+    player->goDownstair( sampleMap );
 }
 
 bool GameMain::Update(){

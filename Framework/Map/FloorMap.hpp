@@ -10,8 +10,8 @@
  */
 enum TileType {
     T_Base ,
-    T_Obstacle,
     T_Wall ,
+    T_Obstacle,
     T_Dark_noUse
 };
 

@@ -1,13 +1,13 @@
 #pragma once
 
-static int MaxMapWidth = 40;
-static int MaxMapHeight = 40;
+const int MaxMapWidth = 40;
+const int MaxMapHeight = 40;
 
-static int MaxScreenWidth = 40;
-static int MaxScreenHeight = 40;
+const int MaxScreenWidth = 40;
+const int MaxScreenHeight = 40;
 
-static int MaxUIWidth = 40;
-static int MaxUIHeight = 40;
+const int MaxUIWidth = 40;
+const int MaxUIHeight = 40;
 
 struct Vector2 {
     int x;

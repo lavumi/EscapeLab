@@ -44,17 +44,4 @@ bool Player::Initialize(){
     ui->SetUIValueData ("GLD");
 }
 
-bool Player::Move(int x, int y){
-    position.x += x;
-    position.y += y;
-    return true;
-}
-
-bool Player::goUpstair(){
-    
-}
-
-bool Player::goDownstair(){
-
-}
 

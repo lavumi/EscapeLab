@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #ifdef _WIN32
     #include <windows.h>
@@ -9,6 +10,7 @@
 #include "../../Map/FloorMap.hpp"
 
 #include "../../UserInterface/DataController.hpp"
+#include "../../UserInterface/LogController.hpp"
 #include "../../Variables.hpp"
 
 
@@ -22,6 +24,7 @@ class Renderer_CLI : public Renderer{
         bool Initialize();
         bool ClearScreen();
         bool inputMapData(void* pMapData );
+        bool RefreshLog(std::string* logContainer ,int logStartPos );
         bool Render();
 
     private: 
@@ -38,25 +41,28 @@ class Renderer_CLI : public Renderer{
 
         int icon[5] = {
             176,  // 
-            178,  //
             219, //
+            178,  //
             112, //
             64, // 플레이어
         };
 
         HANDLE cliHandle;
 
-        DataController* ui;
 
-
-        int* mapTileData;
 
 
         std::string renderTexture;
         std::string uiTexture;
 
         int uiStartPos;
+        Vector2 logPrintStartPos;
 
         Vector2 centerPos;
 
+
+        DataController* ui;
+        int* mapTileData;
+
+        
 };

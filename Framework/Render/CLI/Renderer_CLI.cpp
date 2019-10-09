@@ -7,6 +7,7 @@ Renderer_CLI::Renderer_CLI(){
     uiTexture = "";
 
     uiStartPos = MaxMapWidth + 1;
+    logPrintStartPos = Vector2( uiStartPos + 2, MaxMapHeight / 2);
 
     ui = DataController::getInstance();
 
@@ -197,6 +198,22 @@ bool Renderer_CLI::inputMapData(void* pMapData){
     FloorMap* mapData = (FloorMap*) pMapData;
     mapTileData = (int*)(mapData->getData());
     return true;
+}
+
+bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
+
+    int maxLogShowSize = 18;
+    for( int i = logStartPos , j = 0; j < maxLogShowSize; i++, j++){
+        int textIndex = (logStartPos - j) % MaxLogContainerSize;
+        if( textIndex < 0)
+            break;
+        moveCursor( logPrintStartPos.x, logPrintStartPos.y + maxLogShowSize - j );
+        std::cout << "                               " ;
+        moveCursor( logPrintStartPos.x, logPrintStartPos.y + maxLogShowSize - j );
+        std::cout << logContainer[textIndex] ;
+        
+    }
+
 }
 
 bool Renderer_CLI::drawTile(){

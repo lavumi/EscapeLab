@@ -1,7 +1,5 @@
 #pragma once
-
-#include <stdio.h>
-//#include <windows.h>
+#include "../precompiled.hpp"
 
 class Renderer{
     public :
@@ -9,6 +7,7 @@ class Renderer{
         virtual bool Initialize() = 0;
         virtual bool ClearScreen() = 0;
         virtual bool inputMapData(void* mapData ) = 0;
+        virtual bool RefreshLog(std::string* logContainer , int logStartPos) = 0;
         virtual bool Render( ) = 0;
 
 };

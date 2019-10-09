@@ -1,3 +1,8 @@
+#include <iostream>
+#include <map>
+#include "../Variables.hpp"
+#include "../Map/FloorMap.hpp"
+#include "../UserInterface/LogController.hpp"
 #include "Character.hpp"
 
 BaseCharacter::BaseCharacter(std::string name){
@@ -8,47 +13,47 @@ BaseCharacter::~BaseCharacter(){
 
 }
 
+bool BaseCharacter::Move(int x, int y){
+
+    int targetPosX =  position.x + x;
+    int targetPosY =  position.y + y;
+
+    int targetTile = ((int*)currentMap->getData())[ targetPosX * MaxMapWidth + targetPosY];
+     LogController::PrintLog( std::to_string(targetTile & 0x01 ) );
+    if( targetTile & 0x01 ){
+        LogController::PrintLog( "Can't Move" );
+        return false;
+    }
+    else
+    {
+        position.x = targetPosX;
+        position.y = targetPosY;
+        LogController::PrintLog( "MoveTo " + std::to_string( targetPosX )  + " " + std::to_string( targetPosY ) );
+        return true;
+    }
+}
+
+
+bool BaseCharacter::goUpstair(FloorMap* targetMap){
+    currentMap = targetMap;
+}
+
+bool BaseCharacter::goDownstair(FloorMap* targetMap){
+    currentMap = targetMap;
+}
+
 
 bool BaseCharacter::setStringData(std::string dataName, std::string data){
-
     stringData.insert(std::make_pair(dataName, data));
-    // auto iter = stringData.find(dataName);
-    // if( iter == stringData.end()){
-    //     return false;
-    // }
-    // else {
-    //     //TODO 여기 메모리 릭 안나냐?
-    //     iter->second = data;
-    //     return true;
-    // }
-
 }
 
 bool BaseCharacter::setPercentData(std::string dataName, int curValue, int MaxValue){
     Vector2 data (curValue, MaxValue ); 
     percentData.insert(std::make_pair(dataName, data));
-
-
-    // auto iter = percentData.find(dataName);
-    // if( iter == percentData.end()){
-    //     return false;
-    // }
-    // else {
-    //     iter->second = data;
-    //     return true;
-    // }
 }
 
 bool BaseCharacter::setValueData(std::string dataName, int value){
     valueData.insert(std::make_pair(dataName, value));
-    // auto iter = valueData.find(dataName);
-    // if( iter == valueData.end()){
-    //     return false;
-    // }
-    // else {
-    //     iter->second = value;
-    //     return true;
-    // }
 }
 
 std::string BaseCharacter::GetStringData( std::string dataName){
