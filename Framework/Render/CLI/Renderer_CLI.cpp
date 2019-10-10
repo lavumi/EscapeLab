@@ -10,6 +10,12 @@ Renderer_CLI::Renderer_CLI(){
     logPrintStartPos = Vector2( uiStartPos + 2, MaxMapHeight / 2);
 
     ui = DataController::getInstance();
+    
+    icon[0] = 176;
+    icon[1] = 219, //
+    icon[2] = 178,  //
+    icon[3] = 112, //
+    icon[4] = 64 // 플:레이어`
 
 }
 

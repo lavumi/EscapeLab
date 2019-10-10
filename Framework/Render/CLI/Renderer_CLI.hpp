@@ -39,13 +39,7 @@ class Renderer_CLI : public Renderer{
         bool refreshUI();
         char convertToASCII( int id );
 
-        int icon[5] = {
-            176,  // 
-            219, //
-            178,  //
-            112, //
-            64, // 플레이어
-        };
+        int icon[5];
 
         HANDLE cliHandle;
 
