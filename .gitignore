@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# OS Oriented Files
+.DS_Store
