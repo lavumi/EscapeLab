@@ -1,9 +1,10 @@
+#pragma once
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
-
+ 
 /* reads from keypress, doesn't echo */
-int getch(void)
+int __getch(void)
 {
     struct termios oldattr, newattr;
     int ch;
@@ -14,10 +15,10 @@ int getch(void)
     ch = getchar();
     tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
     return ch;
-}
+};
 
 /* reads from keypress, echoes */
-int getche(void)
+int __getche(void)
 {
     struct termios oldattr, newattr;
     int ch;
