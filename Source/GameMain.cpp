@@ -1,3 +1,12 @@
+#include "../Framework/Map/FloorMap.hpp"
+
+
+#include "../Framework/Render/Renderer.hpp"
+#include "../Framework/Render/CLI/Renderer_CLI.hpp"
+#include "../Framework/Input/InputCtrl.hpp"
+#include "../Framework/UserInterface/LogController.hpp"
+
+#include "../Source/Character/Player.hpp"
 #include "GameMain.hpp"
 
 

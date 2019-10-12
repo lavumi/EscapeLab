@@ -1,21 +1,7 @@
 #pragma once
-#include <iostream>
-#ifdef _WIN32
-    #include <windows.h>
-#else
-    #include <ncurses.h>
-#endif
+#include "../../precompiled.hpp"
 
-#include <vector>
-
-#include "../Renderer.hpp"
-#include "../../Map/FloorMap.hpp"
-
-#include "../../UserInterface/DataController.hpp"
-#include "../../UserInterface/LogController.hpp"
-#include "../../Variables.hpp"
-
-
+class DataController;
 class Renderer_CLI : public Renderer{
 
     public:

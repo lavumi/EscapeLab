@@ -1,4 +1,4 @@
-
+#include "../Character/Character.hpp"
 #include "DataController.hpp"
 
 DataController* DataController::instance = nullptr;

@@ -1,3 +1,10 @@
+
+#include "../Renderer.hpp"
+#include "../../Map/FloorMap.hpp"
+
+#include "../../UserInterface/DataController.hpp"
+#include "../../UserInterface/LogController.hpp"
+#include "../../Variables.hpp"
 #include "Renderer_CLI.hpp"
 
 
@@ -12,10 +19,10 @@ Renderer_CLI::Renderer_CLI(){
     ui = DataController::getInstance();
     
     icon[0] = 176;
-    icon[1] = 219, //
-    icon[2] = 178,  //
-    icon[3] = 112, //
-    icon[4] = 64 // 플:레이어`
+    icon[1] = 219; //
+    icon[2] = 178;  //
+    icon[3] = 112; //
+    icon[4] = 64; // 플:레이어`
 
 }
 

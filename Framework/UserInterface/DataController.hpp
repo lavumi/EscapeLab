@@ -1,10 +1,7 @@
 #pragma once
-#include <iostream>
-#include <vector>
 
-#include "../Variables.hpp"
-#include "../Character/Character.hpp"
 
+class BaseCharacter;
 class DataController{
     public :
         static DataController* getInstance(){

@@ -19,7 +19,6 @@ bool BaseCharacter::Move(int x, int y){
     int targetPosY =  position.y + y;
 
     int targetTile = ((int*)currentMap->getData())[ targetPosX * MaxMapWidth + targetPosY];
-     LogController::PrintLog( std::to_string(targetTile & 0x01 ) );
     if( targetTile & 0x01 ){
         LogController::PrintLog( "Can't Move" );
         return false;
