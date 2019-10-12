@@ -4,9 +4,10 @@
 FloorMap::FloorMap(){
     tileType = new TileType[MaxMapWidth * MaxMapHeight];
 
-    for( int i = 0;i < MaxMapWidth ; i++){  
-        for( int j = 0;j < MaxMapHeight ; j++){
-            if( i == 0 || j == 0 || i == MaxMapWidth - 1 || j == MaxMapHeight - 1){
+    int a = 0;
+    for( int i = 0;i < MaxMapHeight ; i++){  
+        for( int j = 0;j < MaxMapWidth ; j++){
+            if( i == 0 || j == 0 || i == MaxMapHeight - 1 || j == MaxMapWidth - 1){
                 tileType[i * MaxMapWidth + j] = T_Wall;
             }
             else{

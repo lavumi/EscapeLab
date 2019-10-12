@@ -9,12 +9,12 @@
 
 
 Renderer_CLI::Renderer_CLI(){
-    centerPos = Vector2( MaxMapWidth / 2,  MaxMapHeight / 2);
+    centerPos = Vector2( MaxScreenWidth / 2,  MaxScreenHeight / 2);
     renderTexture = "";
     uiTexture = "";
 
-    uiStartPos = MaxMapWidth + 1;
-    logPrintStartPos = Vector2( uiStartPos + 2, MaxMapHeight / 2);
+    uiStartPos = MaxScreenWidth + 1;
+    logPrintStartPos = Vector2( uiStartPos + 2, MaxScreenHeight / 2);
 
     ui = DataController::getInstance();
     
@@ -65,27 +65,27 @@ bool Renderer_CLI::Initialize(){
 
 */
 bool Renderer_CLI::initUIFrame(){
-    for( int i = 0;i < MaxMapWidth ; i++){ 
+    for( int i = 0;i < MaxScreenWidth ; i++){ 
         for( int j = 0;j < uiStartPos ; j++){
              uiTexture += (char)255;
         } 
-        for( int j = 0;j < MaxMapHeight ; j++){
+        for( int j = 0;j < MaxScreenHeight ; j++){
             if( i == 0 && j == 0){
                uiTexture += (char)201;
             }
-            else if( i == 0 && j == MaxMapHeight - 1){
+            else if( i == 0 && j == MaxScreenHeight - 1){
                uiTexture += (char)187;
             }
-            else if( i == MaxMapWidth - 1 && j == 0 ){
+            else if( i == MaxScreenWidth - 1 && j == 0 ){
                uiTexture += (char)200;
             }
-            else if( i == MaxMapWidth - 1 && j == MaxMapHeight - 1 ){
+            else if( i == MaxScreenWidth - 1 && j == MaxScreenHeight - 1 ){
                uiTexture += (char)188;
             }
-            else if( i == 0 ||  i == MaxMapWidth - 1){
+            else if( i == 0 ||  i == MaxScreenWidth - 1){
                uiTexture += (char)205;
             }
-            else if( j == 0 ||  j == MaxMapHeight - 1){
+            else if( j == 0 ||  j == MaxScreenHeight - 1){
                uiTexture += (char)186;
             }
             else{
@@ -136,7 +136,7 @@ bool Renderer_CLI::initUIFrame(){
         parsedData += std::to_string(maxValue);;
 
 
-        int interspace = MaxMapWidth - (*iter).length() - 3 - 3 - 1 - 3 - 10 - 2 - 2;
+        int interspace = MaxScreenWidth - (*iter).length() - 3 - 3 - 1 - 3 - 10 - 2 - 2;
         for(int i = 0;i < interspace ;i ++){
             parsedData += " ";
         }
@@ -170,7 +170,7 @@ bool Renderer_CLI::initUIFrame(){
             int value = ui->GetValueUIData(*iter);
             std::string parsedData =  *iter + " : " + std::to_string(value) ;
 
-            moveCursor(InitUICursorPosX + MaxMapWidth / 2 - 2 , InitUICursorPosY );
+            moveCursor(InitUICursorPosX + MaxScreenWidth / 2 - 2 , InitUICursorPosY );
             std::cout << parsedData;
         }
         else{
@@ -232,14 +232,13 @@ bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
 bool Renderer_CLI::drawTile(){
     Vector2 pPos = ui->GetPlayerPos();
 
-    int drawStartPosX = pPos.x - MaxMapWidth / 2;
-    int drawStartPosY = pPos.y - MaxMapHeight / 2;
+    int drawStartPosX = pPos.x - MaxScreenWidth / 2;
+    int drawStartPosY = pPos.y - MaxScreenHeight / 2;
 
     renderTexture  = "";
 
-    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){  
-
-        for( int j = drawStartPosX, screenY = 0;screenY < MaxScreenWidth ; j++, screenY ++){
+    for( int i = drawStartPosY, screenY = 0 ; screenY < MaxScreenHeight; i++, screenY ++){  
+        for( int j = drawStartPosX, screenX = 0;screenX < MaxScreenWidth ; j++, screenX ++){
             if( i < 0 
                 || i >= MaxMapHeight 
                 || j < 0 
@@ -247,12 +246,11 @@ bool Renderer_CLI::drawTile(){
                 renderTexture += (char)255;
             }
             else{
-                int index = i * MaxScreenWidth + j;
+                int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index];
                 renderTexture += convertToASCII(tileId);
             }
         }               
-        
         renderTexture += (char)10;    
     }
     renderTexture += (char)0;
