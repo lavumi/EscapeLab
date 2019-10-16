@@ -25,6 +25,8 @@ Renderer_CLI::~Renderer_CLI(){
 }
 
 bool Renderer_CLI::Initialize(){
+    
+#ifdef _WIN32
     system( "mode con lines=42 cols=84" );
     SetConsoleOutputCP(437);
     cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -33,6 +35,9 @@ bool Renderer_CLI::Initialize(){
     cursor.bVisible = false;
     cursor.dwSize = 1;
     SetConsoleCursorInfo(cliHandle, &cursor );
+#else
+    initscr();
+#endif
 
     initUIFrame();
     return true;

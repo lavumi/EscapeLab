@@ -43,7 +43,13 @@ class Renderer_CLI : public Renderer{
 
         int icon[5];
 
+    
+    #ifdef _WIN32
         HANDLE cliHandle;
+    #else
+       
+    #endif
+       
 
 
 
