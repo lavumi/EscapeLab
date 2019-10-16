@@ -9,6 +9,8 @@ const int MaxScreenHeight = 40;
 const int MaxUIWidth = 40;
 const int MaxUIHeight = 40;
 
+const bool isRoundSight = false;
+
 struct Vector2 {
     int x;
     int y;
