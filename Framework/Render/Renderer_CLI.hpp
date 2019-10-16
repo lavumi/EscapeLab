@@ -31,11 +31,10 @@ class Renderer_CLI : public Renderer{
 
         int icon[5];
 
-       // HANDLE cliHandle;
-
-
-
-
+#ifndef __NCURSES_H
+        HANDLE cliHandle;
+#endif
+     
         std::string renderTexture;
         std::string uiTexture;
 

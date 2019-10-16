@@ -1,10 +1,6 @@
-#ifdef _WIN32
-    #include <conio.h>
-#else
-   // #include "../../conio.h"
-#endif
-#include "../Character/Character.hpp"
 
+
+class BaseCharacter;
 class InputController{
     public:
         static InputController* getInstance(){

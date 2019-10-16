@@ -219,8 +219,8 @@ bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
 #else
     COORD position;
 
-    position.X = pos.x;
-    position.Y = pos.y;
+    position.X = x;
+    position.Y = y;
     SetConsoleCursorPosition(cliHandle, position);
     std::cout << pString;
 #endif
@@ -308,7 +308,7 @@ bool Renderer_CLI::Render(){
 
     ClearScreen();
 
-    //drawTile();
+    drawTile();
     drawPlayer();
 
 #ifdef __NCURSES_H

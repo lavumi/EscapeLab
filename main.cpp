@@ -14,6 +14,9 @@ int main(){
        running = gameMain->Update();
     }
 
-    endwin();
+#ifdef __NCURSES_H
+    endwin(); 
+#endif
+    
     return 0;
 }
