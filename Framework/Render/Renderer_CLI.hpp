@@ -1,5 +1,5 @@
 #pragma once
-#include "../../precompiled.hpp"
+#include "../precompiled.hpp"
 
 class DataController;
 class Renderer_CLI : public Renderer{
@@ -29,7 +29,7 @@ class Renderer_CLI : public Renderer{
 
         int icon[5];
 
-        HANDLE cliHandle;
+       // HANDLE cliHandle;
 
 
 

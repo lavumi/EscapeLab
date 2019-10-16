@@ -2,8 +2,6 @@
 #include "Source/GameMain.hpp"
 
 
-bool initialize();
-
 int main(){
     GameMain* gameMain = new GameMain();
 
@@ -11,10 +9,11 @@ int main(){
 
     gameMain->Initialize();
 
-    char ch;
     while(true){
         gameMain->Update();
     }
     
     system("pause");
+
+    return 0;
 }

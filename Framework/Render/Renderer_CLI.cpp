@@ -1,10 +1,10 @@
 
-#include "../Renderer.hpp"
-#include "../../Map/FloorMap.hpp"
+#include "Renderer.hpp"
+#include "../Map/FloorMap.hpp"
 
-#include "../../UserInterface/DataController.hpp"
-#include "../../UserInterface/LogController.hpp"
-#include "../../Variables.hpp"
+#include "../UserInterface/DataController.hpp"
+#include "../UserInterface/LogController.hpp"
+#include "../Variables.hpp"
 #include "Renderer_CLI.hpp"
 
 
@@ -33,13 +33,13 @@ Renderer_CLI::~Renderer_CLI(){
 
 bool Renderer_CLI::Initialize(){
     system( "mode con lines=42 cols=84" );
-    SetConsoleOutputCP(437);
-    cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
+    // SetConsoleOutputCP(437);
+    // cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
 
-    CONSOLE_CURSOR_INFO cursor;
-    cursor.bVisible = false;
-    cursor.dwSize = 1;
-    SetConsoleCursorInfo(cliHandle, &cursor );
+    // CONSOLE_CURSOR_INFO cursor;
+    // cursor.bVisible = false;
+    // cursor.dwSize = 1;
+    // SetConsoleCursorInfo(cliHandle, &cursor );
 
     initUIFrame();
     return true;
@@ -183,21 +183,21 @@ bool Renderer_CLI::initUIFrame(){
 }
 
 bool Renderer_CLI::moveCursor(Vector2 pos ){
-    COORD position;
+    // COORD position;
 
-    position.X = pos.x;
-    position.Y = pos.y;
-    SetConsoleCursorPosition(cliHandle, position);
+    // position.X = pos.x;
+    // position.Y = pos.y;
+    // SetConsoleCursorPosition(cliHandle, position);
 
     return true;
 }
 
 bool Renderer_CLI::moveCursor( int x, int y ){
-    COORD position;
+    // COORD position;
 
-    position.X = x;
-    position.Y = y;
-    SetConsoleCursorPosition(cliHandle, position);
+    // position.X = x;
+    // position.Y = y;
+    // SetConsoleCursorPosition(cliHandle, position);
 
     return true;
 }

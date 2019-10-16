@@ -2,7 +2,7 @@
 
 
 #include "../Framework/Render/Renderer.hpp"
-#include "../Framework/Render/CLI/Renderer_CLI.hpp"
+#include "../Framework/Render/Renderer_CLI.hpp"
 #include "../Framework/Input/InputCtrl.hpp"
 #include "../Framework/UserInterface/LogController.hpp"
 

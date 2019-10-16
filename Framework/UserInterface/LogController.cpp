@@ -1,4 +1,4 @@
-#include "../Render/CLI/Renderer_CLI.hpp"
+#include "../Render/Renderer_CLI.hpp"
 #include "LogController.hpp"
     
 int LogController::current_LogCount = 0;
