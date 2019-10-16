@@ -215,7 +215,7 @@ bool Renderer_CLI::initUIFrame(){
 
 bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
 #ifdef __NCURSES_H
-        mvprintw(x,y,"%s",pString.c_str()); 
+        mvprintw(y,x,"%s",pString.c_str()); 
 #else
     COORD position;
 
@@ -307,8 +307,8 @@ bool Renderer_CLI::Render(){
     
 
     ClearScreen();
-
-    drawTile();
+   // initUIFrame();
+  //  drawTile();
     drawPlayer();
 
 #ifdef __NCURSES_H

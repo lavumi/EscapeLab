@@ -9,7 +9,7 @@ class InputController{
             return instance;
         }
         static void Delete();
-        void WairForInput();
+        bool WairForInput();
         void SetPlayer( BaseCharacter* player );
     private : 
 

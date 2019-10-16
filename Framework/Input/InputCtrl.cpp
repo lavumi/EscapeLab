@@ -1,9 +1,3 @@
-#ifdef __NCURSES_H
-    #include <ncurses.h>
-#else
-    #include <conio.h>
-#endif
-
 #include "../Character/Character.hpp"
 #include "InputCtrl.hpp"
 
@@ -26,7 +20,7 @@ void InputController::SetPlayer( BaseCharacter* player ){
     this->player = player;
 }
 
-void InputController::WairForInput(){
+bool InputController::WairForInput(){
     char ch = getch();
     if(ch == 'a')
         player->Move(-1,0);
@@ -36,4 +30,8 @@ void InputController::WairForInput(){
         player->Move(0,-1);
     if(ch == 's')
         player->Move(0,1);
+    if(ch == 'q')
+        return false;
+
+        return true;
 }

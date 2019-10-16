@@ -45,7 +45,5 @@ bool GameMain::Initialize(){
 bool GameMain::Update(){
 
     renderer->Render();
-    inputCtrl->WairForInput();
-    return true;
-
+    return inputCtrl->WairForInput();
 }
