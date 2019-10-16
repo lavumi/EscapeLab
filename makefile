@@ -1,4 +1,4 @@
-CC = g++
+CPP = g++
 
 
 SRCDIR1 = ./Framework/Render
@@ -12,16 +12,19 @@ SRCDIR8 = ./Source/Character
 
 
 
+LDFLAGS = -lncurses
+
+
 SRCS = $(foreach dir, . .. $(SRCDIR8) $(SRCDIR1) $(SRCDIR2) $(SRCDIR3) $(SRCDIR4) $(SRCDIR5) $(SRCDIR6) $(SRCDIR7), $(wildcard $(dir)/*.cpp))
 OBJS = $(SRCS:.cpp=.o)
 
 TARGET = EscapeLab
 
 all : $(TARGET)
-	$(CC) -Wall -o $(TARGET) $(notdir $(OBJS))
+	$(CPP) -Wall -o $(TARGET) $(notdir $(OBJS)) $(LDFLAGS)
 
 $(TARGET) :
-	$(CC) -std=c++11 -c  $(SRCS)
+	$(CPP) -std=c++11 -c  $(SRCS)
 
 clean : 
 	rm -f *.o

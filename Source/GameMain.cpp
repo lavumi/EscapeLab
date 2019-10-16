@@ -46,5 +46,6 @@ bool GameMain::Update(){
 
     renderer->Render();
     inputCtrl->WairForInput();
+    return false;
 
 }

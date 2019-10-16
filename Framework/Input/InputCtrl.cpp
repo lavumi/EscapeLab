@@ -21,7 +21,7 @@ void InputController::SetPlayer( BaseCharacter* player ){
 }
 
 void InputController::WairForInput(){
-    // int ch = getch();
+    char ch = getch();
     // if(ch == 'a')
     //     player->Move(-1,0);
     // if(ch == 'd')

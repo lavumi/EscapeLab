@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#else
+    #include <ncurses.h>
+#endif
 
 #include "Renderer.hpp"
 #include "../Map/FloorMap.hpp"
@@ -28,18 +32,29 @@ Renderer_CLI::Renderer_CLI(){
 
 Renderer_CLI::~Renderer_CLI(){
     delete[] mapTileData; 
- 
+#ifdef __NCURSES_H
+   
+#endif
 }
 
 bool Renderer_CLI::Initialize(){
     system( "mode con lines=42 cols=84" );
-    // SetConsoleOutputCP(437);
-    // cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
 
-    // CONSOLE_CURSOR_INFO cursor;
-    // cursor.bVisible = false;
-    // cursor.dwSize = 1;
-    // SetConsoleCursorInfo(cliHandle, &cursor );
+
+#ifdef _WIN32
+    SetConsoleOutputCP(437);
+    cliHandle = GetStdHandle( STD_OUTPUT_HANDLE );
+
+    CONSOLE_CURSOR_INFO cursor;
+    cursor.bVisible = false;
+    cursor.dwSize = 1;
+    SetConsoleCursorInfo(cliHandle, &cursor );
+#endif
+
+#ifdef __NCURSES_H
+    initscr();
+#endif
+
 
     initUIFrame();
     return true;
@@ -95,10 +110,7 @@ bool Renderer_CLI::initUIFrame(){
         uiTexture += (char)10;
     }
 
-    moveCursor(Vector2(0,0));
-    moveCursor(Vector2(0,0));
-    std::cout << uiTexture ;
-
+    printStringAt(0,0,uiTexture);  
 
 
     int InitUICursorPosX = uiStartPos + 2, InitUICursorPosY = 1;
@@ -108,8 +120,7 @@ bool Renderer_CLI::initUIFrame(){
         std::string value = ui->GetStringUIData(*iter);
 
 
-        moveCursor(InitUICursorPosX, InitUICursorPosY );
-        std::cout << value;
+        printStringAt(InitUICursorPosX,InitUICursorPosY,value);  
         InitUICursorPosY++;
     }
 
@@ -150,8 +161,8 @@ bool Renderer_CLI::initUIFrame(){
                 parsedData += "-";
             }
         }
-        moveCursor(InitUICursorPosX, InitUICursorPosY );
-        std::cout << parsedData;
+
+        printStringAt(InitUICursorPosX,InitUICursorPosY,parsedData);  
         InitUICursorPosY++;
     }
 
@@ -163,15 +174,12 @@ bool Renderer_CLI::initUIFrame(){
         parsedData += " : ";
         parsedData += std::to_string(value);
 
-        moveCursor(InitUICursorPosX, InitUICursorPosY );
-        std::cout << parsedData;
+        printStringAt(InitUICursorPosX,InitUICursorPosY,parsedData);  
         iter++;
         if( iter != valueUIData.end()){
             int value = ui->GetValueUIData(*iter);
             std::string parsedData =  *iter + " : " + std::to_string(value) ;
-
-            moveCursor(InitUICursorPosX + MaxMapWidth / 2 - 2 , InitUICursorPosY );
-            std::cout << parsedData;
+            printStringAt(InitUICursorPosX + MaxMapWidth / 2 - 2 ,InitUICursorPosY,parsedData);  
         }
         else{
             break;
@@ -182,24 +190,42 @@ bool Renderer_CLI::initUIFrame(){
 
 }
 
-bool Renderer_CLI::moveCursor(Vector2 pos ){
-    // COORD position;
+// bool Renderer_CLI::moveCursor(Vector2 pos ){
+//     // COORD position;
 
-    // position.X = pos.x;
-    // position.Y = pos.y;
-    // SetConsoleCursorPosition(cliHandle, position);
+//     // position.X = pos.x;
+//     // position.Y = pos.y;
+//     // SetConsoleCursorPosition(cliHandle, position);
 
-    return true;
-}
+//     move(pos.x, pos.y);
+//     return true;
+// }
 
-bool Renderer_CLI::moveCursor( int x, int y ){
-    // COORD position;
+// bool Renderer_CLI::moveCursor( int x, int y ){
+//     // COORD position;
 
-    // position.X = x;
-    // position.Y = y;
-    // SetConsoleCursorPosition(cliHandle, position);
+//     // position.X = x;
+//     // position.Y = y;
+//     // SetConsoleCursorPosition(cliHandle, position);
 
-    return true;
+//     move(x, y);
+//     return true;
+// }
+
+
+bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
+#ifdef __NCURSES_H
+        mvprintw(x,y,"%s",pString.c_str()); 
+#else
+    COORD position;
+
+    position.X = pos.x;
+    position.Y = pos.y;
+    SetConsoleCursorPosition(cliHandle, position);
+    std::cout << pString;
+#endif
+
+ 
 }
 
 bool Renderer_CLI::ClearScreen(){
@@ -220,10 +246,10 @@ bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
         int textIndex = (logStartPos - j) % MaxLogContainerSize;
         if( textIndex < 0)
             break;
-        moveCursor( logPrintStartPos.x, logPrintStartPos.y + maxLogShowSize - j );
-        std::cout << "                               " ;
-        moveCursor( logPrintStartPos.x, logPrintStartPos.y + maxLogShowSize - j );
-        std::cout << logContainer[textIndex] ;
+
+        printStringAt(logPrintStartPos.x,logPrintStartPos.y,"                               ");  
+        printStringAt(logPrintStartPos.x,logPrintStartPos.y+ maxLogShowSize - j,logContainer[textIndex]);  
+        
         
     }
 
@@ -257,13 +283,13 @@ bool Renderer_CLI::drawTile(){
     }
     renderTexture += (char)0;
 
-    std::cout << renderTexture;
+    printStringAt(0,0,renderTexture);  
+       
     return true;
 }
 
 bool Renderer_CLI::drawPlayer(){
-    moveCursor(centerPos);
-    std::cout << "@";
+    printStringAt(centerPos.x,centerPos.y,"@");  
     return true;
 }
 
@@ -278,13 +304,14 @@ char Renderer_CLI::convertToASCII(int id){
 
 int test = 0;
 bool Renderer_CLI::Render(){
+    
+
     ClearScreen();
 
-
-    moveCursor(0,0);
-    drawTile();
+    //drawTile();
     drawPlayer();
 
-
-    moveCursor(0,MaxMapHeight);
+#ifdef __NCURSES_H
+    refresh();
+#endif
 }

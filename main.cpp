@@ -9,11 +9,11 @@ int main(){
 
     gameMain->Initialize();
 
-    while(true){
-        gameMain->Update();
+    bool running = true;
+    while(running){
+       running = gameMain->Update();
     }
-    
-    system("pause");
 
+    endwin();
     return 0;
 }

@@ -17,8 +17,10 @@ class Renderer_CLI : public Renderer{
 
     private: 
 
-        bool moveCursor( Vector2 pos);
-        bool moveCursor( int x, int y);
+        // bool moveCursor( Vector2 pos);
+        // bool moveCursor( int x, int y);
+
+        bool printStringAt( int x, int y, std::string pString );
 
         bool initUIFrame();
 
