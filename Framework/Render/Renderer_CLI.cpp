@@ -81,6 +81,8 @@ bool Renderer_CLI::Initialize(){
 
 #ifdef __NCURSES_H
     initscr();
+    curs_set(0);
+    noecho();
 #endif
 
 
