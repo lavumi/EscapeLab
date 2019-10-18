@@ -380,7 +380,7 @@ bool Renderer_CLI::Render(){
     drawTile();
     //initUIFrame();
     drawPlayer();
-a
+
 #ifdef __NCURSES_H
     refresh();
 #endif
