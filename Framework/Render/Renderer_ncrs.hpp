@@ -2,11 +2,11 @@
 #include "../precompiled.hpp"
 
 class DataController;
-class Renderer_CLI : public Renderer{
+class Renderer_ncrs : public Renderer{
 
     public:
-        Renderer_CLI();
-        ~Renderer_CLI();
+        Renderer_ncrs();
+        ~Renderer_ncrs();
 
 
         bool Initialize();

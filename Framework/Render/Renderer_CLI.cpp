@@ -54,7 +54,7 @@ Renderer_CLI::Renderer_CLI(){
     icon[10] = 45; // btmleft
     icon[11] = 45; // btmright
 #endif
-    icon[4] = 64; // 플:레이어`
+    icon[4] = 64; // 플레이어
 
 }
 
@@ -109,6 +109,8 @@ bool Renderer_CLI::Initialize(){
 
 
 */
+
+/*
 bool Renderer_CLI::initUIFrame(){
     for( int i = 0;i < MaxMapWidth ; i++){ 
         for( int j = 0;j < uiStartPos ; j++){
@@ -220,47 +222,46 @@ bool Renderer_CLI::initUIFrame(){
 
     return true;
 }
+*/
 
-// bool Renderer_CLI::moveCursor(Vector2 pos ){
-//     // COORD position;
+bool Renderer_CLI::initUIFrame(){
+    uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxMapWidth + 1);
+    box(uiWindow,  ACS_VLINE, ACS_HLINE);
+    touchwin(uiWindow);
+    wrefresh(uiWindow);
 
-//     // position.X = pos.x;
-//     // position.Y = pos.y;
-//     // SetConsoleCursorPosition(cliHandle, position);
+    logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxMapWidth + 1);
+    box(logWindow,  ACS_VLINE, ACS_HLINE);
 
-//     move(pos.x, pos.y);
-//     return true;
-// }
 
-// bool Renderer_CLI::moveCursor( int x, int y ){
-//     // COORD position;
+    refreshUI();
 
-//     // position.X = x;
-//     // position.Y = y;
-//     // SetConsoleCursorPosition(cliHandle, position);
+    return true;
+}
 
-//     move(x, y);
-//     return true;
-// }
+bool Renderer_CLI::SetLogContainer( std::string* logContainer , int* logStartPos){
+    this->logContainer = logContainer;
+    this->logStartPos = logStartPos;
+}
 
 bool Renderer_CLI::printStringAt( int x, int y, char singleChar){
-  mvprintw(y,x,"%c", singleChar );
+    mvprintw(y,x,"%c", singleChar );
     return true;
 }
 
 bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
-#ifdef __NCURSES_H
-        mvprintw(y,x,"%s",pString.c_str()); 
-#else
-    COORD position;
+    #ifdef __NCURSES_H
+            mvprintw(y,x,"%s",pString.c_str()); 
+    #else
+        COORD position;
 
-    position.X = x;
-    position.Y = y;
-    SetConsoleCursorPosition(cliHandle, position);
-    std::cout << pString;
-#endif
+        position.X = x;
+        position.Y = y;
+        SetConsoleCursorPosition(cliHandle, position);
+        std::cout << pString;
+    #endif
 
- return true;
+    return true;
 }
 
 bool Renderer_CLI::ClearScreen(){
@@ -274,21 +275,6 @@ bool Renderer_CLI::inputMapData(void* pMapData){
     return true;
 }
 
-bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
-
-    int maxLogShowSize = 18;
-    for( int i = logStartPos , j = 0; j < maxLogShowSize; i++, j++){
-        int textIndex = (logStartPos - j) % MaxLogContainerSize;
-        if( textIndex < 0)
-            break;
-
-       // printStringAt(logPrintStartPos.x,logPrintStartPos.y,"                               ");
-        printStringAt(logPrintStartPos.x,logPrintStartPos.y+ maxLogShowSize - j,logContainer[textIndex]);  
-        
-        
-    }
-    return true;
-}
 
 //bool Renderer_CLI::drawTile(){
 //    Vector2 pPos = ui->GetPlayerPos();
@@ -364,8 +350,98 @@ bool Renderer_CLI::drawPlayer(){
 }
 
 bool Renderer_CLI::refreshUI(){
+    int InitUICursorPosX =  2, InitUICursorPosY = 1;
 
-        return true;
+
+    auto stringUIData = ui->GetUIstringOrder();
+    for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){
+        std::string value = ui->GetStringUIData(*iter);
+
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, value.c_str());
+        InitUICursorPosY++;
+    }
+    
+
+    auto percentUIData = ui->GetUIpercentOrder(); 
+    for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
+
+        Vector2 value = ui->GetPercentUIData(*iter);
+        int curValue = value.x;
+        int maxValue = value.y;
+
+
+        std::string parsedData = *iter;
+        parsedData += " : ";
+        if( curValue < 100 )
+            parsedData += " ";
+        if( curValue < 10 )
+            parsedData += " ";
+        parsedData += std::to_string(curValue);
+        parsedData += "/";
+        if( maxValue < 100 )
+            parsedData += " ";
+        if( maxValue < 10 )
+            parsedData += " ";
+        parsedData += std::to_string(maxValue);;
+
+
+        int interspace = MaxMapWidth - (*iter).length() - 3 - 3 - 1 - 3 - 10 - 2 - 2;
+        for(int i = 0;i < interspace ;i ++){
+            parsedData += " ";
+        }
+
+        int percent = (int)((float)curValue / (float)maxValue * 10);
+        for( int i = 0;i < 10 ; i++ ){
+            if( i <= percent){
+                parsedData += '#';
+            }      
+            else{
+                parsedData += "-";
+            }
+        }
+
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
+        InitUICursorPosY++;
+    }
+
+    auto valueUIData = ui->GetUIvalueOrder(); 
+    for( auto iter = valueUIData.begin();iter != valueUIData.end();iter++){
+        int value = ui->GetValueUIData(*iter);
+        std::string parsedData = *iter;
+        
+        parsedData += " : ";
+        parsedData += std::to_string(value);
+
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
+        iter++;
+        if( iter != valueUIData.end()){
+            int value = ui->GetValueUIData(*iter);
+            std::string parsedData =  *iter + " : " + std::to_string(value) ;
+            mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX + MaxUIWidth / 2 - 2, parsedData.c_str());
+        }
+        else{
+            break;
+        }
+
+        InitUICursorPosY++;
+    }
+    touchwin(uiWindow);
+    wrefresh(uiWindow);
+    return true;
+}
+
+bool Renderer_CLI::refreshLog(){
+    wclear(logWindow);
+    box(logWindow,  ACS_VLINE, ACS_HLINE);
+    int maxLogShowSize = 19;
+    for( int i = *logStartPos , j = 0; j < maxLogShowSize; i++, j++){
+        int textIndex = (*logStartPos - j) % MaxLogContainerSize;
+        if( textIndex < 0)
+            break;
+        mvwprintw(logWindow,maxLogShowSize -j , 2, logContainer[textIndex].c_str());
+    }
+    touchwin(logWindow);
+    wrefresh(logWindow);
 }
 
 char Renderer_CLI::convertToASCII(int id){
@@ -373,18 +449,36 @@ char Renderer_CLI::convertToASCII(int id){
     return (char)icon[id]; 
 }
 
-int test = 0;
 bool Renderer_CLI::Render(){
     
 
     ClearScreen();
-    //initUIFrame();
     drawTile();
-    //initUIFrame();
     drawPlayer();
 
-#ifdef __NCURSES_H
+    #ifdef __NCURSES_H
     refresh();
-#endif
+    refreshUI();
+    refreshLog();
+
+    #endif
+    return true;
+}
+
+
+
+
+bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
+
+    return true;
+    int maxLogShowSize = 18;
+    for( int i = logStartPos , j = 0; j < maxLogShowSize; i++, j++){
+        int textIndex = (logStartPos - j) % MaxLogContainerSize;
+        if( textIndex < 0)
+            break;
+        mvwprintw(logWindow,maxLogShowSize -j, 0, logContainer[textIndex].c_str());
+    }
+    touchwin(logWindow);
+    wrefresh(logWindow);
     return true;
 }

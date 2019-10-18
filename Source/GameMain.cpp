@@ -3,6 +3,7 @@
 
 #include "../Framework/Render/Renderer.hpp"
 #include "../Framework/Render/Renderer_CLI.hpp"
+#include "../Framework/Render/Renderer_ncrs.hpp"
 #include "../Framework/Input/InputCtrl.hpp"
 #include "../Framework/UserInterface/LogController.hpp"
 
@@ -15,7 +16,7 @@ GameMain::GameMain(){
 }
 
 GameMain::~GameMain(){
-    delete (Renderer_CLI*)renderer;
+    delete (Renderer_ncrs*)renderer;
     delete sampleMap;
     delete (Player*)player;
 
@@ -24,7 +25,7 @@ GameMain::~GameMain(){
 }
 
 bool GameMain::Initialize(){
-    renderer = new Renderer_CLI();
+    renderer = new Renderer_ncrs();
     sampleMap = new FloorMap();
     player = new Player("Lavumi");
     inputCtrl = InputController::getInstance();

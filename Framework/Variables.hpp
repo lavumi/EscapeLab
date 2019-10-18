@@ -7,7 +7,7 @@ const int MaxScreenWidth = 40;
 const int MaxScreenHeight = 40;
 
 const int MaxUIWidth = 40;
-const int MaxUIHeight = 40;
+const int MaxUIHeight = 20;
 
 struct Vector2 {
     int x;
