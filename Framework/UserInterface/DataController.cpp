@@ -21,18 +21,22 @@ DataController::~DataController(){
 
 bool DataController::setCharacter( BaseCharacter* character){
     characters.push_back( character);
+        return true;
 }
 
 bool DataController::SetUIStringData(std::string dataName){
     stringUIOrder.push_back( dataName );
+        return true;
 }
 
 bool DataController::SetUIPercentData(std::string dataName){
     percentUIOrder.push_back( dataName );
+    return true;
 }
 
 bool DataController::SetUIValueData(std::string dataName){
     valueUIOrder.push_back( dataName );
+    return true;
 }
 
 std::string DataController::GetStringUIData( std::string dataName){

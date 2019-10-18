@@ -35,24 +35,29 @@ bool BaseCharacter::Move(int x, int y){
 
 bool BaseCharacter::goUpstair(FloorMap* targetMap){
     currentMap = targetMap;
+        return true;
 }
 
 bool BaseCharacter::goDownstair(FloorMap* targetMap){
     currentMap = targetMap;
+        return true;
 }
 
 
 bool BaseCharacter::setStringData(std::string dataName, std::string data){
     stringData.insert(std::make_pair(dataName, data));
+        return true;
 }
 
 bool BaseCharacter::setPercentData(std::string dataName, int curValue, int MaxValue){
     Vector2 data (curValue, MaxValue ); 
     percentData.insert(std::make_pair(dataName, data));
+        return true;
 }
 
 bool BaseCharacter::setValueData(std::string dataName, int value){
     valueData.insert(std::make_pair(dataName, value));
+        return true;
 }
 
 std::string BaseCharacter::GetStringData( std::string dataName){

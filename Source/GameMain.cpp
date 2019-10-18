@@ -15,9 +15,9 @@ GameMain::GameMain(){
 }
 
 GameMain::~GameMain(){
-    delete renderer;
+    delete (Renderer_CLI*)renderer;
     delete sampleMap;
-    delete player;
+    delete (Player*)player;
 
     InputController::Delete();
     DataController::Delete();
@@ -40,10 +40,12 @@ bool GameMain::Initialize(){
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
     player->goDownstair( sampleMap );
+    return true;
 }
 
 bool GameMain::Update(){
 
     renderer->Render();
-    return inputCtrl->WairForInput();
+    bool result = inputCtrl->WairForInput();
+    return result;
 }

@@ -42,6 +42,8 @@ bool Player::Initialize(){
     ui->SetUIValueData ("DEF");
     ui->SetUIValueData ("INT");
     ui->SetUIValueData ("GLD");
+    
+    return true;
 }
 
 

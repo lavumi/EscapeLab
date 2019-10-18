@@ -21,11 +21,39 @@ Renderer_CLI::Renderer_CLI(){
     logPrintStartPos = Vector2( uiStartPos + 2, MaxMapHeight / 2);
 
     ui = DataController::getInstance();
-    
+   
+#ifdef _WIN32 
     icon[0] = 176;
     icon[1] = 219; //
     icon[2] = 178;  //
     icon[3] = 112; //
+    
+    icon[5] = 255; //empty (outSide of map)
+    
+    icon[6] = 205; // -
+    icon[7] = 186; // |
+    
+    icon[8] = 201; // topleft
+    icon[9] = 187; // topright
+    icon[10] = 200; // btmleft
+    icon[11] = 199; // btmright
+    
+#else
+    icon[0] = 46;
+    icon[1] = 35; //
+    icon[2] = 43;
+    icon[3] = 35;
+
+    icon[5] = 32; //empty (outSide of map)
+    
+    icon[6] = 45; // |
+    icon[7] = 124; // -
+    
+    icon[8] = 45; // toplef
+    icon[9] = 45; // topright
+    icon[10] = 45; // btmleft
+    icon[11] = 45; // btmright
+#endif
     icon[4] = 64; // 플:레이어`
 
 }
@@ -56,7 +84,7 @@ bool Renderer_CLI::Initialize(){
 #endif
 
 
-    initUIFrame();
+   initUIFrame();//
     return true;
 }
 
@@ -82,29 +110,29 @@ bool Renderer_CLI::Initialize(){
 bool Renderer_CLI::initUIFrame(){
     for( int i = 0;i < MaxMapWidth ; i++){ 
         for( int j = 0;j < uiStartPos ; j++){
-             uiTexture += (char)255;
+             uiTexture += convertToASCII(5);
         } 
         for( int j = 0;j < MaxMapHeight ; j++){
             if( i == 0 && j == 0){
-               uiTexture += (char)201;
+               uiTexture += convertToASCII(8);
             }
             else if( i == 0 && j == MaxMapHeight - 1){
-               uiTexture += (char)187;
+               uiTexture += convertToASCII(9);
             }
             else if( i == MaxMapWidth - 1 && j == 0 ){
-               uiTexture += (char)200;
+               uiTexture += convertToASCII(10);
             }
             else if( i == MaxMapWidth - 1 && j == MaxMapHeight - 1 ){
-               uiTexture += (char)188;
+               uiTexture += convertToASCII(11);
             }
             else if( i == 0 ||  i == MaxMapWidth - 1){
-               uiTexture += (char)205;
+               uiTexture += convertToASCII(6);
             }
             else if( j == 0 ||  j == MaxMapHeight - 1){
-               uiTexture += (char)186;
+               uiTexture += convertToASCII(7);
             }
             else{
-               uiTexture += (char)255;
+               uiTexture += convertToASCII(5);
             }
         }
         uiTexture += (char)10;
@@ -188,6 +216,7 @@ bool Renderer_CLI::initUIFrame(){
         InitUICursorPosY++;
     }
 
+    return true;
 }
 
 // bool Renderer_CLI::moveCursor(Vector2 pos ){
@@ -212,6 +241,10 @@ bool Renderer_CLI::initUIFrame(){
 //     return true;
 // }
 
+bool Renderer_CLI::printStringAt( int x, int y, char singleChar){
+  mvprintw(y,x,"%c", singleChar );
+    return true;
+}
 
 bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
 #ifdef __NCURSES_H
@@ -225,7 +258,7 @@ bool Renderer_CLI::printStringAt(int x, int y, std::string pString){
     std::cout << pString;
 #endif
 
- 
+ return true;
 }
 
 bool Renderer_CLI::ClearScreen(){
@@ -247,13 +280,49 @@ bool Renderer_CLI::RefreshLog( std::string* logContainer ,int logStartPos ){
         if( textIndex < 0)
             break;
 
-        printStringAt(logPrintStartPos.x,logPrintStartPos.y,"                               ");  
+       // printStringAt(logPrintStartPos.x,logPrintStartPos.y,"                               ");
         printStringAt(logPrintStartPos.x,logPrintStartPos.y+ maxLogShowSize - j,logContainer[textIndex]);  
         
         
     }
-
+    return true;
 }
+
+//bool Renderer_CLI::drawTile(){
+//    Vector2 pPos = ui->GetPlayerPos();
+//
+//    int drawStartPosX = pPos.x - MaxMapWidth / 2;
+//    int drawStartPosY = pPos.y - MaxMapHeight / 2;
+//
+//    renderTexture  = "";
+//
+//    int mapDrawStartX = 0;
+//    int mapDrawStartY = 0;
+//
+//    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){
+//
+//        for( int j = drawStartPosX, screenY = 0;screenY < MaxScreenWidth ; j++, screenY ++){
+//            if( i < 0
+//                || i >= MaxMapHeight
+//                || j < 0
+//                || j >= MaxMapWidth ){
+//                renderTexture += convertToASCII(5);
+//            }
+//            else{
+//                int index = i * MaxScreenWidth + j;
+//                int tileId = mapTileData[index];
+//                renderTexture += convertToASCII(tileId);
+//            }
+//        }
+//
+//        renderTexture += (char)10;
+//    }
+//    renderTexture += (char)0;
+//
+//    printStringAt(0,0,renderTexture);
+//
+//    return true;
+//}
 
 bool Renderer_CLI::drawTile(){
     Vector2 pPos = ui->GetPlayerPos();
@@ -262,43 +331,43 @@ bool Renderer_CLI::drawTile(){
     int drawStartPosY = pPos.y - MaxMapHeight / 2;
 
     renderTexture  = "";
+    
+    int mapDrawStartX = 0;
+    int mapDrawStartY = 0;
 
-    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){  
-
+    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){
+        renderTexture = "";
         for( int j = drawStartPosX, screenY = 0;screenY < MaxScreenWidth ; j++, screenY ++){
-            if( i < 0 
-                || i >= MaxMapHeight 
-                || j < 0 
+            if( i < 0
+                || i >= MaxMapHeight
+                || j < 0
                 || j >= MaxMapWidth ){
-                renderTexture += (char)255;
+                renderTexture += convertToASCII(5);
             }
             else{
                 int index = i * MaxScreenWidth + j;
                 int tileId = mapTileData[index];
                 renderTexture += convertToASCII(tileId);
             }
-        }               
-        
-        renderTexture += (char)10;    
+        }
+        printStringAt(mapDrawStartX, mapDrawStartY, renderTexture);
+        mapDrawStartY++;
     }
-    renderTexture += (char)0;
-
-    printStringAt(0,0,renderTexture);  
-       
     return true;
 }
 
 bool Renderer_CLI::drawPlayer(){
-    printStringAt(centerPos.x,centerPos.y,"@");  
+    printStringAt(centerPos.x,centerPos.y, convertToASCII(4));  
     return true;
 }
 
 bool Renderer_CLI::refreshUI(){
 
-    
+        return true;
 }
 
 char Renderer_CLI::convertToASCII(int id){
+
     return (char)icon[id]; 
 }
 
@@ -307,11 +376,13 @@ bool Renderer_CLI::Render(){
     
 
     ClearScreen();
-   // initUIFrame();
-  //  drawTile();
+    //initUIFrame();
+    drawTile();
+    //initUIFrame();
     drawPlayer();
-
+a
 #ifdef __NCURSES_H
     refresh();
 #endif
+    return true;
 }

@@ -33,5 +33,5 @@ bool InputController::WairForInput(){
     if(ch == 'q')
         return false;
 
-        return true;
+    return true;
 }

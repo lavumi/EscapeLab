@@ -21,4 +21,5 @@ int LogController::PrintLog( std::string text ){
     if(current_LogCount >= MaxLogContainerSize ){
         current_LogCount = 0;
     }
+    return 0;
 };

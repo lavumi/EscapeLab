@@ -21,6 +21,8 @@ class Renderer_CLI : public Renderer{
         // bool moveCursor( int x, int y);
 
         bool printStringAt( int x, int y, std::string pString );
+        bool printStringAt( int x, int y, char singleChar);
+
 
         bool initUIFrame();
 
@@ -29,7 +31,7 @@ class Renderer_CLI : public Renderer{
         bool refreshUI();
         char convertToASCII( int id );
 
-        int icon[5];
+        int icon[12];
 
 #ifndef __NCURSES_H
         HANDLE cliHandle;
