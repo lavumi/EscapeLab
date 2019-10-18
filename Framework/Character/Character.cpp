@@ -18,7 +18,7 @@ bool BaseCharacter::Move(int x, int y){
     int targetPosX =  position.x + x;
     int targetPosY =  position.y + y;
 
-    int targetTile = ((int*)currentMap->getData())[ targetPosX * MaxMapWidth + targetPosY];
+    int targetTile = ((int*)currentMap->getData())[ targetPosY * MaxMapWidth + targetPosX];
     if( targetTile & 0x01 ){
         LogController::PrintLog( "Can't Move" );
         return false;

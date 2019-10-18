@@ -18,12 +18,12 @@ enum TileColorType{
 };
 
 Renderer_ncrs::Renderer_ncrs(){
-    centerPos = Vector2( MaxMapWidth / 2,  MaxMapHeight / 2);
+    centerPos = Vector2( MaxScreenWidth / 2,  MaxScreenHeight / 2);
     renderTexture = "";
     uiTexture = "";
 
-    uiStartPos = MaxMapWidth + 1;
-    logPrintStartPos = Vector2( uiStartPos + 2, MaxMapHeight / 2);
+    uiStartPos = MaxScreenWidth + 1;
+    logPrintStartPos = Vector2( uiStartPos + 2, MaxScreenHeight / 2);
 
     ui = DataController::getInstance();
 
@@ -82,15 +82,13 @@ bool Renderer_ncrs::Initialize(){
 */
 
 bool Renderer_ncrs::initUIFrame(){
-    uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxMapWidth + 1);
+    uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxScreenWidth + 1);
     box(uiWindow,  ACS_VLINE, ACS_HLINE);
     touchwin(uiWindow);
     wrefresh(uiWindow);
 
 
-
-
-    logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxMapWidth + 1);
+    logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxScreenWidth + 1);
     box(logWindow,  ACS_VLINE, ACS_HLINE);
 
 
@@ -125,8 +123,8 @@ bool Renderer_ncrs::inputMapData(void* pMapData){
 bool Renderer_ncrs::drawTile(){
     Vector2 pPos = ui->GetPlayerPos();
 
-    int drawStartPosX = pPos.x - MaxMapWidth / 2;
-    int drawStartPosY = pPos.y - MaxMapHeight / 2;
+    int drawStartPosX = pPos.x - MaxScreenWidth / 2;
+    int drawStartPosY = pPos.y - MaxScreenHeight / 2;
 
     renderTexture  = "";
     
@@ -146,7 +144,7 @@ bool Renderer_ncrs::drawTile(){
                 renderTexture += convertToASCII(5);
             }
             else{
-                int index = i * MaxScreenWidth + j;
+                int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index];
                 renderTexture += convertToASCII(tileId);
             }
