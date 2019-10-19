@@ -1,3 +1,4 @@
+#include "../UserInterface/LogController.hpp"
 #include "FloorMap.hpp"
 #include "../Variables.hpp"
 
@@ -14,13 +15,55 @@ FloorMap::FloorMap(){
             }
         }
     }
+
+
+    //set testWalls
+
+    for(int i = 20;i < 30 ; i++){
+         tileType[40 * MaxMapWidth + i] = T_Wall;
+    }
+    
+        for(int i = 40;i < 50 ; i++){
+         tileType[i * MaxMapWidth + 23] = T_Wall;
+    }
+
+    fovData = new bool[MaxMapWidth * MaxMapHeight];
+    for( int i = 0;i < MaxMapHeight ; i++){  
+        for( int j = 0;j < MaxMapWidth ; j++){
+            fovData[i * MaxMapWidth + j] = false;
+        }
+    }
 }
 
 
 FloorMap::~FloorMap(){
     delete[] tileType;
+    delete[] fovData;
 }
 
 TileType* FloorMap::getData(){
     return tileType;
+}
+
+bool FloorMap::isInSight(int x, int y){
+    return fovData[y * MaxMapWidth + x];
+}
+
+bool FloorMap::isMovable(int x, int y){
+    return tileType[y * MaxMapWidth + x] & 0x01;
+}
+
+bool FloorMap::isVisible(int x, int y){
+    return tileType[y * MaxMapWidth + x] >> 1 & 0x01;
+}
+
+void FloorMap::setVisible(int x, int y){
+    if( x + y * MaxMapWidth > MaxMapWidth * MaxMapHeight)
+        return;
+    fovData[x + y * MaxMapWidth] = true;
+}
+
+void FloorMap::resetfovData(){
+
+    std::fill(&fovData[0], &fovData[MaxMapWidth * MaxMapHeight - 1], false);
 }

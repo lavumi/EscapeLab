@@ -20,9 +20,9 @@
 
 enum TileColorType{
     BASE_TILE = 1,
-    WALL_TILE,
     OBSTACLE_TILE,
     FOG_TILE,
+    WALL_TILE,
     OOS_TILE,
     CHAR_TILE,
     GUAGE_TILE,
@@ -48,10 +48,7 @@ Renderer_ncrs::Renderer_ncrs(){
 }
 
 Renderer_ncrs::~Renderer_ncrs(){
-    delete[] mapTileData; 
-#ifdef __NCURSES_H
-   
-#endif
+
 }
 
 bool Renderer_ncrs::Initialize(){
@@ -123,12 +120,14 @@ bool Renderer_ncrs::ClearScreen(){
 }
 
 bool Renderer_ncrs::inputMapData(void* pMapData){
-    FloorMap* mapData = (FloorMap*) pMapData;
-    mapTileData = (int*)(mapData->getData());
+    mapData = (FloorMap*) pMapData;
+    //mapTileData = (int*)(mapData->getData());
     return true;
 }
 
 bool Renderer_ncrs::drawMap(){
+
+    int* mapTileData = (int*)(mapData->getData());
     Vector2 pPos = ui->GetPlayerPos();
 
     int drawStartPosX = pPos.x - MaxMapWindowWidth / 2;
@@ -154,7 +153,7 @@ bool Renderer_ncrs::drawMap(){
             else{
                 int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index];
-                drawTile(screenX, screenY, tileId);
+                drawTile(screenX, screenY, tileId, mapData->isInSight(j,i));
             }
         }
 
@@ -167,11 +166,19 @@ bool Renderer_ncrs::drawMap(){
     return true;
 }
 
-bool Renderer_ncrs::drawTile(int x, int y,int tileID){
+bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible ){
 
-    attron(COLOR_PAIR(tileID + 1));
+    if( isVisible)
+        attron(COLOR_PAIR(tileID + 1));
+    else
+        attron(COLOR_PAIR(OOS_TILE));
     mvprintw(y,x, "%c", convertToASCII(tileID)); 
-    attroff(COLOR_PAIR(tileID + 1));
+
+    if( isVisible)
+        attroff(COLOR_PAIR(tileID + 1));
+    else
+        attroff(COLOR_PAIR(OOS_TILE));
+   // attroff(COLOR_PAIR(tileID + 1));
 }
 
 

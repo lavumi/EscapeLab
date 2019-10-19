@@ -2,6 +2,7 @@
 #include "../precompiled.hpp"
 
 class FloorMap;
+class FieldOfView;
 class BaseCharacter{
     public : 
         BaseCharacter(std::string name);
@@ -22,6 +23,8 @@ class BaseCharacter{
         Vector2 GetPercentData( std::string dataName);
         int GetValueData( std::string dataName);
 
+        FloorMap* GetCurrentMap(){ return currentMap;};
+
     protected:
         std::string name;
         Vector2 position;
@@ -34,4 +37,8 @@ class BaseCharacter{
         std::map<std::string, std::string > stringData;
         std::map<std::string, Vector2> percentData;
         std::map<std::string, int > valueData;
+
+        FieldOfView* fov;
+
+        int sightSize;
 };

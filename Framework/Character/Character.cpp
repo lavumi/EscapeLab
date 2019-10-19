@@ -3,10 +3,13 @@
 #include "../Variables.hpp"
 #include "../Map/FloorMap.hpp"
 #include "../UserInterface/LogController.hpp"
+#include "FieldOfView.hpp"
 #include "Character.hpp"
 
 BaseCharacter::BaseCharacter(std::string name){
     this->name = name;
+    fov = new FieldOfView(this);
+    sightSize = 8;
 }
 
 BaseCharacter::~BaseCharacter(){
@@ -19,7 +22,9 @@ bool BaseCharacter::Move(int x, int y){
     int targetPosY =  position.y + y;
 
     int targetTile = ((int*)currentMap->getData())[ targetPosY * MaxMapWidth + targetPosX];
-    if( targetTile & 0x01 ){
+    
+    
+    if( currentMap->isMovable(targetPosX, targetPosY)){
         LogController::PrintLog( "Can't Move" );
         return false;
     }
@@ -28,19 +33,27 @@ bool BaseCharacter::Move(int x, int y){
         position.x = targetPosX;
         position.y = targetPosY;
         LogController::PrintLog( "MoveTo " + std::to_string( targetPosX )  + " " + std::to_string( targetPosY ) );
+
+        currentMap->resetfovData();
+        fov->Compute( position, sightSize);
         return true;
     }
+    
 }
 
 
 bool BaseCharacter::goUpstair(FloorMap* targetMap){
     currentMap = targetMap;
-        return true;
+    currentMap->resetfovData();
+    fov->Compute( position, sightSize);
+    return true;
 }
 
 bool BaseCharacter::goDownstair(FloorMap* targetMap){
     currentMap = targetMap;
-        return true;
+    currentMap->resetfovData();
+    fov->Compute( position, sightSize);
+    return true;
 }
 
 

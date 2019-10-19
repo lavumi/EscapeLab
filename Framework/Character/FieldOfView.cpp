@@ -1,6 +1,27 @@
+#include "Character.hpp"
+#include "../Map/FloorMap.hpp"
 #include "FieldOfView.hpp"
 
-void sight::Compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top, Slope bottom) {
+FieldOfView::FieldOfView(BaseCharacter* player){
+    this->player = player;
+}
+
+FieldOfView::~FieldOfView(){
+
+}
+
+
+void FieldOfView::Compute(Vector2 origin, int rangeLimit){
+
+    _setVisible(origin.x, origin.y);
+    for(uint octant = 0; octant < 8; octant++) {
+            _compute(octant, origin, rangeLimit, 1, Slope(1, 1), Slope(0, 1));
+    }
+}
+        
+
+
+void FieldOfView::_compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top, Slope bottom) {
     for (; x <= rangeLimit; x++) {
         int topY;
         if (top.X == 1) {
@@ -33,8 +54,8 @@ void sight::Compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top
 
         int wasOpaque = -1;
         for (int y = topY; (int)y >= (int)bottomY; y--) {
-            if (rangeLimit < 0  ){
-               //|| GetDistance((int)x, (int)y) <= rangeLimit) {
+            if (rangeLimit < 0  
+               || GetDistance((int)x, (int)y) <= rangeLimit) {
                 bool isOpaque = BlocksLight(x, y, octant, origin);
                 bool isVisible =
                     isOpaque || ((y != topY || top.Greater(y * 4 - 1, x * 4 + 1)) && (y != bottomY || bottom.Less(y * 4 + 1, x * 4 - 1)));
@@ -52,7 +73,7 @@ void sight::Compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top
                                     bottom = Slope(ny, nx);
                                     break;
                                 } else
-                                    Compute(octant, origin, rangeLimit, x + 1, top, Slope(ny, nx));
+                                    _compute(octant, origin, rangeLimit, x + 1, top, Slope(ny, nx));
                             } else {
                                 if (y == bottomY)
                                     return;
@@ -78,7 +99,7 @@ void sight::Compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top
     }
 }
 
-bool sight::BlocksLight(int x, int y, int octant, Vector2 origin) {
+bool FieldOfView::BlocksLight(int x, int y, int octant, Vector2 origin) {
     int nx = origin.x, ny = origin.y;
     switch (octant) {
         case 0:
@@ -114,10 +135,10 @@ bool sight::BlocksLight(int x, int y, int octant, Vector2 origin) {
             ny += y;
             break;
     }
-    return false;//_blocksLight((int)nx, (int)ny);
+    return _blocksLight((int)nx, (int)ny);
 }
 
-void sight::SetVisible(int x, int y, int octant, Vector2 origin) {
+void FieldOfView::SetVisible(int x, int y, int octant, Vector2 origin) {
     int nx = origin.x, ny = origin.y;
     switch (octant) {
         case 0:
@@ -155,5 +176,22 @@ void sight::SetVisible(int x, int y, int octant, Vector2 origin) {
     }
 
 
-    //_setVisible((int)nx, (int)ny);
+    _setVisible((int)nx, (int)ny);
+}
+
+bool FieldOfView::_blocksLight(int x,int y){
+
+    return player->GetCurrentMap()->isVisible(x, y);
+}
+
+int FieldOfView::GetDistance(int x, int y){
+
+
+    return sqrt(x * x + y * y);     //Circle Sight
+    //return x + y;                 //Diamond Sight
+    //return x > y ? x : y;         //Square Sight
+}
+
+void FieldOfView::_setVisible(int x, int y){
+    player->GetCurrentMap()->setVisible(x, y);
 }

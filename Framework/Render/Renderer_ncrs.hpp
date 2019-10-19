@@ -29,7 +29,7 @@ class Renderer_ncrs : public Renderer{
         bool initUIFrame();
 
         bool drawMap();
-        bool drawTile(int x, int y,int tileID);
+        bool drawTile(int x, int y,int tileID, bool isVisible = false);
         bool drawPlayer();
         bool refreshUI();
         bool refreshLog();
@@ -49,7 +49,7 @@ class Renderer_ncrs : public Renderer{
         Vector2 centerPos;
 
         DataController* ui;
-        int* mapTileData;
+        FloorMap* mapData;
 
         std::string* logContainer;
         int* logStartPos;

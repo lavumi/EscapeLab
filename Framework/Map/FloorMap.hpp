@@ -10,9 +10,9 @@
  */
 enum TileType {
     T_Base ,
-    T_Wall ,
     T_Obstacle,
-    T_Dark_noUse
+    T_Dark,
+    T_Wall,
 };
 
 
@@ -22,8 +22,15 @@ class FloorMap{
         ~FloorMap();
 
         TileType* getData();
+
+        bool isMovable(int x, int y);
+        bool isVisible(int x, int y);
+        bool isInSight(int x, int y);
+        void setVisible(int x, int y);
+        void resetfovData();
     private : 
         
         TileType* tileType;
+        bool* fovData;
 
 };
