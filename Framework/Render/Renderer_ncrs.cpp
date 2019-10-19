@@ -8,22 +8,33 @@
 #include "../Variables.hpp"
 #include "Renderer_ncrs.hpp"
 
+// COLOR_BLACK
+// COLOR_RED
+// COLOR_GREEN
+// COLOR_YELLOW
+// COLOR_BLUE
+// COLOR_MAGENTA
+// COLOR_CYAN
+// COLOR_WHITE
+
 
 enum TileColorType{
     BASE_TILE = 1,
     WALL_TILE,
     OBSTACLE_TILE,
     FOG_TILE,
-    PLAYER_TILE
+    OOS_TILE,
+    CHAR_TILE,
+    GUAGE_TILE,
 };
 
 Renderer_ncrs::Renderer_ncrs(){
-    centerPos = Vector2( MaxScreenWidth / 2,  MaxScreenHeight / 2);
+    centerPos = Vector2( MaxMapWindowWidth / 2,  MaxMapWindowHeight / 2);
     renderTexture = "";
     uiTexture = "";
 
-    uiStartPos = MaxScreenWidth + 1;
-    logPrintStartPos = Vector2( uiStartPos + 2, MaxScreenHeight / 2);
+    uiStartPos = MaxMapWindowWidth + 1;
+    logPrintStartPos = Vector2( uiStartPos + 2, MaxMapWindowHeight / 2);
 
     ui = DataController::getInstance();
 
@@ -52,11 +63,13 @@ bool Renderer_ncrs::Initialize(){
 
     start_color();
     init_pair( BASE_TILE, COLOR_GREEN , COLOR_BLACK );
-    init_pair( WALL_TILE, COLOR_BLACK , COLOR_GREEN );
+    init_pair( WALL_TILE, COLOR_BLACK , COLOR_BLUE );
     init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
-    init_pair( PLAYER_TILE, COLOR_WHITE , COLOR_BLACK );
-
+    init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK );
+    init_pair( CHAR_TILE, COLOR_WHITE , COLOR_BLACK );
+    init_pair( 98, COLOR_RED , COLOR_BLACK );
+    init_pair( 99, COLOR_BLUE , COLOR_BLACK );
     initUIFrame();
     return true;
 }
@@ -82,14 +95,9 @@ bool Renderer_ncrs::Initialize(){
 */
 
 bool Renderer_ncrs::initUIFrame(){
-    uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxScreenWidth + 1);
-    box(uiWindow,  ACS_VLINE, ACS_HLINE);
-    touchwin(uiWindow);
-    wrefresh(uiWindow);
+    uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxMapWindowWidth + 1);
 
-
-    logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxScreenWidth + 1);
-    box(logWindow,  ACS_VLINE, ACS_HLINE);
+    logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxMapWindowWidth + 1);
 
 
     wattron(logWindow, COLOR_PAIR(BASE_TILE));
@@ -120,54 +128,63 @@ bool Renderer_ncrs::inputMapData(void* pMapData){
     return true;
 }
 
-bool Renderer_ncrs::drawTile(){
+bool Renderer_ncrs::drawMap(){
     Vector2 pPos = ui->GetPlayerPos();
 
-    int drawStartPosX = pPos.x - MaxScreenWidth / 2;
-    int drawStartPosY = pPos.y - MaxScreenHeight / 2;
+    int drawStartPosX = pPos.x - MaxMapWindowWidth / 2;
+    int drawStartPosY = pPos.y - MaxMapWindowHeight / 2;
 
     renderTexture  = "";
     
     int mapDrawStartX = 0;
     int mapDrawStartY = 0;
 
-
+   // attron(COLOR_PAIR(WALL_TILE));
 
     //최적화 염두에 두자
-    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){
+    for( int i = drawStartPosY, screenY = 0 ; screenY < MaxMapWindowHeight; i++, screenY ++){
         renderTexture = "";
-        for( int j = drawStartPosX, screenY = 0;screenY < MaxScreenWidth ; j++, screenY ++){
+        for( int j = drawStartPosX, screenX = 0;screenX < MaxMapWindowWidth ; j++, screenX ++){
             if( i < 0
                 || i >= MaxMapHeight
                 || j < 0
                 || j >= MaxMapWidth ){
-                renderTexture += convertToASCII(5);
+                    drawTile(screenX, screenY, 5);
             }
             else{
                 int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index];
-                renderTexture += convertToASCII(tileId);
+                drawTile(screenX, screenY, tileId);
             }
         }
 
-        mvprintw(mapDrawStartY,mapDrawStartX,"%s",renderTexture.c_str()); 
+        //mvprintw(mapDrawStartY,mapDrawStartX,"%s",renderTexture.c_str()); 
 
         mapDrawStartY++;
     }
     
-    //attroff(COLOR_PAIR(WALL_TILE));
+   // attroff(COLOR_PAIR(WALL_TILE));
     return true;
 }
 
+bool Renderer_ncrs::drawTile(int x, int y,int tileID){
+
+    attron(COLOR_PAIR(tileID + 1));
+    mvprintw(y,x, "%c", convertToASCII(tileID)); 
+    attroff(COLOR_PAIR(tileID + 1));
+}
+
+
 bool Renderer_ncrs::drawPlayer(){
-    attron(COLOR_PAIR(PLAYER_TILE));
+    attron(COLOR_PAIR(CHAR_TILE));
     mvprintw(centerPos.y,centerPos.x,"%c",convertToASCII(4));   
-    attroff(COLOR_PAIR(PLAYER_TILE));
+    attroff(COLOR_PAIR(CHAR_TILE));
     return true;
 }
 
 bool Renderer_ncrs::refreshUI(){
     wattron(uiWindow, COLOR_PAIR(BASE_TILE));
+    box(uiWindow,  ACS_VLINE, ACS_HLINE);
     int InitUICursorPosX =  2, InitUICursorPosY = 1;
 
     auto stringUIData = ui->GetUIstringOrder();
@@ -200,25 +217,29 @@ bool Renderer_ncrs::refreshUI(){
         if( maxValue < 10 )
             parsedData += " ";
         parsedData += std::to_string(maxValue);;
+       
 
-
-        int interspace = MaxMapWidth - (*iter).length() - 3 - 3 - 1 - 3 - 10 - 2 - 2;
+        int interspace = MaxUIWidth - (*iter).length() - 3 - 3 - 1 - 3 - 20 - 2 - 2;
         for(int i = 0;i < interspace ;i ++){
             parsedData += " ";
         }
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
 
         int percent = (int)((float)curValue / (float)maxValue * 10);
-        for( int i = 0;i < 10 ; i++ ){
-            if( i <= percent){
-                parsedData += '#';
+        wattroff(uiWindow, COLOR_PAIR(BASE_TILE));
+        wattron(uiWindow,COLOR_PAIR(98));
+        for( int i = 0;i < 20 ; i++ ){
+            if( i <= percent * 2){
+                
+                waddch(uiWindow, ACS_CKBOARD);
             }      
             else{
-                parsedData += "-";
+                waddch(uiWindow, ACS_HLINE);
             }
         }
-
-
-        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
+        wattroff(uiWindow,COLOR_PAIR(98));
+        wattron(uiWindow, COLOR_PAIR(BASE_TILE));
+        
         
         InitUICursorPosY++;
     }
@@ -277,7 +298,7 @@ bool Renderer_ncrs::Render(){
     
 
     ClearScreen();
-    drawTile();
+    drawMap();
     drawPlayer();
     refresh();
     refreshUI();

@@ -28,7 +28,8 @@ class Renderer_ncrs : public Renderer{
 
         bool initUIFrame();
 
-        bool drawTile();
+        bool drawMap();
+        bool drawTile(int x, int y,int tileID);
         bool drawPlayer();
         bool refreshUI();
         bool refreshLog();
@@ -36,12 +37,9 @@ class Renderer_ncrs : public Renderer{
 
         int icon[12];
 
-#ifndef __NCURSES_H
-        HANDLE cliHandle;
-#endif
-
         WINDOW* uiWindow;
         WINDOW* logWindow;
+        WINDOW* mapWindow;
          
         std::string renderTexture;
         std::string uiTexture;

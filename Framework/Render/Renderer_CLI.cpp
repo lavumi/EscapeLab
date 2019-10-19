@@ -323,9 +323,9 @@ bool Renderer_CLI::drawTile(){
     int mapDrawStartX = 0;
     int mapDrawStartY = 0;
 
-    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxScreenHeight; i++, screenX ++){
+    for( int i = drawStartPosY, screenX = 0 ; screenX < MaxMapWindowHeight; i++, screenX ++){
         renderTexture = "";
-        for( int j = drawStartPosX, screenY = 0;screenY < MaxScreenWidth ; j++, screenY ++){
+        for( int j = drawStartPosX, screenY = 0;screenY < MaxMapWindowWidth ; j++, screenY ++){
             if( i < 0
                 || i >= MaxMapHeight
                 || j < 0
@@ -333,7 +333,7 @@ bool Renderer_CLI::drawTile(){
                 renderTexture += convertToASCII(5);
             }
             else{
-                int index = i * MaxScreenWidth + j;
+                int index = i * MaxMapWindowWidth + j;
                 int tileId = mapTileData[index];
                 renderTexture += convertToASCII(tileId);
             }
