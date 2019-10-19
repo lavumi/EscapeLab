@@ -33,7 +33,8 @@ void sight::Compute(int octant, Vector2 origin, int rangeLimit, int x, Slope top
 
         int wasOpaque = -1;
         for (int y = topY; (int)y >= (int)bottomY; y--) {
-            if (rangeLimit < 0 || GetDistance((int)x, (int)y) <= rangeLimit) {
+            if (rangeLimit < 0  ){
+               //|| GetDistance((int)x, (int)y) <= rangeLimit) {
                 bool isOpaque = BlocksLight(x, y, octant, origin);
                 bool isVisible =
                     isOpaque || ((y != topY || top.Greater(y * 4 - 1, x * 4 + 1)) && (y != bottomY || bottom.Less(y * 4 + 1, x * 4 - 1)));
@@ -113,7 +114,7 @@ bool sight::BlocksLight(int x, int y, int octant, Vector2 origin) {
             ny += y;
             break;
     }
-    return _blocksLight((int)nx, (int)ny);
+    return false;//_blocksLight((int)nx, (int)ny);
 }
 
 void sight::SetVisible(int x, int y, int octant, Vector2 origin) {
@@ -152,5 +153,7 @@ void sight::SetVisible(int x, int y, int octant, Vector2 origin) {
             ny += y;
             break;
     }
-    _setVisible((int)nx, (int)ny);
+
+
+    //_setVisible((int)nx, (int)ny);
 }
