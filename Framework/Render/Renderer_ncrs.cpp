@@ -63,7 +63,7 @@ bool Renderer_ncrs::Initialize(){
     init_pair( WALL_TILE, COLOR_BLACK , COLOR_BLUE );
     init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
-    init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK );
+    init_pair( OOS_TILE, COLOR_BLACK , COLOR_WHITE);
     init_pair( CHAR_TILE, COLOR_WHITE , COLOR_BLACK );
     init_pair( 98, COLOR_RED , COLOR_BLACK );
     init_pair( 99, COLOR_BLUE , COLOR_BLACK );
@@ -107,6 +107,7 @@ bool Renderer_ncrs::initUIFrame(){
 bool Renderer_ncrs::SetLogContainer( std::string* logContainer , int* logStartPos){
     this->logContainer = logContainer;
     this->logStartPos = logStartPos;
+    return true;
 }
 
 bool Renderer_ncrs::printStringAt(int x, int y, std::string pString){
@@ -178,7 +179,9 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible ){
         attroff(COLOR_PAIR(tileID + 1));
     else
         attroff(COLOR_PAIR(OOS_TILE));
-   // attroff(COLOR_PAIR(tileID + 1));
+   // attroff(COLOR_PAIR(tileID + 1))
+   
+    return true;;
 }
 
 
@@ -294,6 +297,7 @@ bool Renderer_ncrs::refreshLog(){
     wattroff( logWindow, COLOR_PAIR(BASE_TILE));
     touchwin(logWindow);
     wrefresh(logWindow);
+    return true;
 }
 
 char Renderer_ncrs::convertToASCII(int id){

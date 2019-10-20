@@ -242,6 +242,7 @@ bool Renderer_CLI::initUIFrame(){
 bool Renderer_CLI::SetLogContainer( std::string* logContainer , int* logStartPos){
     this->logContainer = logContainer;
     this->logStartPos = logStartPos;
+    return true;     
 }
 
 bool Renderer_CLI::printStringAt( int x, int y, char singleChar){
@@ -442,6 +443,7 @@ bool Renderer_CLI::refreshLog(){
     }
     touchwin(logWindow);
     wrefresh(logWindow);
+    return true;
 }
 
 char Renderer_CLI::convertToASCII(int id){
