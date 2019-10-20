@@ -25,7 +25,8 @@ enum TileColorType{
     WALL_TILE,
     OOS_TILE,
     CHAR_TILE,
-    GUAGE_TILE,
+    UI_TILE,
+    GUAGE_TILE = 98,
 };
 
 Renderer_ncrs::Renderer_ncrs(){
@@ -36,7 +37,7 @@ Renderer_ncrs::Renderer_ncrs(){
     uiStartPos = MaxMapWindowWidth + 1;
     logPrintStartPos = Vector2( uiStartPos + 2, MaxMapWindowHeight / 2);
 
-    ui = DataController::getInstance();
+    dataCtrl = DataController::getInstance();
 
     icon[0] = 46;
     icon[1] = 35; //
@@ -59,14 +60,15 @@ bool Renderer_ncrs::Initialize(){
 
 
     start_color();
-    init_pair( BASE_TILE, COLOR_GREEN , COLOR_BLACK );
-    init_pair( WALL_TILE, COLOR_BLACK , COLOR_BLUE );
+    init_pair( BASE_TILE, COLOR_CYAN , COLOR_BLACK );
+    init_pair( WALL_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
-    init_pair( OOS_TILE, COLOR_BLACK , COLOR_WHITE);
-    init_pair( CHAR_TILE, COLOR_WHITE , COLOR_BLACK );
+    init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK);
+    init_pair( CHAR_TILE, COLOR_CYAN , COLOR_BLACK );
     init_pair( 98, COLOR_RED , COLOR_BLACK );
     init_pair( 99, COLOR_BLUE , COLOR_BLACK );
+    init_pair( UI_TILE ,COLOR_GREEN , COLOR_BLACK );
     initUIFrame();
     return true;
 }
@@ -129,7 +131,7 @@ bool Renderer_ncrs::inputMapData(void* pMapData){
 bool Renderer_ncrs::drawMap(){
 
     int* mapTileData = (int*)(mapData->getData());
-    Vector2 pPos = ui->GetPlayerPos();
+    Vector2 pPos = dataCtrl->GetPlayerPos();
 
     int drawStartPosX = pPos.x - MaxMapWindowWidth / 2;
     int drawStartPosY = pPos.y - MaxMapWindowHeight / 2;
@@ -192,24 +194,40 @@ bool Renderer_ncrs::drawPlayer(){
     return true;
 }
 
+bool Renderer_ncrs::drawEnemy(){
+    attron(COLOR_PAIR(CHAR_TILE));
+    int enemySize = dataCtrl->GetEnemyCount();
+    Vector2 pPos = dataCtrl->GetPlayerPos();
+
+    for(int i = 0;i < enemySize;i++){
+        Vector2 pos = dataCtrl->GetEnemyPos(i);
+        int posX = pos.x - pPos.x + centerPos.x;
+        int posY = pos.y - pPos.y + centerPos.y;
+        mvprintw(posY,posX,"T");   
+    }
+
+    attroff(COLOR_PAIR(CHAR_TILE));
+    return true;
+}
+
 bool Renderer_ncrs::refreshUI(){
-    wattron(uiWindow, COLOR_PAIR(BASE_TILE));
+    wattron(uiWindow, COLOR_PAIR(UI_TILE));
     box(uiWindow,  ACS_VLINE, ACS_HLINE);
     int InitUICursorPosX =  2, InitUICursorPosY = 1;
 
-    auto stringUIData = ui->GetUIstringOrder();
+    auto stringUIData = dataCtrl->GetUIstringOrder();
     for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){
-        std::string value = ui->GetStringUIData(*iter);
+        std::string value = dataCtrl->GetStringUIData(*iter);
 
         mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, value.c_str());
         InitUICursorPosY++;
     }
     
 
-    auto percentUIData = ui->GetUIpercentOrder(); 
+    auto percentUIData = dataCtrl->GetUIpercentOrder(); 
     for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
 
-        Vector2 value = ui->GetPercentUIData(*iter);
+        Vector2 value = dataCtrl->GetPercentUIData(*iter);
         int curValue = value.x;
         int maxValue = value.y;
 
@@ -236,8 +254,8 @@ bool Renderer_ncrs::refreshUI(){
         mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
 
         int percent = (int)((float)curValue / (float)maxValue * 10);
-        wattroff(uiWindow, COLOR_PAIR(BASE_TILE));
-        wattron(uiWindow,COLOR_PAIR(98));
+        wattroff(uiWindow, COLOR_PAIR(UI_TILE));
+        wattron(uiWindow,COLOR_PAIR(GUAGE_TILE));
         for( int i = 0;i < 20 ; i++ ){
             if( i <= percent * 2){
                 
@@ -247,16 +265,16 @@ bool Renderer_ncrs::refreshUI(){
                 waddch(uiWindow, ACS_HLINE);
             }
         }
-        wattroff(uiWindow,COLOR_PAIR(98));
-        wattron(uiWindow, COLOR_PAIR(BASE_TILE));
+        wattroff(uiWindow,COLOR_PAIR(GUAGE_TILE));
+        wattron(uiWindow, COLOR_PAIR(UI_TILE));
         
         
         InitUICursorPosY++;
     }
 
-    auto valueUIData = ui->GetUIvalueOrder(); 
+    auto valueUIData = dataCtrl->GetUIvalueOrder(); 
     for( auto iter = valueUIData.begin();iter != valueUIData.end();iter++){
-        int value = ui->GetValueUIData(*iter);
+        int value = dataCtrl->GetValueUIData(*iter);
         std::string parsedData = *iter;
         
         parsedData += " : ";
@@ -265,7 +283,7 @@ bool Renderer_ncrs::refreshUI(){
         mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
         iter++;
         if( iter != valueUIData.end()){
-            int value = ui->GetValueUIData(*iter);
+            int value = dataCtrl->GetValueUIData(*iter);
             std::string parsedData =  *iter + " : " + std::to_string(value) ;
             mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX + MaxUIWidth / 2 - 2, parsedData.c_str());
         }
@@ -276,7 +294,7 @@ bool Renderer_ncrs::refreshUI(){
         InitUICursorPosY++;
     }
     //attroff(COLOR_PAIR(BASE_TILE));
-    wattroff(uiWindow, COLOR_PAIR(BASE_TILE));
+    wattroff(uiWindow, COLOR_PAIR(UI_TILE));
     touchwin(uiWindow);
     wrefresh(uiWindow);
 
@@ -285,7 +303,7 @@ bool Renderer_ncrs::refreshUI(){
 
 bool Renderer_ncrs::refreshLog(){
     wclear(logWindow);
-    wattron( logWindow, COLOR_PAIR(BASE_TILE));
+    wattron( logWindow, COLOR_PAIR(UI_TILE));
     box(logWindow,  ACS_VLINE, ACS_HLINE);
     int maxLogShowSize = MaxUIHeight - 2;
     for( int i = *logStartPos , j = 0; j < maxLogShowSize; i++, j++){
@@ -294,7 +312,7 @@ bool Renderer_ncrs::refreshLog(){
             textIndex = MaxLogContainerSize - 1;
         mvwprintw(logWindow, maxLogShowSize -j , 2, logContainer[textIndex].c_str());
     }
-    wattroff( logWindow, COLOR_PAIR(BASE_TILE));
+    wattroff( logWindow, COLOR_PAIR(UI_TILE));
     touchwin(logWindow);
     wrefresh(logWindow);
     return true;
@@ -311,6 +329,7 @@ bool Renderer_ncrs::Render(){
     ClearScreen();
     drawMap();
     drawPlayer();
+    drawEnemy();
     refresh();
     refreshUI();
     refreshLog();

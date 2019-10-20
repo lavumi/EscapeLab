@@ -1,8 +1,9 @@
+
 #include "Player.hpp"
 
 
 
-Player::Player(std::string name ) :BaseCharacter(name) {
+Player::Player(std::string name ) :BaseCharacter(name, true) {
 
 }
 

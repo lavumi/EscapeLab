@@ -8,6 +8,7 @@
 #include "../Framework/UserInterface/LogController.hpp"
 
 #include "../Source/Character/Player.hpp"
+#include "../Source/Character/NonPlayer.hpp"
 #include "GameMain.hpp"
 
 
@@ -28,6 +29,7 @@ bool GameMain::Initialize(){
     renderer = new Renderer_ncrs();
     sampleMap = new FloorMap();
     player = new Player("Lavumi");
+    enemy = new NonPlayer("TESTENEMY");
     inputCtrl = InputController::getInstance();
     dataCtrl = DataController::getInstance();
 
@@ -35,12 +37,15 @@ bool GameMain::Initialize(){
 
 
     inputCtrl->SetPlayer( player );
-    dataCtrl->setCharacter(player);
+    dataCtrl->setPlayer(player);
+    dataCtrl->setCharacter(enemy);
 
     player->Initialize();
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
     player->goDownstair( sampleMap );
+    enemy->goDownstair( sampleMap );
+    enemy->Move(40,40);
     return true;
 }
 

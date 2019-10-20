@@ -6,10 +6,11 @@
 #include "FieldOfView.hpp"
 #include "Character.hpp"
 
-BaseCharacter::BaseCharacter(std::string name){
+BaseCharacter::BaseCharacter(std::string name, bool isPlayer){
     this->name = name;
     fov = new FieldOfView(this);
     sightSize = 8;
+    isPlayerCharacter = isPlayer;
 }
 
 BaseCharacter::~BaseCharacter(){
@@ -34,8 +35,11 @@ bool BaseCharacter::Move(int x, int y){
         position.y = targetPosY;
         LogController::PrintLog( "MoveTo " + std::to_string( targetPosX )  + " " + std::to_string( targetPosY ) );
 
-        currentMap->resetfovData();
-        fov->Compute( position, sightSize);
+        if(isPlayerCharacter){
+            currentMap->resetfovData();
+            fov->Compute( position, sightSize);
+        }
+
         return true;
     }
     
@@ -44,15 +48,19 @@ bool BaseCharacter::Move(int x, int y){
 
 bool BaseCharacter::goUpstair(FloorMap* targetMap){
     currentMap = targetMap;
-    currentMap->resetfovData();
-    fov->Compute( position, sightSize);
+    if(isPlayerCharacter){
+        currentMap->resetfovData();
+        fov->Compute( position, sightSize);
+    }
     return true;
 }
 
 bool BaseCharacter::goDownstair(FloorMap* targetMap){
     currentMap = targetMap;
-    currentMap->resetfovData();
-    fov->Compute( position, sightSize);
+    if(isPlayerCharacter){
+        currentMap->resetfovData();
+        fov->Compute( position, sightSize);
+    }
     return true;
 }
 

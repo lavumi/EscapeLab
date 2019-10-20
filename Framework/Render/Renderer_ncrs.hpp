@@ -31,6 +31,7 @@ class Renderer_ncrs : public Renderer{
         bool drawMap();
         bool drawTile(int x, int y,int tileID, bool isVisible = false);
         bool drawPlayer();
+        bool drawEnemy();
         bool refreshUI();
         bool refreshLog();
         char convertToASCII( int id );
@@ -48,7 +49,7 @@ class Renderer_ncrs : public Renderer{
         Vector2 logPrintStartPos;
         Vector2 centerPos;
 
-        DataController* ui;
+        DataController* dataCtrl;
         FloorMap* mapData;
 
         std::string* logContainer;

@@ -19,4 +19,7 @@ class GameMain{
         Renderer* renderer; 
         InputController* inputCtrl;
         DataController* dataCtrl;
+
+
+        BaseCharacter* enemy;
 };

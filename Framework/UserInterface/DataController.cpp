@@ -17,16 +17,14 @@ DataController::~DataController(){
     valueUIOrder.clear();
 }
 
-
-
-bool DataController::setCharacter( BaseCharacter* character){
-    characters.push_back( character);
-        return true;
+bool DataController::setPlayer( BaseCharacter* character){
+    player = character;
+    return true;
 }
 
 bool DataController::SetUIStringData(std::string dataName){
     stringUIOrder.push_back( dataName );
-        return true;
+    return true;
 }
 
 bool DataController::SetUIPercentData(std::string dataName){
@@ -40,17 +38,31 @@ bool DataController::SetUIValueData(std::string dataName){
 }
 
 std::string DataController::GetStringUIData( std::string dataName){
-    return characters[0]->GetStringData(dataName);
+    return player->GetStringData(dataName);
 }
 
 Vector2 DataController::GetPercentUIData( std::string dataName){
-    return characters[0]->GetPercentData(dataName);
+    return player->GetPercentData(dataName);
 }
 
 int DataController::GetValueUIData( std::string dataName){
-    return characters[0]->GetValueData(dataName);
+    return player->GetValueData(dataName);
 }
 
 Vector2 DataController::GetPlayerPos(){
-    return characters[0]->GetPos();
+    return player->GetPos();
+}
+
+
+bool DataController::setCharacter( BaseCharacter* character){
+    characters.push_back( character);
+    return true;
+}
+
+int DataController::GetEnemyCount(){
+    return characters.size();
+}
+
+Vector2 DataController::GetEnemyPos(int index){
+    return characters[index]->GetPos();
 }

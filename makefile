@@ -15,7 +15,7 @@ SRCDIR8 = ./Source/Character
 LDFLAGS = -lncurses
 
 
-SRCS = $(foreach dir, . .. $(SRCDIR8) $(SRCDIR1) $(SRCDIR2) $(SRCDIR3) $(SRCDIR4) $(SRCDIR5) $(SRCDIR6) $(SRCDIR7), $(wildcard $(dir)/*.cpp))
+SRCS = $(foreach dir, . ..  $(SRCDIR1) $(SRCDIR2) $(SRCDIR3) $(SRCDIR4) $(SRCDIR5) $(SRCDIR6) $(SRCDIR7) $(SRCDIR8), $(wildcard $(dir)/*.cpp))
 OBJS = $(SRCS:.cpp=.o)
 
 TARGET = EscapeLab

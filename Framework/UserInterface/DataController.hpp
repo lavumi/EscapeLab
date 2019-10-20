@@ -11,10 +11,10 @@ class DataController{
         }
         static void Delete();
 
-        bool setCharacter( BaseCharacter* character);
 
+        //Player Setting
+        bool setPlayer( BaseCharacter* character );
 
-        //regoin UI
         bool SetUIStringData(std::string dataName);
         bool SetUIPercentData( std::string dataName);
         bool SetUIValueData( std::string dataName );
@@ -33,13 +33,20 @@ class DataController{
             return valueUIOrder;
         };
 
-        //endregion
         Vector2 GetPlayerPos();
+        //Player Setting End
+
+
+        bool setCharacter( BaseCharacter* character);
+        int GetEnemyCount();
+        Vector2 GetEnemyPos(int index);
 
     private:
         static DataController* instance;
         DataController();
         ~DataController();
+
+        BaseCharacter* player;
 
         std::vector<BaseCharacter*> characters;
 

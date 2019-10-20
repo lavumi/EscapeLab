@@ -3,9 +3,11 @@
 
 class FloorMap;
 class FieldOfView;
+
+
 class BaseCharacter{
     public : 
-        BaseCharacter(std::string name);
+        BaseCharacter(std::string name, bool isPlayer = false);
         ~BaseCharacter();
 
 
@@ -26,6 +28,8 @@ class BaseCharacter{
         FloorMap* GetCurrentMap(){ return currentMap;};
 
     protected:
+        bool isPlayerCharacter;
+
         std::string name;
         Vector2 position;
         FloorMap* currentMap;
