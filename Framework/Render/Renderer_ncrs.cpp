@@ -302,7 +302,7 @@ bool Renderer_ncrs::refreshUI(){
 }
 
 bool Renderer_ncrs::refreshLog(){
-    wclear(logWindow);
+//    wclear(logWindow);
     wattron( logWindow, COLOR_PAIR(UI_TILE));
     box(logWindow,  ACS_VLINE, ACS_HLINE);
     int maxLogShowSize = MaxUIHeight - 2;
