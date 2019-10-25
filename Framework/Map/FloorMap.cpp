@@ -1,6 +1,7 @@
 #include "../UserInterface/LogController.hpp"
-#include "FloorMap.hpp"
 #include "../Variables.hpp"
+#include "../Character/Character.hpp"
+#include "FloorMap.hpp"
 
 
 //Map Int data

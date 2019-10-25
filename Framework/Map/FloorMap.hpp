@@ -15,6 +15,11 @@ enum TileType {
     T_Wall,
 };
 
+typedef struct _singleTile{
+    unsigned char Property;
+    BaseCharacter* character;
+    //std::vector<> items;
+} TileData;
 
 class FloorMap{
     public : 
