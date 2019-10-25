@@ -2,6 +2,31 @@
 #include "FloorMap.hpp"
 #include "../Variables.hpp"
 
+
+//Map Int data
+//xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxxx
+// First 8bit : property of tile
+//      0 : can Move
+//      1 : can See
+//      2 : 
+//      3 : 
+//      4 : 
+//      5 :
+//      6 :
+//      7 :
+//
+//
+// Second     : on Tile status
+//      0 : enemy
+//      1 : item
+//      2 : 
+//      3 : 
+//      4 : 
+//      5 :
+//      6 :
+//      7 : 
+
+
 FloorMap::FloorMap(){
     tileType = new TileType[MaxMapWidth * MaxMapHeight];
     

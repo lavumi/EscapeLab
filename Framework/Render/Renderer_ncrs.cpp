@@ -60,7 +60,7 @@ bool Renderer_ncrs::Initialize(){
 
 
     start_color();
-    init_pair( BASE_TILE, COLOR_CYAN , COLOR_BLACK );
+    init_pair( BASE_TILE, COLOR_GREEN , COLOR_CYAN );
     init_pair( WALL_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
