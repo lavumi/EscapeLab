@@ -2,7 +2,6 @@
 
 #include "Renderer.hpp"
 #include "../Map/FloorMap.hpp"
-
 #include "../UserInterface/DataController.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../Variables.hpp"
@@ -130,7 +129,7 @@ bool Renderer_ncrs::inputMapData(void* pMapData){
 
 bool Renderer_ncrs::drawMap(){
 
-    int* mapTileData = (int*)(mapData->getData());
+    TileData* mapTileData = (TileData*)(mapData->getData());
     Vector2 pPos = dataCtrl->GetPlayerPos();
 
     int drawStartPosX = pPos.x - MaxMapWindowWidth / 2;
@@ -155,7 +154,7 @@ bool Renderer_ncrs::drawMap(){
             }
             else{
                 int index = i * MaxMapWidth + j;
-                int tileId = mapTileData[index];
+                int tileId = mapTileData[index].Property;
                 drawTile(screenX, screenY, tileId, mapData->isInSight(j,i));
             }
         }
@@ -175,13 +174,13 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible ){
         attron(COLOR_PAIR(tileID + 1));
     else
         attron(COLOR_PAIR(OOS_TILE));
+
     mvprintw(y,x, "%c", convertToASCII(tileID)); 
 
     if( isVisible)
         attroff(COLOR_PAIR(tileID + 1));
     else
         attroff(COLOR_PAIR(OOS_TILE));
-   // attroff(COLOR_PAIR(tileID + 1))
    
     return true;;
 }
@@ -302,7 +301,6 @@ bool Renderer_ncrs::refreshUI(){
 }
 
 bool Renderer_ncrs::refreshLog(){
-//    wclear(logWindow);
     wattron( logWindow, COLOR_PAIR(UI_TILE));
     box(logWindow,  ACS_VLINE, ACS_HLINE);
     int maxLogShowSize = MaxUIHeight - 2;
@@ -319,13 +317,10 @@ bool Renderer_ncrs::refreshLog(){
 }
 
 char Renderer_ncrs::convertToASCII(int id){
-
     return (char)icon[id]; 
 }
 
 bool Renderer_ncrs::Render(){
-    
-
     ClearScreen();
     drawMap();
     drawPlayer();
@@ -335,9 +330,6 @@ bool Renderer_ncrs::Render(){
     refreshLog();
     return true;
 }
-
-
-
 
 bool Renderer_ncrs::RefreshLog( std::string* logContainer ,int logStartPos ){
     return true;

@@ -4,41 +4,21 @@
 #include "FloorMap.hpp"
 
 
-//Map Int data
-//xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxxx
-// First 8bit : property of tile
-//      0 : can Move
-//      1 : can See
-//      2 : 
-//      3 : 
-//      4 : 
-//      5 :
-//      6 :
-//      7 :
-//
-//
-// Second     : on Tile status
-//      0 : enemy
-//      1 : item
-//      2 : 
-//      3 : 
-//      4 : 
-//      5 :
-//      6 :
-//      7 : 
+
 
 
 FloorMap::FloorMap(){
-    tileType = new TileType[MaxMapWidth * MaxMapHeight];
+    tileData = new TileData[MaxMapWidth * MaxMapHeight];
     
     for( int i = 0;i < MaxMapHeight ; i++){  
         for( int j = 0;j < MaxMapWidth ; j++){
             if( i == 0 || j == 0 || i == MaxMapHeight - 1 || j == MaxMapWidth - 1){
-                tileType[i * MaxMapWidth + j] = T_Wall;
+                tileData[i * MaxMapWidth + j].Property = T_Wall;
             }
             else{
-                tileType[i * MaxMapWidth + j] = T_Base;
+                tileData[i * MaxMapWidth + j].Property = T_Base;
             }
+            tileData[i * MaxMapWidth + j].State = 0;
         }
     }
 
@@ -46,50 +26,46 @@ FloorMap::FloorMap(){
     //set testWalls
 
     for(int i = 20;i < 30 ; i++){
-         tileType[40 * MaxMapWidth + i] = T_Wall;
+         tileData[40 * MaxMapWidth + i].Property = T_Wall;
     }
     
         for(int i = 40;i < 50 ; i++){
-         tileType[i * MaxMapWidth + 23] = T_Wall;
-    }
-
-    fovData = new bool[MaxMapWidth * MaxMapHeight];
-    for( int i = 0;i < MaxMapHeight ; i++){  
-        for( int j = 0;j < MaxMapWidth ; j++){
-            fovData[i * MaxMapWidth + j] = false;
-        }
+         tileData[i * MaxMapWidth + 23].Property = T_Wall;
     }
 }
 
 
 FloorMap::~FloorMap(){
-    delete[] tileType;
-    delete[] fovData;
+    delete[] tileData;
+
 }
 
-TileType* FloorMap::getData(){
-    return tileType;
+TileData* FloorMap::getData(){
+    return tileData;
 }
 
 bool FloorMap::isInSight(int x, int y){
-    return fovData[y * MaxMapWidth + x];
+    return  tileData[y * MaxMapWidth + x].State & 0b00000001;
 }
 
 bool FloorMap::isMovable(int x, int y){
-    return tileType[y * MaxMapWidth + x] & 0x01;
+    return tileData[y * MaxMapWidth + x].Property & 0b00000001;
 }
 
 bool FloorMap::isVisible(int x, int y){
-    return tileType[y * MaxMapWidth + x] >> 1 & 0x01;
+    return tileData[y * MaxMapWidth + x].Property >> 1 & 0b00000001;
 }
 
 void FloorMap::setVisible(int x, int y){
     if( x + y * MaxMapWidth > MaxMapWidth * MaxMapHeight)
         return;
-    fovData[x + y * MaxMapWidth] = true;
+   tileData[y * MaxMapWidth + x].State = 0b00000001;
 }
 
 void FloorMap::resetfovData(){
-
-    std::fill(&fovData[0], &fovData[MaxMapWidth * MaxMapHeight - 1], false);
+    for( int i = 0;i < MaxMapHeight ; i++){  
+        for( int j = 0;j < MaxMapWidth ; j++){
+            tileData[i * MaxMapWidth + j].State = 0;
+        }
+    }
 }

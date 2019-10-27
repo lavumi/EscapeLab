@@ -1,13 +1,5 @@
 #pragma once
 
-/**
- * TileType
- *  
- * Can Walk         Can See         : 0x00
- * Can`t Walk       Can See         : 0x01
- * Can Walk         Can`t See       : 0x10
- * Can`t Walk       Can`t See       : 0x11
- */
 enum TileType {
     T_Base ,
     T_Obstacle,
@@ -15,10 +7,35 @@ enum TileType {
     T_Wall,
 };
 
+class BaseCharacter;
+
+
+//Map Int data
+//xxxxxxxxx
+// Property : property of tile
+//      0 : can Move
+//      1 : can See
+//      2 : 
+//      3 : 
+//      4 : 
+//      5 :
+//      6 :
+//      7 :
+//
+//
+// State     : on Tile status
+//      0 : onSight
+//      1 : 
+//      2 : 
+//      3 : 
+//      4 : 
+//      5 :
+//      6 :
+//      7 : 
 typedef struct _singleTile{
     unsigned char Property;
+    unsigned char State;
     BaseCharacter* character;
-    //std::vector<> items;
 } TileData;
 
 class FloorMap{
@@ -26,7 +43,7 @@ class FloorMap{
         FloorMap();
         ~FloorMap();
 
-        TileType* getData();
+        TileData* getData();
 
         bool isMovable(int x, int y);
         bool isVisible(int x, int y);
@@ -35,7 +52,6 @@ class FloorMap{
         void resetfovData();
     private : 
         
-        TileType* tileType;
-        bool* fovData;
+        TileData* tileData;
 
 };
