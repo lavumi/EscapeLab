@@ -16,7 +16,9 @@ class BaseCharacter{
         virtual bool Initialize() = 0;
         bool goUpstair(FloorMap* targetMap);
         bool goDownstair(FloorMap* targetMap);
-        
+
+
+
         Vector2 GetPos(){
             return position;
         }
@@ -26,6 +28,11 @@ class BaseCharacter{
         int GetValueData( std::string dataName);
 
         FloorMap* GetCurrentMap(){ return currentMap;};
+
+
+        bool MeleeAttack(BaseCharacter* target );
+
+        void TakeDanage(int atk);
 
     protected:
         bool isPlayerCharacter;

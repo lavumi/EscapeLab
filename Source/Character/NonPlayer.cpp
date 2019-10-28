@@ -12,8 +12,8 @@ NonPlayer::~NonPlayer(){
 }
 
 bool NonPlayer::Initialize(){
-    position.x = MaxMapWidth / 2;
-    position.y = MaxMapHeight / 2;
+    // position.x = MaxMapWidth / 2;
+    // position.y = MaxMapHeight / 2;
 
     DataController* ui = DataController::getInstance();
 

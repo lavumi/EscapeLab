@@ -19,7 +19,7 @@ bool Player::Initialize(){
 
 
     setStringData("Name", name);
-    setPercentData( "HP" , 23, 100);
+    setPercentData( "HP" , 100, 100);
     setPercentData("MP", 40, 80);
 
     setValueData ("STR", 17);

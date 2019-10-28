@@ -19,22 +19,16 @@ BaseCharacter::~BaseCharacter(){
 
 bool BaseCharacter::Move(int x, int y){
 
-    int targetPosX =  position.x + x;
-    int targetPosY =  position.y + y;
 
-    int targetTile = ((int*)currentMap->getData())[ targetPosY * MaxMapWidth + targetPosX];
-    
-    
-    if( currentMap->isMovable(targetPosX, targetPosY)){
-        LogController::PrintLog( "Can't Move" );
-        return false;
-    }
-    else
-    {
-        position.x = targetPosX;
-        position.y = targetPosY;
-        LogController::PrintLog( "MoveTo " + std::to_string( targetPosX )  + " " + std::to_string( targetPosY ) );
 
+    Vector2 targetPos;
+    targetPos.x = position.x + x;
+    targetPos.y = position.y + y;
+
+
+    if( currentMap->moveCharacter(position, targetPos) == true ){
+        LogController::PrintLog( "MoveTo " + std::to_string( targetPos.x + targetPos.y * MaxMapWidth) );
+        position = targetPos;
         if(isPlayerCharacter){
             currentMap->resetfovData();
             fov->Compute( position, sightSize);
@@ -42,12 +36,18 @@ bool BaseCharacter::Move(int x, int y){
 
         return true;
     }
-    
+    else{
+      //  TakeDanage(14);
+        LogController::PrintLog( "Can't Move" );
+        return false;
+    }
+
 }
 
 
 bool BaseCharacter::goUpstair(FloorMap* targetMap){
     currentMap = targetMap;
+    targetMap->characterEnter(position, this);
     if(isPlayerCharacter){
         currentMap->resetfovData();
         fov->Compute( position, sightSize);
@@ -56,7 +56,9 @@ bool BaseCharacter::goUpstair(FloorMap* targetMap){
 }
 
 bool BaseCharacter::goDownstair(FloorMap* targetMap){
+
     currentMap = targetMap;
+    targetMap->characterEnter(position, this);
     if(isPlayerCharacter){
         currentMap->resetfovData();
         fov->Compute( position, sightSize);
@@ -109,4 +111,21 @@ int BaseCharacter::GetValueData( std::string dataName){
     else {
         return iter->second;
     }
+}
+
+bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
+    int atk = valueData.find("ATK")->second;
+    LogController::PrintLog("ATK " + std::to_string(atk) + " damage");
+    target->TakeDanage(atk);
+}
+
+void BaseCharacter::TakeDanage(int atk){
+    int def = GetValueData("DEF");
+
+
+    Vector2 hp = GetPercentData("HP"); 
+    hp.x -= atk - def;
+    std::string myname = GetStringData("Name");
+    LogController::PrintLog(myname + " take " + std::to_string(atk -def ) + " damage.");
+
 }

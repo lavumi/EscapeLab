@@ -44,6 +44,9 @@ bool GameMain::Initialize(){
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
     player->goDownstair( sampleMap );
+
+
+    enemy->Initialize();
     enemy->goDownstair( sampleMap );
     enemy->Move(40,40);
     return true;

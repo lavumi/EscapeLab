@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../Variables.hpp"
 enum TileType {
     T_Base ,
     T_Obstacle,
@@ -32,10 +32,20 @@ class BaseCharacter;
 //      5 :
 //      6 :
 //      7 : 
+
 typedef struct _singleTile{
     unsigned char Property;
     unsigned char State;
     BaseCharacter* character;
+
+    _singleTile(){
+        Property = 0b00000000;
+        State = 0b00000000;
+        character = nullptr;
+    };
+    ~_singleTile(){
+
+    };
 } TileData;
 
 class FloorMap{
@@ -49,9 +59,13 @@ class FloorMap{
         bool isVisible(int x, int y);
         bool isInSight(int x, int y);
         void setVisible(int x, int y);
+        bool moveCharacter(Vector2 from, Vector2 to);
+        bool characterEnter(Vector2 pos, BaseCharacter* chara);
         void resetfovData();
     private : 
         
         TileData* tileData;
+        Vector2* upstairPos;
+        Vector2* downstairPos;
 
 };

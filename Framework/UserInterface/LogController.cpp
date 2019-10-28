@@ -15,11 +15,16 @@ void LogController::Initialize( Renderer* renderer ){
 
 int LogController::PrintLog( std::string text ){
    // renderer->RefreshLog(&text, 0);
+    std::string inputText = text;
+    while(inputText.length() < 20){
+        inputText += " ";
+    }
+
     current_LogCount++;
     if(current_LogCount >= MaxLogContainerSize ){
         current_LogCount = 0;
     }
-    LogContainer[current_LogCount] = text;
+    LogContainer[current_LogCount] = inputText;
     //renderer->RefreshLog( LogContainer, current_LogCount );
 
     return 0;
