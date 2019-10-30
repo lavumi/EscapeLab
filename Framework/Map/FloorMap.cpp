@@ -82,12 +82,17 @@ bool FloorMap::moveCharacter(Vector2 from, Vector2 to){
     }
     else{
                         LogController::PrintLog( "555" );
-        //다른 경우가 잇을까?
+        //다른 경우가 잇을까
+        
+                        
+        return false;
     }
+    return false;
 }
 
 bool FloorMap::characterEnter(Vector2 pos, BaseCharacter* chara){
     tileData[pos.y * MaxMapWidth + pos.x].character = chara;
+    return false;
 }
 
 bool FloorMap::isMovable(int x, int y){

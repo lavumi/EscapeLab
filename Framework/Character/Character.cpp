@@ -117,6 +117,7 @@ bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
     int atk = valueData.find("ATK")->second;
     LogController::PrintLog("ATK " + std::to_string(atk) + " damage");
     target->TakeDanage(atk);
+    return true;
 }
 
 void BaseCharacter::TakeDanage(int atk){
