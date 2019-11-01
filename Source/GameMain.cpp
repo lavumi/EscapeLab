@@ -9,6 +9,7 @@
 
 #include "../Source/Character/Player.hpp"
 #include "../Source/Character/NonPlayer.hpp"
+#include "../Source/Character/BattleCtrl.hpp"
 #include "GameMain.hpp"
 
 
@@ -34,6 +35,8 @@ bool GameMain::Initialize(){
     dataCtrl = DataController::getInstance();
 
     LogController::Initialize( renderer );
+
+    BattleCtrl* btlCtrl = new BattleCtrl();
 
 
     inputCtrl->SetPlayer( player );
