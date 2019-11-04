@@ -3,17 +3,17 @@
 
 class FloorMap;
 class FieldOfView;
-
+class BaseBattleCtrl;
 
 class BaseCharacter{
     public : 
-        BaseCharacter(std::string name, bool isPlayer = false);
+        BaseCharacter();
         ~BaseCharacter();
 
 
-        bool Move(int x, int y) ;
+        bool Initialize(std::string name, BaseBattleCtrl* battleCtrl, bool isPlayer);
 
-        virtual bool Initialize() = 0;
+        bool Move(int x, int y) ;
         bool goUpstair(FloorMap* targetMap);
         bool goDownstair(FloorMap* targetMap);
 
@@ -32,7 +32,7 @@ class BaseCharacter{
 
         bool MeleeAttack(BaseCharacter* target );
 
-        void TakeDanage(int atk);
+        void TakeDamage(int atk);
 
     protected:
         bool isPlayerCharacter;
@@ -52,4 +52,6 @@ class BaseCharacter{
         FieldOfView* fov;
 
         int sightSize;
+
+        BaseBattleCtrl* btlCtrl;
 };

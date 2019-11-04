@@ -3,9 +3,9 @@
 class BaseCharacter;
 class NonPlayer : public BaseCharacter{
     public:
-        NonPlayer(std::string);
+        NonPlayer();
         ~NonPlayer();
-        bool Initialize();
+        bool Initialize(std::string);
     private:
 
 

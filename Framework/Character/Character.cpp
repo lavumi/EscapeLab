@@ -3,18 +3,27 @@
 #include "../Variables.hpp"
 #include "../Map/FloorMap.hpp"
 #include "../UserInterface/LogController.hpp"
+#include "BaseBattleCtrl.hpp"
 #include "FieldOfView.hpp"
 #include "Character.hpp"
 
-BaseCharacter::BaseCharacter(std::string name, bool isPlayer){
-    this->name = name;
-    fov = new FieldOfView(this);
-    sightSize = 8;
-    isPlayerCharacter = isPlayer;
+BaseCharacter::BaseCharacter(){
+
 }
 
 BaseCharacter::~BaseCharacter(){
 
+}
+
+bool BaseCharacter::Initialize(std::string name, BaseBattleCtrl* battleCtrl, bool isPlayer = false){
+    this->name = name;
+    fov = new FieldOfView(this);
+    sightSize = 8;
+
+
+    btlCtrl = battleCtrl;
+    isPlayerCharacter = isPlayer;
+    return true;
 }
 
 bool BaseCharacter::Move(int x, int y){
@@ -114,19 +123,17 @@ int BaseCharacter::GetValueData( std::string dataName){
 }
 
 bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
-    int atk = valueData.find("ATK")->second;
-    LogController::PrintLog("ATK " + std::to_string(atk) + " damage");
-    target->TakeDanage(atk);
+    btlCtrl->MeleeAttack(this, target);
     return true;
 }
 
-void BaseCharacter::TakeDanage(int atk){
-    int def = GetValueData("DEF");
-
-
-    Vector2 hp = GetPercentData("HP"); 
-    hp.x -= atk - def;
-    std::string myname = GetStringData("Name");
-    LogController::PrintLog(myname + " take " + std::to_string(atk -def ) + " damage.");
+void BaseCharacter::TakeDamage(int damage){
+    auto iter = percentData.find("HP");
+    if( iter == percentData.end()){
+        return ;
+    }
+    else {
+        iter->second.x -= damage;
+    }
 
 }

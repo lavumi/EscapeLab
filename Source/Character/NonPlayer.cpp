@@ -3,7 +3,7 @@
 #include "NonPlayer.hpp"
 
 
-NonPlayer::NonPlayer(std::string name ) :BaseCharacter(name) {
+NonPlayer::NonPlayer( ) :BaseCharacter() {
 
 }
 
@@ -11,7 +11,10 @@ NonPlayer::~NonPlayer(){
 
 }
 
-bool NonPlayer::Initialize(){
+bool NonPlayer::Initialize(std::string name){
+    BaseCharacter::Initialize(name, nullptr, false);
+
+    
     // position.x = MaxMapWidth / 2;
     // position.y = MaxMapHeight / 2;
 

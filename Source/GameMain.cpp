@@ -6,7 +6,9 @@
 #include "../Framework/Render/Renderer_ncrs.hpp"
 #include "../Framework/Input/InputCtrl.hpp"
 #include "../Framework/UserInterface/LogController.hpp"
+#include "../Framework/UserInterface/DataController.hpp"
 
+#include "../Framework/Character/Character.hpp"
 #include "../Source/Character/Player.hpp"
 #include "../Source/Character/NonPlayer.hpp"
 #include "../Source/Character/BattleCtrl.hpp"
@@ -19,8 +21,14 @@ GameMain::GameMain(){
 
 GameMain::~GameMain(){
     delete (Renderer_ncrs*)renderer;
+    delete btlCtrl;
     delete sampleMap;
+
+
     delete (Player*)player;
+    delete (NonPlayer*)enemy;
+
+
 
     InputController::Delete();
     DataController::Delete();
@@ -28,28 +36,31 @@ GameMain::~GameMain(){
 
 bool GameMain::Initialize(){
     renderer = new Renderer_ncrs();
+    btlCtrl = new BattleCtrl();
     sampleMap = new FloorMap();
-    player = new Player("Lavumi");
-    enemy = new NonPlayer("TESTENEMY");
+    player = new Player();
+    enemy = new NonPlayer();
     inputCtrl = InputController::getInstance();
     dataCtrl = DataController::getInstance();
 
     LogController::Initialize( renderer );
 
-    BattleCtrl* btlCtrl = new BattleCtrl();
+
 
 
     inputCtrl->SetPlayer( player );
-    dataCtrl->setPlayer(player);
-    dataCtrl->setCharacter(enemy);
+    dataCtrl->setPlayer( player );
+    dataCtrl->setCharacter( enemy );
 
-    player->Initialize();
+
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
+
+
+
+    ((Player*)player)->Initialize("Lavumi", btlCtrl);
     player->goDownstair( sampleMap );
-
-
-    enemy->Initialize();
+    ((NonPlayer*)enemy)->Initialize("TESTENEMY");
     enemy->goDownstair( sampleMap );
     enemy->Move(40,40);
     return true;

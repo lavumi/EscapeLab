@@ -1,14 +1,12 @@
 #pragma once
 
-#include "../../Framework/Character/Character.hpp"
-#include "../../Framework/UserInterface/DataController.hpp"
 
 
 class Player : public BaseCharacter{
     public:
-        Player(std::string);
+        Player();
         ~Player();
-        bool Initialize();
+        bool Initialize(std::string, BaseBattleCtrl* btlCtrl);
     private:
 
 

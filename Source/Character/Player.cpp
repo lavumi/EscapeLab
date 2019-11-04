@@ -1,9 +1,11 @@
 
+#include "../../Framework/Character/Character.hpp"
+#include "../../Framework/UserInterface/DataController.hpp"
 #include "Player.hpp"
 
 
 
-Player::Player(std::string name ) :BaseCharacter(name, true) {
+Player::Player() :BaseCharacter() {
 
 }
 
@@ -11,7 +13,8 @@ Player::~Player(){
 
 }
 
-bool Player::Initialize(){
+bool Player::Initialize(std::string name , BaseBattleCtrl* btlCtrl){
+    BaseCharacter::Initialize(name, btlCtrl, true);
     position.x = MaxMapWidth / 2;
     position.y = MaxMapHeight / 2;
 
