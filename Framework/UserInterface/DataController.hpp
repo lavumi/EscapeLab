@@ -38,6 +38,7 @@ class DataController{
 
 
         bool setCharacter( BaseCharacter* character);
+        bool removeCharacter(BaseCharacter* character );
         int GetEnemyCount();
         Vector2 GetEnemyPos(int index);
 
@@ -48,7 +49,7 @@ class DataController{
 
         BaseCharacter* player;
 
-        std::vector<BaseCharacter*> characters;
+        std::list<BaseCharacter*> characters;
 
         std::vector<std::string> stringUIOrder;
         std::vector<std::string> percentUIOrder;

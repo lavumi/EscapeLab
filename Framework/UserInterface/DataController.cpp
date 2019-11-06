@@ -59,10 +59,20 @@ bool DataController::setCharacter( BaseCharacter* character){
     return true;
 }
 
+
+bool DataController::removeCharacter( BaseCharacter* character){
+
+    auto iter = std::find(characters.begin(), characters.end(), character);
+    characters.erase(iter);
+    return true;
+}
+
 int DataController::GetEnemyCount(){
     return characters.size();
 }
 
 Vector2 DataController::GetEnemyPos(int index){
-    return characters[index]->GetPos();
+    auto iter = characters.front();
+    iter += index;
+    return iter->GetPos();
 }

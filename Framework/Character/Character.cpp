@@ -3,6 +3,7 @@
 #include "../Variables.hpp"
 #include "../Map/FloorMap.hpp"
 #include "../UserInterface/LogController.hpp"
+#include "../UserInterface/DataController.hpp"
 #include "BaseBattleCtrl.hpp"
 #include "FieldOfView.hpp"
 #include "Character.hpp"
@@ -12,12 +13,13 @@ BaseCharacter::BaseCharacter(){
 }
 
 BaseCharacter::~BaseCharacter(){
-
+    delete fov;
 }
 
 bool BaseCharacter::Initialize(std::string name, BaseBattleCtrl* battleCtrl, bool isPlayer = false){
     this->name = name;
-    fov = new FieldOfView(this);
+    if(isPlayer == true )
+        fov = new FieldOfView(this);
     sightSize = 8;
 
 
@@ -36,7 +38,7 @@ bool BaseCharacter::Move(int x, int y){
 
 
     if( currentMap->moveCharacter(position, targetPos) == true ){
-        LogController::PrintLog( "MoveTo " + std::to_string( targetPos.x + targetPos.y * MaxMapWidth) );
+       // LogController::PrintLog( "MoveTo " + std::to_string( targetPos.x + targetPos.y * MaxMapWidth) );
         position = targetPos;
         if(isPlayerCharacter){
             currentMap->resetfovData();
@@ -47,7 +49,7 @@ bool BaseCharacter::Move(int x, int y){
     }
     else{
       //  TakeDanage(14);
-        LogController::PrintLog( "Can't Move" );
+      //  LogController::PrintLog( "Can't Move" );
         return false;
     }
 
@@ -134,6 +136,19 @@ void BaseCharacter::TakeDamage(int damage){
     }
     else {
         iter->second.x -= damage;
+        if( iter->second.x <= 0){
+            die();
+        }
     }
 
+}
+
+void BaseCharacter::die(){
+    if(currentMap->removeCharacter(position, this) == true){
+        LogController::PrintLog( name + " DIE!!");
+        DataController::getInstance()->removeCharacter(this);
+    }
+    else{
+        LogController::PrintLog("error : "+ name + " DIE!!");
+    }
 }

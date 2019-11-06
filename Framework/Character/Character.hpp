@@ -54,4 +54,6 @@ class BaseCharacter{
         int sightSize;
 
         BaseBattleCtrl* btlCtrl;
+
+        void die();
 };

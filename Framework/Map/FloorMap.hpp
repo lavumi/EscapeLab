@@ -61,6 +61,7 @@ class FloorMap{
         void setVisible(int x, int y);
         bool moveCharacter(Vector2 from, Vector2 to);
         bool characterEnter(Vector2 pos, BaseCharacter* chara);
+        bool removeCharacter(Vector2 pos, BaseCharacter* chara );
         void resetfovData();
     private : 
         

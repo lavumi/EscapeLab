@@ -116,3 +116,13 @@ void FloorMap::resetfovData(){
         }
     }
 }
+
+bool FloorMap::removeCharacter(Vector2 pos, BaseCharacter* chara){
+    if( tileData[pos.y * MaxMapWidth + pos.x].character == chara){
+        tileData[pos.y * MaxMapWidth + pos.x].character = nullptr;
+        return true;
+    }
+    else{
+        return false;
+    }
+}
