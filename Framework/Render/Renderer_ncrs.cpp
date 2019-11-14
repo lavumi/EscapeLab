@@ -222,7 +222,6 @@ bool Renderer_ncrs::refreshUI(){
         InitUICursorPosY++;
     }
     
-
     auto percentUIData = dataCtrl->GetUIpercentOrder(); 
     for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
 
@@ -292,7 +291,8 @@ bool Renderer_ncrs::refreshUI(){
 
         InitUICursorPosY++;
     }
-    //attroff(COLOR_PAIR(BASE_TILE));
+
+
     wattroff(uiWindow, COLOR_PAIR(UI_TILE));
     touchwin(uiWindow);
     wrefresh(uiWindow);

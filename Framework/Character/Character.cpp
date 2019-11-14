@@ -28,6 +28,39 @@ bool BaseCharacter::Initialize(std::string name, BaseBattleCtrl* battleCtrl, boo
     return true;
 }
 
+// Status BaseCharacter::getStatusData(){
+//     Status returnValue;
+//     returnValue = *stats;
+//     returnValue.Name = stats->Name;
+//     return returnValue;
+// }
+
+std::string BaseCharacter::getStatusData(StatusData::stringData data){
+    std::string returnValue;
+    // switch (data)
+    // {
+    // case stringData::Name:
+    //    returnValue = stats->StringData[stringData::Name];
+    //     break;
+    // default:
+    //     break;
+    // }
+    returnValue = stats->StringData[data];
+    return returnValue;
+}
+
+Vector2 BaseCharacter::getStatusData(StatusData::vectorData data) {
+    Vector2 returnValue;
+    returnValue = stats->VectorData[data];
+    return returnValue;
+}
+
+int BaseCharacter::getStatusData(StatusData::intData data){
+    int returnValue;
+    returnValue = stats->intData[data];
+    return returnValue;
+}
+
 bool BaseCharacter::Move(int x, int y){
 
 
@@ -77,70 +110,15 @@ bool BaseCharacter::goDownstair(FloorMap* targetMap){
     return true;
 }
 
-
-bool BaseCharacter::setStringData(std::string dataName, std::string data){
-    stringData.insert(std::make_pair(dataName, data));
-        return true;
-}
-
-bool BaseCharacter::setPercentData(std::string dataName, int curValue, int MaxValue){
-    Vector2 data (curValue, MaxValue ); 
-    percentData.insert(std::make_pair(dataName, data));
-        return true;
-}
-
-bool BaseCharacter::setValueData(std::string dataName, int value){
-    valueData.insert(std::make_pair(dataName, value));
-        return true;
-}
-
-std::string BaseCharacter::GetStringData( std::string dataName){
-    auto iter = stringData.find(dataName);
-    if( iter == stringData.end()){
-        return "AA";
-    }
-    else {
-        return iter->second;
-    }
-}
-
-Vector2 BaseCharacter::GetPercentData( std::string dataName){
-    auto iter = percentData.find(dataName);
-    if( iter == percentData.end()){
-        return Vector2(0,0);
-    }
-    else {
-        return iter->second;
-    }
-}
-
-int BaseCharacter::GetValueData( std::string dataName){
-    auto iter = valueData.find(dataName);
-    if( iter == valueData.end()){
-        return 0;
-    }
-    else {
-        return iter->second;
-    }
-}
-
 bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
     btlCtrl->MeleeAttack(this, target);
     return true;
 }
 
 void BaseCharacter::TakeDamage(int damage){
-    auto iter = percentData.find("HP");
-    if( iter == percentData.end()){
-        return ;
-    }
-    else {
-        iter->second.x -= damage;
-        if( iter->second.x <= 0){
-            die();
-        }
-    }
-
+    stats->VectorData[StatusData::HP].x -= damage;
+    if( stats->VectorData[StatusData::HP].x <= 0)
+        die();
 }
 
 void BaseCharacter::die(){
@@ -152,3 +130,4 @@ void BaseCharacter::die(){
         LogController::PrintLog("error : "+ name + " DIE!!");
     }
 }
+

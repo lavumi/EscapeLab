@@ -7,6 +7,8 @@ class Player : public BaseCharacter{
         Player();
         ~Player();
         bool Initialize(std::string, BaseBattleCtrl* btlCtrl);
+
+        
     private:
 
 

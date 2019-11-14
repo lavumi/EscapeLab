@@ -21,17 +21,17 @@ bool Player::Initialize(std::string name , BaseBattleCtrl* btlCtrl){
     DataController* ui = DataController::getInstance();
 
 
-    setStringData("Name", name);
-    setPercentData( "HP" , 100, 100);
-    setPercentData("MP", 40, 80);
+    // setStringData("Name", name);
+    // setPercentData( "HP" , 100, 100);
+    // setPercentData("MP", 40, 80);
 
-    setValueData ("STR", 17);
-    setValueData ("EV ", 9);
-    setValueData ("DEX", 12);
-    setValueData ("DEF", 12);
-    setValueData ("INT", 23);
+    // setValueData ("STR", 17);
+    // setValueData ("EV ", 9);
+    // setValueData ("DEX", 12);
+    // setValueData ("DEF", 12);
+    // setValueData ("INT", 23);
 
-    setValueData ("GLD", 993);
+    // setValueData ("GLD", 993);
 
 
 

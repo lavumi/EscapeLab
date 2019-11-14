@@ -8,7 +8,7 @@
             "label": "g++ build active file",
             "command": "/usr/bin/g++",
             "args": [
-                "-std=c++11",
+                "-std=c++14",
                 "-g",
                 "${workspaceRoot}/*.cpp",
                 "${workspaceRoot}/*/*.cpp",

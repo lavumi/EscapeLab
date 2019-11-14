@@ -37,16 +37,16 @@ bool DataController::SetUIValueData(std::string dataName){
     return true;
 }
 
-std::string DataController::GetStringUIData( std::string dataName){
-    return player->GetStringData(dataName);
+std::string DataController::GetStringUIData( StatusData::stringData data){
+    return player->getStatusData(data);
 }
 
-Vector2 DataController::GetPercentUIData( std::string dataName){
-    return player->GetPercentData(dataName);
+Vector2 DataController::GetPercentUIData( StatusData::vectorData data){
+    return player->getStatusData(data);
 }
 
-int DataController::GetValueUIData( std::string dataName){
-    return player->GetValueData(dataName);
+int DataController::GetValueUIData( StatusData::intData data){
+    return player->getStatusData(data);
 }
 
 Vector2 DataController::GetPlayerPos(){
@@ -76,3 +76,13 @@ Vector2 DataController::GetEnemyPos(int index){
     iter += index;
     return iter->GetPos();
 }
+
+auto DataController::GetUIstringOrder(){
+    return StatusData::stringList;
+};
+auto DataController::GetUIpercentOrder(){
+    return StatusData::vectorList;
+};
+auto DataController::GetUIvalueOrder(){
+    return StatusData::intList;
+};

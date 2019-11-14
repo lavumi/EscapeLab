@@ -1,6 +1,13 @@
 #pragma once
 
 
+namespace StatusData{
+     enum stringData : unsigned int;
+     enum vectorData: unsigned int;
+     enum intData: unsigned int;
+}
+
+
 class BaseCharacter;
 class DataController{
     public :
@@ -19,19 +26,13 @@ class DataController{
         bool SetUIPercentData( std::string dataName);
         bool SetUIValueData( std::string dataName );
 
-        std::string GetStringUIData( std::string dataName);
-        Vector2 GetPercentUIData( std::string dataName);
-        int GetValueUIData( std::string dataName);
+        std::string GetStringUIData( StatusData::stringData data);
+        Vector2 GetPercentUIData( StatusData::vectorData data);
+        int GetValueUIData( StatusData::intData data);
 
-        std::vector<std::string> GetUIstringOrder(){
-            return stringUIOrder;
-        };
-        std::vector<std::string> GetUIpercentOrder(){
-            return percentUIOrder;
-        };
-        std::vector<std::string> GetUIvalueOrder(){
-            return valueUIOrder;
-        };
+        auto GetUIstringOrder();
+        auto GetUIpercentOrder();
+        auto GetUIvalueOrder();
 
         Vector2 GetPlayerPos();
         //Player Setting End
