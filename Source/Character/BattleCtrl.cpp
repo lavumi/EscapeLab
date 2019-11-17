@@ -13,8 +13,8 @@ BattleCtrl::~BattleCtrl(){
 }
 
 bool BattleCtrl::MeleeAttack( BaseCharacter* attacker, BaseCharacter* defender) {
-    int atk = attacker->getStatusData(intData::STR);
-    int def = defender->getStatusData(intData::DEF);
+    int atk = attacker->getStatusData(StatusData::STR);
+    int def = defender->getStatusData(StatusData::DEF);
     int damage = calculateDamage(atk, def);
     LogController::PrintLog( std::to_string(atk) + " atk , " + std::to_string(def) + " def , " + std::to_string(damage) + " Damage taken"  );
     defender->TakeDamage(damage);

@@ -9,13 +9,20 @@
 #include "../Framework/UserInterface/DataController.hpp"
 
 #include "../Framework/Character/Character.hpp"
-#include "../Source/Character/Player.hpp"
-#include "../Source/Character/NonPlayer.hpp"
+#include "../Framework/Character/CharacterGenerator.hpp"
 #include "../Source/Character/BattleCtrl.hpp"
 #include "GameMain.hpp"
 
 
 GameMain::GameMain(){
+    renderer = new Renderer_ncrs();
+    btlCtrl = new BattleCtrl();
+    sampleMap = new FloorMap();
+
+    charGenerator = new CharacterGenerator();
+    inputCtrl = InputController::getInstance();
+    dataCtrl = DataController::getInstance();
+    LogController::Initialize( renderer );
 
 }
 
@@ -23,46 +30,26 @@ GameMain::~GameMain(){
     delete (Renderer_ncrs*)renderer;
     delete btlCtrl;
     delete sampleMap;
-
-
-    delete (Player*)player;
-    delete (NonPlayer*)enemy;
-
-
+    delete charGenerator;
 
     InputController::Delete();
     DataController::Delete();
 }
 
 bool GameMain::Initialize(){
-    renderer = new Renderer_ncrs();
-    btlCtrl = new BattleCtrl();
-    sampleMap = new FloorMap();
-    player = new Player();
-    enemy = new NonPlayer();
-    inputCtrl = InputController::getInstance();
-    dataCtrl = DataController::getInstance();
 
-    LogController::Initialize( renderer );
+    charGenerator->Initialize(btlCtrl);
 
-
-
+    BaseCharacter* player = charGenerator->makeCharacter( Status("Lavumi", 100, 80, 12, 6, 9,5,9,523), sampleMap, Vector2( MaxMapWidth / 2, MaxMapHeight / 2), true);
+    BaseCharacter* enemy = charGenerator->makeCharacter( Status("TestEnemy", 30, 80, 12, 6, 9,5,9,523), sampleMap, Vector2( 7, 17));
 
     inputCtrl->SetPlayer( player );
     dataCtrl->setPlayer( player );
     dataCtrl->setCharacter( enemy );
-
-
+ 
     renderer->Initialize();
     renderer->inputMapData(sampleMap);
 
-
-
-    ((Player*)player)->Initialize("Lavumi", btlCtrl);
-    player->goDownstair( sampleMap );
-    ((NonPlayer*)enemy)->Initialize("TESTENEMY");
-    enemy->goDownstair( sampleMap );
-    enemy->Move(40,40);
     return true;
 }
 

@@ -1,12 +1,11 @@
 
 class FloorMap;
-class Player;
-class NonPlayer;
 class BaseCharacter;
 class Renderer;
 class InputController;
 class DataController;
 class BattleCtrl;
+class CharacterGenerator;
 class GameMain{
     public : 
         GameMain();
@@ -23,8 +22,5 @@ class GameMain{
         InputController* inputCtrl;
         DataController* dataCtrl;
         BattleCtrl* btlCtrl;
-
-
-        BaseCharacter* player;
-        BaseCharacter* enemy;
+        CharacterGenerator* charGenerator;
 };

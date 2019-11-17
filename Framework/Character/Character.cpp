@@ -9,42 +9,36 @@
 #include "Character.hpp"
 
 BaseCharacter::BaseCharacter(){
-
+    stats = new Status();
 }
 
 BaseCharacter::~BaseCharacter(){
-    delete fov;
+    if(isPlayerCharacter == true )
+        delete fov;
+
+    delete stats;
 }
 
-bool BaseCharacter::Initialize(std::string name, BaseBattleCtrl* battleCtrl, bool isPlayer = false){
-    this->name = name;
-    if(isPlayer == true )
-        fov = new FieldOfView(this);
-    sightSize = 8;
-
-
+bool BaseCharacter::Initialize( BaseBattleCtrl* battleCtrl, Status pStats, Vector2 position,bool isPlayer = false){
     btlCtrl = battleCtrl;
+    if(isPlayer == true ){
+        fov = new FieldOfView(this);
+    }
+
+
+    this->name = pStats.StringData[0];
+    this->position = position;
+    sightSize = 8;
+    *stats = pStats;
+
     isPlayerCharacter = isPlayer;
+    _isDead = true;
+    
     return true;
 }
 
-// Status BaseCharacter::getStatusData(){
-//     Status returnValue;
-//     returnValue = *stats;
-//     returnValue.Name = stats->Name;
-//     return returnValue;
-// }
-
 std::string BaseCharacter::getStatusData(StatusData::stringData data){
     std::string returnValue;
-    // switch (data)
-    // {
-    // case stringData::Name:
-    //    returnValue = stats->StringData[stringData::Name];
-    //     break;
-    // default:
-    //     break;
-    // }
     returnValue = stats->StringData[data];
     return returnValue;
 }
@@ -62,16 +56,12 @@ int BaseCharacter::getStatusData(StatusData::intData data){
 }
 
 bool BaseCharacter::Move(int x, int y){
-
-
-
     Vector2 targetPos;
     targetPos.x = position.x + x;
     targetPos.y = position.y + y;
 
 
     if( currentMap->moveCharacter(position, targetPos) == true ){
-       // LogController::PrintLog( "MoveTo " + std::to_string( targetPos.x + targetPos.y * MaxMapWidth) );
         position = targetPos;
         if(isPlayerCharacter){
             currentMap->resetfovData();
@@ -81,13 +71,24 @@ bool BaseCharacter::Move(int x, int y){
         return true;
     }
     else{
-      //  TakeDanage(14);
-      //  LogController::PrintLog( "Can't Move" );
         return false;
     }
 
 }
 
+bool BaseCharacter::__setPosition(Vector2 pos ){
+    if( currentMap->moveCharacter(position, pos) == true ){
+        position = pos;
+        if(isPlayerCharacter){
+            currentMap->resetfovData();
+            fov->Compute( position, sightSize);
+        }
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 bool BaseCharacter::goUpstair(FloorMap* targetMap){
     currentMap = targetMap;
@@ -129,5 +130,6 @@ void BaseCharacter::die(){
     else{
         LogController::PrintLog("error : "+ name + " DIE!!");
     }
+    _isDead = false;
 }
 

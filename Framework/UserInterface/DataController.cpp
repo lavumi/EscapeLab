@@ -77,12 +77,15 @@ Vector2 DataController::GetEnemyPos(int index){
     return iter->GetPos();
 }
 
-auto DataController::GetUIstringOrder(){
-    return StatusData::stringList;
-};
-auto DataController::GetUIpercentOrder(){
-    return StatusData::vectorList;
-};
-auto DataController::GetUIvalueOrder(){
-    return StatusData::intList;
-};
+// auto DataController::GetUIstringOrder(){
+//     return StatusData::stringList;
+// };
+// auto DataController::GetUIpercentOrder(){
+//     return StatusData::vectorList;
+// };
+// // StatusData::intData* DataController::GetUIvalueOrder(){
+// //     return StatusData::intList;
+// // };
+// StatusData::intData (&GetUIvalueOrder())[6]{
+//     return StatusData::intList;
+// };

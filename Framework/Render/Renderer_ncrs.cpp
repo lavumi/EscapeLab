@@ -2,6 +2,7 @@
 
 #include "Renderer.hpp"
 #include "../Map/FloorMap.hpp"
+#include "../Character/Character.hpp"
 #include "../UserInterface/DataController.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../Variables.hpp"
@@ -214,6 +215,87 @@ bool Renderer_ncrs::refreshUI(){
     box(uiWindow,  ACS_VLINE, ACS_HLINE);
     int InitUICursorPosX =  2, InitUICursorPosY = 1;
 
+
+
+    for( int i = 0; i < StatusData::stringDataLength ; i++ ){
+        std::string value = dataCtrl->GetStringUIData((StatusData::stringData)i);
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, value.c_str());
+        InitUICursorPosY++;
+    }
+
+    for( int i = 0; i < StatusData::vectorDataLength ; i++ ){
+        Vector2 value = dataCtrl->GetPercentUIData((StatusData::vectorData)i);
+        int curValue = value.x;
+        int maxValue = value.y;
+        std::string parsedData = ToString((StatusData::vectorData)i);
+
+
+        parsedData += " : ";
+        if( curValue < 100 )
+            parsedData += " ";
+        if( curValue < 10 )
+            parsedData += " ";
+        parsedData += std::to_string(curValue);
+        parsedData += "/";
+        if( maxValue < 100 )
+            parsedData += " ";
+        if( maxValue < 10 )
+            parsedData += " ";
+        parsedData += std::to_string(maxValue);;
+       
+
+        int interspace = MaxUIWidth - parsedData.length() - 1 - 20 - 2 - 2;
+       // parsedData += std::to_string(interspace);
+        for(int i = 0;i < interspace ;i ++){
+            parsedData += " ";
+        }
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
+
+        int percent = (int)((float)curValue / (float)maxValue * 10);
+        wattroff(uiWindow, COLOR_PAIR(UI_TILE));
+        wattron(uiWindow,COLOR_PAIR(GUAGE_TILE));
+        for( int i = 0;i < 20 ; i++ ){
+            if( i <= percent * 2){
+                
+                waddch(uiWindow, ACS_CKBOARD);
+            }      
+            else{
+                waddch(uiWindow, ACS_HLINE);
+            }
+        }
+        wattroff(uiWindow,COLOR_PAIR(GUAGE_TILE));
+        wattron(uiWindow, COLOR_PAIR(UI_TILE));
+        
+        
+        InitUICursorPosY++;
+    }
+
+    for( int i = 0;i < StatusData::intDataLength ; i++ ){
+        int value = dataCtrl->GetValueUIData((StatusData::intData)i);
+        std::string parsedData = ToString((StatusData::intData)i);
+
+        parsedData += " : ";
+        parsedData += std::to_string(value);
+
+        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
+        i++;
+
+        if( i < StatusData::intDataLength){
+            int value = dataCtrl->GetValueUIData((StatusData::intData)i);
+            std::string parsedData = ToString((StatusData::intData)i);
+
+            parsedData += " : ";
+            parsedData += std::to_string(value);
+            mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX + MaxUIWidth / 2 - 2, parsedData.c_str());
+        }
+        else{
+            break;
+        }
+
+        InitUICursorPosY++;
+    }
+
+    /*
     auto stringUIData = dataCtrl->GetUIstringOrder();
     for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){
         std::string value = dataCtrl->GetStringUIData(*iter);
@@ -221,7 +303,7 @@ bool Renderer_ncrs::refreshUI(){
         mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, value.c_str());
         InitUICursorPosY++;
     }
-    
+
     auto percentUIData = dataCtrl->GetUIpercentOrder(); 
     for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
 
@@ -269,8 +351,7 @@ bool Renderer_ncrs::refreshUI(){
         
         InitUICursorPosY++;
     }
-
-    auto valueUIData = dataCtrl->GetUIvalueOrder(); 
+    auto valueUIData = dataCtrl->GetUIvalueOrder();
     for( auto iter = valueUIData.begin();iter != valueUIData.end();iter++){
         int value = dataCtrl->GetValueUIData(*iter);
         std::string parsedData = *iter;
@@ -291,6 +372,7 @@ bool Renderer_ncrs::refreshUI(){
 
         InitUICursorPosY++;
     }
+    */
 
 
     wattroff(uiWindow, COLOR_PAIR(UI_TILE));
