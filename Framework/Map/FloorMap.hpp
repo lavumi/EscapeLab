@@ -58,6 +58,7 @@ class FloorMap{
         bool isMovable(int x, int y);
         bool isVisible(int x, int y);
         bool isInSight(int x, int y);
+        BaseCharacter* getCharacter(int x, int y);
         void setVisible(int x, int y);
         bool moveCharacter(Vector2 from, Vector2 to);
         bool characterEnter(Vector2 pos, BaseCharacter* chara);

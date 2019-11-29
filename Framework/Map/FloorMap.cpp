@@ -50,7 +50,9 @@ bool FloorMap::isInSight(int x, int y){
     return  tileData[y * MaxMapWidth + x].State & 0b00000001;
 }
 
-
+BaseCharacter* FloorMap::getCharacter(int x, int y){
+    return  tileData[y * MaxMapWidth + x].character;
+}
 
 bool FloorMap::moveCharacter(Vector2 from, Vector2 to){
     TileData* fromTile = &tileData[from.y * MaxMapWidth + from.x];
@@ -81,7 +83,7 @@ bool FloorMap::moveCharacter(Vector2 from, Vector2 to){
         return false;
     }
     else{
-                        LogController::PrintLog( "555" );
+        LogController::PrintLog( "555" );
         //다른 경우가 잇을까
         
                         

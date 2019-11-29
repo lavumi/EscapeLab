@@ -156,7 +156,7 @@ bool Renderer_ncrs::drawMap(){
             else{
                 int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index].Property;
-                drawTile(screenX, screenY, tileId, mapData->isInSight(j,i));
+                drawTile(screenX, screenY, tileId, mapData->isInSight(j,i), mapData->getCharacter(j,i));
             }
         }
 
@@ -169,20 +169,25 @@ bool Renderer_ncrs::drawMap(){
     return true;
 }
 
-bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible ){
+bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , BaseCharacter* character){
+    if( isVisible && character != nullptr ){
+        attron(COLOR_PAIR(CHAR_TILE));
+        char headChar = character->getStatusData(StatusData::Name)[0];
+        mvprintw(y,x, "%c", headChar); 
+        attroff(COLOR_PAIR(CHAR_TILE));
 
-    if( isVisible)
+    }
+    else if ( isVisible ){
         attron(COLOR_PAIR(tileID + 1));
-    else
-        attron(COLOR_PAIR(OOS_TILE));
-
-    mvprintw(y,x, "%c", convertToASCII(tileID)); 
-
-    if( isVisible)
+        mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(tileID + 1));
-    else
+    }
+    else {
+        attron(COLOR_PAIR(OOS_TILE));
+        mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(OOS_TILE));
-   
+
+    }
     return true;;
 }
 
@@ -406,7 +411,7 @@ bool Renderer_ncrs::Render(){
     ClearScreen();
     drawMap();
     drawPlayer();
-    drawEnemy();
+    //drawEnemy();
     refresh();
     refreshUI();
     refreshLog();

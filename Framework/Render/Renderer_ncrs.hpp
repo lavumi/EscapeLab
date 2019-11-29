@@ -29,7 +29,7 @@ class Renderer_ncrs : public Renderer{
         bool initUIFrame();
 
         bool drawMap();
-        bool drawTile(int x, int y,int tileID, bool isVisible = false);
+        bool drawTile(int x, int y,int tileID, bool isVisible = false, BaseCharacter* character = nullptr);
         bool drawPlayer();
         bool drawEnemy();
         bool refreshUI();

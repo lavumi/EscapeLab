@@ -47,6 +47,7 @@ typedef struct _status
 
     _status operator=(_status &p)
     {
+
         StringData[0] = p.StringData[0];
 
         VectorData[0]   = p.VectorData[0];
@@ -57,6 +58,8 @@ typedef struct _status
         intData[3]      = p.intData[3]   ;
         intData[4]      = p.intData[4]   ;
         intData[5]      = p.intData[5]   ;
+
+        return *this;
     }
 
 } Status;
