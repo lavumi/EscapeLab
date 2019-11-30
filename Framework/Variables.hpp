@@ -19,6 +19,13 @@ struct Vector2 {
         this->x = x;
         this->y = y;
     }
+
+    bool operator==(Vector2 target ){
+        if ( x == target.x && y == target.y )
+            return true;
+        else
+            return false;
+    }
 };
 
 
@@ -45,19 +52,24 @@ namespace StatusData{
         switch (v){
             case Name:   
                 return "Name";
+            default : 
+                return "NULL";
         }
     }
 
-        inline const char* ToString(vectorData v){
+    inline const char* ToString(vectorData v){
         switch (v){
             case HP:   
                 return "HP";
             case MP:   
                 return "MP";
+            default : 
+                return "NULL";
+
         }
     }
 
-        inline const char* ToString(intData v){
+    inline const char* ToString(intData v){
         switch (v){
             case STR:   
                 return "STR";
@@ -71,6 +83,8 @@ namespace StatusData{
                 return "INT";
             case GLD:   
                 return "GLD";
+            default : 
+                return "NULL";
         }
     }
 

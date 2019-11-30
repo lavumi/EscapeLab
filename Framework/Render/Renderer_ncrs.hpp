@@ -2,6 +2,7 @@
 #include "../precompiled.hpp"
 
 class DataController;
+class InputController;
 class Renderer_ncrs : public Renderer{
 
     public:
@@ -30,6 +31,7 @@ class Renderer_ncrs : public Renderer{
 
         bool drawMap();
         bool drawTile(int x, int y,int tileID, bool isVisible = false, BaseCharacter* character = nullptr);
+        bool drawInputModeCursor();
         bool drawPlayer();
         bool drawEnemy();
         bool refreshUI();
@@ -54,5 +56,8 @@ class Renderer_ncrs : public Renderer{
 
         std::string* logContainer;
         int* logStartPos;
+
+
+        InputController* inputCtrl;
         
 };

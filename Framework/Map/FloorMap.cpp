@@ -73,6 +73,8 @@ bool FloorMap::moveCharacter(Vector2 from, Vector2 to){
     else if (fromTile->character != nullptr && toTile->character != nullptr){
         //움직이고자 한 타일에 적이 있을때
         //공격해야겠지?
+        //이거 안좋은 코드 같은데...
+        //여기서 공격이 아니라 뭔가 다른걸 반환해줘서 캐릭터에서 그걸 받아서 실행하는게 더 좋을거 같다
         fromTile->character->MeleeAttack( toTile->character );
         return false;
     }
@@ -84,9 +86,7 @@ bool FloorMap::moveCharacter(Vector2 from, Vector2 to){
     }
     else{
         LogController::PrintLog( "555" );
-        //다른 경우가 잇을까
-        
-                        
+        //다른 경우가 잇을까         
         return false;
     }
     return false;

@@ -94,6 +94,7 @@ public:
     FloorMap *GetCurrentMap() { return currentMap; };
 
     bool MeleeAttack(BaseCharacter *target);
+    bool RangeAttack(Vector2 target);
 
     void TakeDamage(int atk);
 

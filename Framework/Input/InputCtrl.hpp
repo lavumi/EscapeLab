@@ -2,6 +2,13 @@
 
 class BaseCharacter;
 class InputController{
+    private : 
+
+        static InputController* instance;
+        InputController();
+        ~InputController();
+
+
     public:
         static InputController* getInstance(){
             if( instance == nullptr)
@@ -9,13 +16,21 @@ class InputController{
             return instance;
         }
         static void Delete();
-        bool WairForInput();
-        void SetPlayer( BaseCharacter* player );
-    private : 
 
-        static InputController* instance;
-        InputController();
-        ~InputController();
+
+    private:
+        enum InputMode {
+            NORMAL,
+            RANGE_ATTACK
+        };
+        void changeMode(InputMode mode);
+        InputMode currentMode;
         BaseCharacter* player;
 
+        Vector2 cursor;
+    public :
+
+        bool WairForInput();
+        void SetPlayer( BaseCharacter* player );
+        Vector2 GetCursorPos();
 };

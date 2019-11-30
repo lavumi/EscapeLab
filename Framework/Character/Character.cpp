@@ -116,6 +116,10 @@ bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
     return true;
 }
 
+bool BaseCharacter::RangeAttack(Vector2 target){
+    return true;
+}
+
 void BaseCharacter::TakeDamage(int damage){
     stats->VectorData[StatusData::HP].x -= damage;
     if( stats->VectorData[StatusData::HP].x <= 0)

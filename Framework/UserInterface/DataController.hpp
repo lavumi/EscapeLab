@@ -30,11 +30,6 @@ class DataController{
         Vector2 GetPercentUIData( StatusData::vectorData data);
         int GetValueUIData( StatusData::intData data);
 
-        // auto GetUIstringOrder();
-        // auto GetUIpercentOrder();
-        // //StatusData::intData* GetUIvalueOrder();
-        // StatusData::intData (&GetUIvalueOrder())[6];
-
         Vector2 GetPlayerPos();
         //Player Setting End
 

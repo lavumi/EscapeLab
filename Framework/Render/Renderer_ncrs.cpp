@@ -3,6 +3,7 @@
 #include "Renderer.hpp"
 #include "../Map/FloorMap.hpp"
 #include "../Character/Character.hpp"
+#include "../Input/InputCtrl.hpp"
 #include "../UserInterface/DataController.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../Variables.hpp"
@@ -26,6 +27,7 @@ enum TileColorType{
     OOS_TILE,
     CHAR_TILE,
     UI_TILE,
+    CURSOR_TILE,
     GUAGE_TILE = 98,
 };
 
@@ -38,6 +40,7 @@ Renderer_ncrs::Renderer_ncrs(){
     logPrintStartPos = Vector2( uiStartPos + 2, MaxMapWindowHeight / 2);
 
     dataCtrl = DataController::getInstance();
+    inputCtrl = InputController::getInstance();
 
     icon[0] = 46;
     icon[1] = 35; //
@@ -66,6 +69,7 @@ bool Renderer_ncrs::Initialize(){
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
     init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK);
     init_pair( CHAR_TILE, COLOR_CYAN , COLOR_BLACK );
+    init_pair( CURSOR_TILE, COLOR_MAGENTA , COLOR_BLACK );
     init_pair( 98, COLOR_RED , COLOR_BLACK );
     init_pair( 99, COLOR_BLUE , COLOR_BLACK );
     init_pair( UI_TILE ,COLOR_GREEN , COLOR_BLACK );
@@ -189,6 +193,21 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , BaseChara
 
     }
     return true;;
+}
+
+bool Renderer_ncrs::drawInputModeCursor(){
+    Vector2 curPos = inputCtrl->GetCursorPos();
+    if( curPos == Vector2(0,0))
+        return false;
+    
+
+    attron(COLOR_PAIR(CURSOR_TILE));
+    Vector2 pPos = dataCtrl->GetPlayerPos();
+    int posX = curPos.x - pPos.x + centerPos.x;
+    int posY = curPos.y - pPos.y + centerPos.y;
+    mvprintw(posY,posX,"*");   
+    attroff(COLOR_PAIR(CURSOR_TILE));
+    return true;
 }
 
 
@@ -412,6 +431,7 @@ bool Renderer_ncrs::Render(){
     drawMap();
     drawPlayer();
     //drawEnemy();
+    drawInputModeCursor();
     refresh();
     refreshUI();
     refreshLog();
