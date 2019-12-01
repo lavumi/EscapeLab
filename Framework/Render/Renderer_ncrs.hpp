@@ -34,9 +34,13 @@ class Renderer_ncrs : public Renderer{
         bool drawInputModeCursor();
         bool drawPlayer();
         bool drawEnemy();
-        bool refreshUI();
-        bool refreshLog();
+        bool drawUI();
+        bool drawLog();
+
+
+
         char convertToASCII( int id );
+        bool drawBresenhamLine( Vector2 start, Vector2 end);
 
         int icon[12];
 

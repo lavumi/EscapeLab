@@ -117,6 +117,7 @@ bool BaseCharacter::MeleeAttack(BaseCharacter* target ){
 }
 
 bool BaseCharacter::RangeAttack(Vector2 target){
+    btlCtrl->RangeAttack( this, target );
     return true;
 }
 

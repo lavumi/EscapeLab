@@ -1,8 +1,7 @@
 #pragma once
 #include "../precompiled.hpp"
 
-typedef struct _status
-{
+typedef struct _status{
     std::string* StringData;
     Vector2* VectorData;
     int* intData;

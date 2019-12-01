@@ -50,7 +50,7 @@ bool InputController::WairForInput(){
         if(ch == 'j')
             cursor.y += 1;
         if(ch == '\n'){
-            //player->
+            player->RangeAttack( cursor );
             changeMode(NORMAL);
         }
         if(ch == 'q'){

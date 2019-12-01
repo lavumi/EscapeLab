@@ -105,7 +105,7 @@ bool Renderer_ncrs::initUIFrame(){
 
     wattron(logWindow, COLOR_PAIR(BASE_TILE));
 
-    refreshUI();
+    drawUI();
 
     return true;
 }
@@ -199,14 +199,16 @@ bool Renderer_ncrs::drawInputModeCursor(){
     Vector2 curPos = inputCtrl->GetCursorPos();
     if( curPos == Vector2(0,0))
         return false;
-    
 
-    attron(COLOR_PAIR(CURSOR_TILE));
     Vector2 pPos = dataCtrl->GetPlayerPos();
-    int posX = curPos.x - pPos.x + centerPos.x;
-    int posY = curPos.y - pPos.y + centerPos.y;
-    mvprintw(posY,posX,"*");   
-    attroff(COLOR_PAIR(CURSOR_TILE));
+    drawBresenhamLine( pPos,curPos );
+
+    // attron(COLOR_PAIR(CURSOR_TILE));
+    // 
+    // int posX = curPos.x - pPos.x + centerPos.x;
+    // int posY = curPos.y - pPos.y + centerPos.y;
+    // mvprintw(posY,posX,"*");   
+    // attroff(COLOR_PAIR(CURSOR_TILE));
     return true;
 }
 
@@ -234,7 +236,7 @@ bool Renderer_ncrs::drawEnemy(){
     return true;
 }
 
-bool Renderer_ncrs::refreshUI(){
+bool Renderer_ncrs::drawUI(){
     wattron(uiWindow, COLOR_PAIR(UI_TILE));
     box(uiWindow,  ACS_VLINE, ACS_HLINE);
     int InitUICursorPosX =  2, InitUICursorPosY = 1;
@@ -319,86 +321,6 @@ bool Renderer_ncrs::refreshUI(){
         InitUICursorPosY++;
     }
 
-    /*
-    auto stringUIData = dataCtrl->GetUIstringOrder();
-    for( auto iter = stringUIData.begin();iter != stringUIData.end();iter++){
-        std::string value = dataCtrl->GetStringUIData(*iter);
-
-        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, value.c_str());
-        InitUICursorPosY++;
-    }
-
-    auto percentUIData = dataCtrl->GetUIpercentOrder(); 
-    for( auto iter = percentUIData.begin();iter != percentUIData.end();iter++){
-
-        Vector2 value = dataCtrl->GetPercentUIData(*iter);
-        int curValue = value.x;
-        int maxValue = value.y;
-
-
-        std::string parsedData = *iter;
-        parsedData += " : ";
-        if( curValue < 100 )
-            parsedData += " ";
-        if( curValue < 10 )
-            parsedData += " ";
-        parsedData += std::to_string(curValue);
-        parsedData += "/";
-        if( maxValue < 100 )
-            parsedData += " ";
-        if( maxValue < 10 )
-            parsedData += " ";
-        parsedData += std::to_string(maxValue);;
-       
-
-        int interspace = MaxUIWidth - (*iter).length() - 3 - 3 - 1 - 3 - 20 - 2 - 2;
-        for(int i = 0;i < interspace ;i ++){
-            parsedData += " ";
-        }
-        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
-
-        int percent = (int)((float)curValue / (float)maxValue * 10);
-        wattroff(uiWindow, COLOR_PAIR(UI_TILE));
-        wattron(uiWindow,COLOR_PAIR(GUAGE_TILE));
-        for( int i = 0;i < 20 ; i++ ){
-            if( i <= percent * 2){
-                
-                waddch(uiWindow, ACS_CKBOARD);
-            }      
-            else{
-                waddch(uiWindow, ACS_HLINE);
-            }
-        }
-        wattroff(uiWindow,COLOR_PAIR(GUAGE_TILE));
-        wattron(uiWindow, COLOR_PAIR(UI_TILE));
-        
-        
-        InitUICursorPosY++;
-    }
-    auto valueUIData = dataCtrl->GetUIvalueOrder();
-    for( auto iter = valueUIData.begin();iter != valueUIData.end();iter++){
-        int value = dataCtrl->GetValueUIData(*iter);
-        std::string parsedData = *iter;
-        
-        parsedData += " : ";
-        parsedData += std::to_string(value);
-
-        mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX, parsedData.c_str());
-        iter++;
-        if( iter != valueUIData.end()){
-            int value = dataCtrl->GetValueUIData(*iter);
-            std::string parsedData =  *iter + " : " + std::to_string(value) ;
-            mvwprintw(uiWindow,InitUICursorPosY, InitUICursorPosX + MaxUIWidth / 2 - 2, parsedData.c_str());
-        }
-        else{
-            break;
-        }
-
-        InitUICursorPosY++;
-    }
-    */
-
-
     wattroff(uiWindow, COLOR_PAIR(UI_TILE));
     touchwin(uiWindow);
     wrefresh(uiWindow);
@@ -406,7 +328,7 @@ bool Renderer_ncrs::refreshUI(){
     return true;
 }
 
-bool Renderer_ncrs::refreshLog(){
+bool Renderer_ncrs::drawLog(){
     wattron( logWindow, COLOR_PAIR(UI_TILE));
     box(logWindow,  ACS_VLINE, ACS_HLINE);
     int maxLogShowSize = MaxUIHeight - 2;
@@ -426,15 +348,61 @@ char Renderer_ncrs::convertToASCII(int id){
     return (char)icon[id]; 
 }
 
+bool Renderer_ncrs::drawBresenhamLine(Vector2 start, Vector2 end ){
+    attron(COLOR_PAIR(CURSOR_TILE));
+    Vector2 curPos;
+
+
+    int x = start.x;
+    int y = start.y;
+
+    int width = end.x - start.x;
+    int height = end.y - start.y;
+
+    int F = 2 * height - width;
+
+    int detF1 = 2 * height;
+    int detF2 = 2 * ( height - width );
+
+    Vector2 pPos = dataCtrl->GetPlayerPos();
+    for ( x = start.x ; x <= end.x ; x++ ){
+        curPos = Vector2(x,y);
+        int posX = curPos.x - pPos.x + centerPos.x;
+        int posY = curPos.y - pPos.y + centerPos.y;
+        mvprintw(posY,posX,"*");
+
+        if ( F < 0 ){
+            F += detF1;
+        }  
+        else{
+            y++;
+            F+= detF2;
+        }
+    }
+    attroff(COLOR_PAIR(CURSOR_TILE));
+    return true;
+
+
+    return true;
+}
+
 bool Renderer_ncrs::Render(){
     ClearScreen();
-    drawMap();
-    drawPlayer();
-    //drawEnemy();
-    drawInputModeCursor();
-    refresh();
-    refreshUI();
-    refreshLog();
+    //Game Main Draw
+    {
+        drawMap();
+        drawPlayer();
+        drawInputModeCursor();
+        refresh();
+    }
+
+    //UI draw
+    {
+        drawUI();
+        drawLog();
+    }
+
+
     return true;
 }
 
