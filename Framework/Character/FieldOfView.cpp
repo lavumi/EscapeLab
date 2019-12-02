@@ -14,7 +14,7 @@ FieldOfView::~FieldOfView(){
 void FieldOfView::Compute(Vector2 origin, int rangeLimit){
 
     _setVisible(origin.x, origin.y);
-    for(uint octant = 0; octant < 8; octant++) {
+    for(int octant = 0; octant < 8; octant++) {
             _compute(octant, origin, rangeLimit, 1, Slope(1, 1), Slope(0, 1));
     }
 }

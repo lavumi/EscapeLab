@@ -6,14 +6,13 @@ class InputController;
 class Renderer_ncrs : public Renderer{
 
     public:
-        Renderer_ncrs();
+        Renderer_ncrs(); // ok
         ~Renderer_ncrs();
 
 
-        bool Initialize();
-        bool ClearScreen();
-        bool inputMapData(void* pMapData );
-        bool RefreshLog(std::string* logContainer ,int logStartPos );
+        bool Initialize(); // no
+        bool ClearScreen(); //???
+        bool inputMapData(void* pMapData ); // ok
         bool Render();
 
         bool SetLogContainer( std::string* logContainer , int* logStartPos);
@@ -23,19 +22,15 @@ class Renderer_ncrs : public Renderer{
         // bool moveCursor( Vector2 pos);
         // bool moveCursor( int x, int y);
 
-        bool printStringAt( int x, int y, std::string pString );
-        bool printStringAt( int x, int y, char singleChar);
+        bool initUIFrame(); // no
 
+        bool drawMap(); // ok
 
-        bool initUIFrame();
-
-        bool drawMap();
-        bool drawTile(int x, int y,int tileID, bool isVisible = false, BaseCharacter* character = nullptr);
-        bool drawInputModeCursor();
-        bool drawPlayer();
-        bool drawEnemy();
-        bool drawUI();
-        bool drawLog();
+        bool drawTile(int x, int y,int tileID, bool isVisible = false, BaseCharacter* character = nullptr); // no
+        bool drawInputModeCursor(); //no
+        bool drawPlayer(); // no
+        bool drawUI(); // no
+        bool drawLog(); // no
 
 
 
@@ -43,10 +38,6 @@ class Renderer_ncrs : public Renderer{
         bool drawBresenhamLine( Vector2 start, Vector2 end);
 
         int icon[12];
-
-        WINDOW* uiWindow;
-        WINDOW* logWindow;
-        WINDOW* mapWindow;
          
         std::string renderTexture;
         std::string uiTexture;

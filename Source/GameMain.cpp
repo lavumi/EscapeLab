@@ -2,8 +2,13 @@
 
 
 #include "../Framework/Render/Renderer.hpp"
-#include "../Framework/Render/Renderer_CLI.hpp"
-#include "../Framework/Render/Renderer_ncrs.hpp"
+
+#ifdef _WIN32
+    #include "../Framework/Render/Renderer_CLI.hpp"
+#else
+    #include "../Framework/Render/Renderer_ncrs.hpp"
+#endif
+
 #include "../Framework/Input/InputCtrl.hpp"
 #include "../Framework/UserInterface/LogController.hpp"
 #include "../Framework/UserInterface/DataController.hpp"
@@ -15,7 +20,13 @@
 
 
 GameMain::GameMain(){
+
+#ifdef _WIN32
+    renderer = new Renderer_CLI();
+#else
     renderer = new Renderer_ncrs();
+#endif
+
     btlCtrl = new BattleCtrl();
     sampleMap = new FloorMap();
 
@@ -26,8 +37,14 @@ GameMain::GameMain(){
 
 }
 
-GameMain::~GameMain(){
+GameMain::~GameMain(){ 
+
+#ifdef _WIN32
+    delete (Renderer_CLI*)renderer;
+#else
     delete (Renderer_ncrs*)renderer;
+#endif
+
     delete btlCtrl;
     delete sampleMap;
     delete charGenerator;

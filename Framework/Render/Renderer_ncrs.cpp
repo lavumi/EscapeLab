@@ -1,4 +1,5 @@
-#include <ncurses.h>
+#ifndef _WIN32
+
 
 #include "Renderer.hpp"
 #include "../Map/FloorMap.hpp"
@@ -116,11 +117,6 @@ bool Renderer_ncrs::SetLogContainer( std::string* logContainer , int* logStartPo
     return true;
 }
 
-bool Renderer_ncrs::printStringAt(int x, int y, std::string pString){
-    
-    return true;
-}
-
 bool Renderer_ncrs::ClearScreen(){
 
     return true;
@@ -216,22 +212,6 @@ bool Renderer_ncrs::drawInputModeCursor(){
 bool Renderer_ncrs::drawPlayer(){
     attron(COLOR_PAIR(CHAR_TILE));
     mvprintw(centerPos.y,centerPos.x,"%c",convertToASCII(4));   
-    attroff(COLOR_PAIR(CHAR_TILE));
-    return true;
-}
-
-bool Renderer_ncrs::drawEnemy(){
-    attron(COLOR_PAIR(CHAR_TILE));
-    int enemySize = dataCtrl->GetEnemyCount();
-    Vector2 pPos = dataCtrl->GetPlayerPos();
-
-    for(int i = 0;i < enemySize;i++){
-        Vector2 pos = dataCtrl->GetEnemyPos(i);
-        int posX = pos.x - pPos.x + centerPos.x;
-        int posY = pos.y - pPos.y + centerPos.y;
-        mvprintw(posY,posX,"T");   
-    }
-
     attroff(COLOR_PAIR(CHAR_TILE));
     return true;
 }
@@ -406,6 +386,6 @@ bool Renderer_ncrs::Render(){
     return true;
 }
 
-bool Renderer_ncrs::RefreshLog( std::string* logContainer ,int logStartPos ){
-    return true;
-}
+
+
+#endif

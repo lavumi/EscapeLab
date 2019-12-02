@@ -14,7 +14,6 @@ void LogController::Initialize( Renderer* renderer ){
 
 
 int LogController::PrintLog( std::string text ){
-   // renderer->RefreshLog(&text, 0);
     std::string inputText = text;
     while(inputText.length() < 35){
         inputText += " ";
@@ -25,7 +24,6 @@ int LogController::PrintLog( std::string text ){
         current_LogCount = 0;
     }
     LogContainer[current_LogCount] = inputText;
-    //renderer->RefreshLog( LogContainer, current_LogCount );
 
     return 0;
 };

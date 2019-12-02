@@ -5,7 +5,7 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "g++ build active file",
+            "label": "g++ build linux",
             "command": "/usr/bin/g++",
             "args": [
                 "-std=c++14",
@@ -20,6 +20,28 @@
             "options": {
                 "cwd": "/usr/bin"
             },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "g++ build window",
+            "command": "g++",
+            "args": [
+                "-std=c++14",
+                "-g",
+                "${workspaceRoot}/*.cpp",
+                "${workspaceRoot}/*/*.cpp",
+                "${workspaceRoot}/*/*/*.cpp",      
+                "-o",
+                "${workspaceRoot}/EscapeLab",
+                "-lncurses"
+            ],
             "problemMatcher": [
                 "$gcc"
             ],
