@@ -33,6 +33,10 @@ class Renderer_ncrs : public Renderer{
         bool drawLog(); // no
 
 
+        WINDOW* uiWindow;
+        WINDOW* logWindow;
+
+
 
         char convertToASCII( int id );
         bool drawBresenhamLine( Vector2 start, Vector2 end);
