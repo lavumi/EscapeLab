@@ -1,5 +1,6 @@
 #include "EnemyStateMachine.hpp"
 #include "Character.hpp"
+#include "../Map/FloorMap.hpp"
 #include "../UserInterface/DataController.hpp"
 
 EnemyStateMachine::EnemyStateMachine( BaseCharacter* owner ){
@@ -23,13 +24,14 @@ void EnemyStateMachine::Update(){
             break;
         case EnemyState::WANDERING:
             wantering();
-            checkCondition();
             break;
         case EnemyState::FIND_PLAYER:
             fallowCharacter();
             break;
-        
+        default :
+            break;   
     }
+    checkCondition();
 }
 
 
@@ -78,5 +80,12 @@ void EnemyStateMachine::rangeAttack(){
 }
 
 void EnemyStateMachine::checkCondition(){
-
+    Vector2 myPos = owner->GetPos();
+    FloorMap* curMap = owner->GetCurrentMap();
+    if (curMap->isInSight( myPos.x, myPos.y ) ){
+        currentState = EnemyState::FIND_PLAYER;
+    }
+    else {
+        currentState = EnemyState::WANDERING;
+    }
 }
