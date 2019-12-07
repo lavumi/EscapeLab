@@ -37,6 +37,10 @@ bool BaseCharacter::Initialize( BattleCtrl* battleCtrl, Status pStats, Vector2 p
     return true;
 }
 
+char BaseCharacter::GetNameHead(){
+    return stats->StringData[StatusData::Name][0];
+}
+
 std::string BaseCharacter::getStatusData(StatusData::stringData data){
     std::string returnValue;
     returnValue = stats->StringData[data];
@@ -60,14 +64,12 @@ bool BaseCharacter::Move(int x, int y){
     targetPos.x = position.x + x;
     targetPos.y = position.y + y;
 
-
     if( currentMap->moveCharacter(position, targetPos) == true ){
         position = targetPos;
         if(isPlayerCharacter){
             currentMap->resetfovData();
             fov->Compute( position, sightSize);
         }
-
         return true;
     }
     else{

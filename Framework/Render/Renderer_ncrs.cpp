@@ -176,7 +176,7 @@ bool Renderer_ncrs::drawMap(){
 bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , BaseCharacter* character){
     if( isVisible && character != nullptr ){
         attron(COLOR_PAIR(CHAR_TILE));
-        char headChar = character->getStatusData(StatusData::Name)[0];
+        char headChar = character->GetNameHead();
         mvprintw(y,x, "%c", headChar); 
         attroff(COLOR_PAIR(CHAR_TILE));
 
