@@ -1,4 +1,4 @@
-#include "../../Framework/Character/BaseBattleCtrl.hpp"
+#include "../../Framework/Character/BattleCtrl.hpp"
 #include "../../Framework/Character/Character.hpp"
 #include "../../Framework/UserInterface/LogController.hpp"
 #include "BattleCtrl.hpp"

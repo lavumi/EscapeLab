@@ -4,7 +4,7 @@
 #include "../Map/FloorMap.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../UserInterface/DataController.hpp"
-#include "BaseBattleCtrl.hpp"
+#include "BattleCtrl.hpp"
 #include "FieldOfView.hpp"
 #include "Character.hpp"
 
@@ -19,7 +19,7 @@ BaseCharacter::~BaseCharacter(){
     delete stats;
 }
 
-bool BaseCharacter::Initialize( BaseBattleCtrl* battleCtrl, Status pStats, Vector2 position,bool isPlayer = false){
+bool BaseCharacter::Initialize( BattleCtrl* battleCtrl, Status pStats, Vector2 position,bool isPlayer = false){
     btlCtrl = battleCtrl;
     if(isPlayer == true ){
         fov = new FieldOfView(this);

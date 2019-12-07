@@ -7,11 +7,11 @@ class CharacterGenerator{
         CharacterGenerator();
         ~CharacterGenerator();
 
-        void Initialize(BaseBattleCtrl* btlCtrl);
+        void Initialize(BattleCtrl* btlCtrl);
         BaseCharacter* makeCharacter( Status data , FloorMap* map, Vector2 Pos, bool isPlayer = false);
     
     private:
 
         BaseCharacter* characterPool;
-        BaseBattleCtrl* btlCtrl;
+        BattleCtrl* btlCtrl;
 };

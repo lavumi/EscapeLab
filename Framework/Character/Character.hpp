@@ -68,14 +68,14 @@ typedef struct _status{
 
 class FloorMap;
 class FieldOfView;
-class BaseBattleCtrl;
+class BattleCtrl;
 class BaseCharacter
 {
 public:
     BaseCharacter();
     ~BaseCharacter();
 
-    bool Initialize(BaseBattleCtrl *battleCtrl, Status stats, Vector2 position, bool isPlayer);
+    bool Initialize(BattleCtrl *battleCtrl, Status stats, Vector2 position, bool isPlayer);
 
     bool Move(int x, int y);
     bool goUpstair(FloorMap *targetMap);
@@ -115,7 +115,7 @@ protected:
 
     int sightSize;
 
-    BaseBattleCtrl *btlCtrl;
+    BattleCtrl *btlCtrl;
 
     void die();
     bool _isDead;

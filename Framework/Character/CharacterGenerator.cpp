@@ -3,7 +3,7 @@
 #include "../Variables.hpp"
 #include "Character.hpp"
 #include "CharacterGenerator.hpp"
-#include "BaseBattleCtrl.hpp"
+#include "BattleCtrl.hpp"
 
 
 CharacterGenerator::CharacterGenerator(){
@@ -14,7 +14,7 @@ CharacterGenerator::~CharacterGenerator(){
     delete[] characterPool;
 }
 
-void CharacterGenerator::Initialize(BaseBattleCtrl* btlCtrl){
+void CharacterGenerator::Initialize(BattleCtrl* btlCtrl){
     this->btlCtrl = btlCtrl;
 }
 

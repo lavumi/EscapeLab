@@ -10,7 +10,7 @@
 
 #include "../Framework/Character/Character.hpp"
 #include "../Framework/Character/CharacterGenerator.hpp"
-#include "../Source/Character/BattleCtrl.hpp"
+#include "../Framework/Character/BattleCtrl.hpp"
 #include "GameMain.hpp"
 
 

@@ -1,7 +1,8 @@
 #pragma once
-#include "../../Framework/Character/BaseBattleCtrl.hpp"
+#include "../precompiled.hpp"
+
 class BaseCharacter;
-class BattleCtrl : public BaseBattleCtrl {
+class BattleCtrl  {
     public :
     BattleCtrl();
     ~BattleCtrl();
