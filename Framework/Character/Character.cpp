@@ -4,6 +4,7 @@
 #include "../Map/FloorMap.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../UserInterface/DataController.hpp"
+#include "EnemyStateMachine.hpp"
 #include "BattleCtrl.hpp"
 #include "FieldOfView.hpp"
 #include "Character.hpp"
@@ -15,6 +16,8 @@ BaseCharacter::BaseCharacter(){
 BaseCharacter::~BaseCharacter(){
     if(isPlayerCharacter == true )
         delete fov;
+    else 
+        delete stateMachine;
 
     delete stats;
 }
@@ -23,6 +26,9 @@ bool BaseCharacter::Initialize( BattleCtrl* battleCtrl, Status pStats, Vector2 p
     btlCtrl = battleCtrl;
     if(isPlayer == true ){
         fov = new FieldOfView(this);
+    }
+    else {
+        stateMachine = new EnemyStateMachine( this );
     }
 
 
@@ -140,3 +146,8 @@ void BaseCharacter::die(){
     _isDead = false;
 }
 
+
+void BaseCharacter::Update(){
+    if( isPlayerCharacter == false )
+        stateMachine->Update();
+}

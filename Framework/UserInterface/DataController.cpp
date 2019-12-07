@@ -77,6 +77,12 @@ Vector2 DataController::GetEnemyPos(int index){
     return iter->GetPos();
 }
 
+void DataController::Update(){
+    std::for_each(characters.begin(), characters.end(), [](BaseCharacter* character) { 
+        character->Update();
+    });
+}
+
 // auto DataController::GetUIstringOrder(){
 //     return StatusData::stringList;
 // };

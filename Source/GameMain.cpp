@@ -57,5 +57,6 @@ bool GameMain::Update(){
 
     renderer->Render();
     bool result = inputCtrl->WairForInput();
+    dataCtrl->Update();
     return result;
 }

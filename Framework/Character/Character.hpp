@@ -69,6 +69,7 @@ typedef struct _status{
 class FloorMap;
 class FieldOfView;
 class BattleCtrl;
+class EnemyStateMachine;
 class BaseCharacter
 {
 public:
@@ -105,6 +106,8 @@ public:
     }
     bool __setPosition(Vector2 pos );
 
+    void Update();
+
 protected:
     bool isPlayerCharacter;
 
@@ -121,4 +124,8 @@ protected:
 
     void die();
     bool _isDead;
+
+
+
+    EnemyStateMachine* stateMachine;
 };

@@ -34,6 +34,8 @@ class DataController{
         //Player Setting End
 
 
+        void Update();
+
         bool setCharacter( BaseCharacter* character);
         bool removeCharacter(BaseCharacter* character );
         int GetEnemyCount();
