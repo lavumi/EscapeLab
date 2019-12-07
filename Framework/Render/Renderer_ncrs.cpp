@@ -350,38 +350,64 @@ char Renderer_ncrs::convertToASCII(int id){
 
 bool Renderer_ncrs::drawBresenhamLine(Vector2 start, Vector2 end ){
     attron(COLOR_PAIR(CURSOR_TILE));
-    Vector2 curPos;
 
-
-    int x = start.x;
-    int y = start.y;
+    int deltaX, deltaY;
+    int counter = 0;
 
     int width = end.x - start.x;
     int height = end.y - start.y;
 
-    int F = 2 * height - width;
 
-    int detF1 = 2 * height;
-    int detF2 = 2 * ( height - width );
+
+    if ( width < 0 ){
+        deltaX = -1;
+        width = -width;
+    }
+    else {
+        deltaX = 1;
+    }
+
+    if ( height < 0 ) {
+        deltaY = -1;
+        height = -height;
+    }
+    else{
+        deltaY = 1;
+    }
+
+    int x = start.x;
+    int y = start.y;
 
     Vector2 pPos = dataCtrl->GetPlayerPos();
-    for ( x = start.x ; x <= end.x ; x++ ){
-        curPos = Vector2(x,y);
-        int posX = curPos.x - pPos.x + centerPos.x;
-        int posY = curPos.y - pPos.y + centerPos.y;
-        mvprintw(posY,posX,"*");
+    if ( width >= height ){
+        for ( int i = 0; i < width ; i++){
+            x += deltaX;
+            counter += height;
 
-        if ( F < 0 ){
-            F += detF1;
-        }  
-        else{
-            y++;
-            F+= detF2;
+            if( counter >= width ){
+                y += deltaY;
+                counter -= width;
+            }
+
+            int posX = x - pPos.x + centerPos.x;
+            int posY = y - pPos.y + centerPos.y;
+            mvprintw(posY,posX,"*");
         }
     }
-    attroff(COLOR_PAIR(CURSOR_TILE));
-    return true;
+    else {
+        for ( int i = 0 ; i < height ; i++ ){
+            y += deltaY;
+            counter += width;
 
+            if ( counter >= height ){
+                x += deltaX;
+                counter -= height;
+            }
+            int posX = x - pPos.x + centerPos.x;
+            int posY = y - pPos.y + centerPos.y;
+            mvprintw(posY,posX,"*");
+        }
+    }
 
     return true;
 }
