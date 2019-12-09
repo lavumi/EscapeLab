@@ -30,7 +30,7 @@ class InputController{
         Vector2 cursor;
     public :
 
-        bool WairForInput();
+        int WairForInput();
         void SetPlayer( BaseCharacter* player );
         Vector2 GetCursorPos();
 };

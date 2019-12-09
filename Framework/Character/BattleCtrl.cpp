@@ -96,8 +96,8 @@ bool BattleCtrl::RangeAttack( BaseCharacter* attacker, Vector2 target){
     if( target_char != nullptr){
         int def = target_char->getStatusData(StatusData::DEF);
         int damage = calculateDamage(atk, def);
-        target_char->TakeDamage( damage );
         LogController::PrintLog( target_char->getStatusData(StatusData::Name) + " take " +  std::to_string(damage) + " Damage" );
+        target_char->TakeDamage( damage );
         return true;
     }
     else {
