@@ -25,6 +25,7 @@ enum TileColorType{
     FOG_TILE,
     WALL_TILE,
     OOS_TILE,
+    NS_TILE,
     CHAR_TILE,
     UI_TILE,
     CURSOR_TILE,
@@ -68,6 +69,7 @@ bool Renderer_ncrs::Initialize(){
     init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
     init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
     init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK);
+    init_pair( NS_TILE, COLOR_BLACK , COLOR_BLACK);
     init_pair( CHAR_TILE, COLOR_CYAN , COLOR_BLACK );
     init_pair( CURSOR_TILE, COLOR_MAGENTA , COLOR_BLACK );
     init_pair( 98, COLOR_RED , COLOR_BLACK );
@@ -159,7 +161,7 @@ bool Renderer_ncrs::drawMap(){
             }
             else{
                 int index = i * MaxMapWidth + j;
-                int tileId = mapTileData[index].Property;
+                int tileId = mapTileData[index].getTileID();
                 drawTile(screenX, screenY, tileId, mapData->isInSight(j,i), mapData->hasSeen(j,i),  mapData->getCharacter(j,i));
             }
         }
@@ -186,15 +188,15 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , bool hasS
         mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(tileID + 1));
     }
-    // else if( hasSeen ){
-    //     attron(COLOR_PAIR(FOG_TILE));
-    //     mvprintw(y,x, "%c", convertToASCII(tileID)); 
-    //     attroff(COLOR_PAIR(FOG_TILE));
-    // }
-    else {
+    else if( hasSeen ){
         attron(COLOR_PAIR(OOS_TILE));
         mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(OOS_TILE));
+    }
+    else {
+        attron(COLOR_PAIR(NS_TILE));
+        mvprintw(y,x, "%c", convertToASCII(tileID)); 
+        attroff(COLOR_PAIR(NS_TILE));
     }
     return true;;
 }

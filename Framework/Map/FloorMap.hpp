@@ -34,15 +34,24 @@ class BaseCharacter;
 //      7 : 
 
 typedef struct _singleTile{
-    unsigned char Property;
-    unsigned char State;
+    bool cantMove;
+    bool cantSee;
+    bool onSight;
+    bool hasSeen;
     BaseCharacter* character;
 
     _singleTile(){
-        Property = 0b00000000;
-        State = 0b00000000;
+        cantMove = false;
+        cantSee = false;
+        onSight = false;
+        hasSeen = false;
         character = nullptr;
     };
+
+    int getTileID(){
+        return !cantMove + !cantSee * 2; 
+    }
+
     ~_singleTile(){
 
     };
@@ -59,6 +68,7 @@ class FloorMap{
         bool isVisible(int x, int y);
         bool isInSight(int x, int y);
         bool hasSeen(int x, int y);
+        int getTileID( int x, int y );
         BaseCharacter* getCharacter(int x, int y);
         void setVisible(int x, int y);
         bool moveCharacter(Vector2 from, Vector2 to);

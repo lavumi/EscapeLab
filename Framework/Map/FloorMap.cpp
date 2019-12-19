@@ -13,15 +13,18 @@ FloorMap::FloorMap(){
     for( int i = 0;i < MaxMapHeight ; i++){  
         for( int j = 0;j < MaxMapWidth ; j++){
             if( i == 0 || j == 0 || i == MaxMapHeight - 1 || j == MaxMapWidth - 1){
-                tileData[i * MaxMapWidth + j].Property = 0b00000011;
+                tileData[i * MaxMapWidth + j].cantMove = false;
+                tileData[i * MaxMapWidth + j].cantSee = false;
             }
             else if ( i % 2 == 0 && j % 2 == 0 && rand() % 3 == 1){
-                tileData[i * MaxMapWidth + j].Property = 0b00000011;
+                tileData[i * MaxMapWidth + j].cantMove = false;
+                tileData[i * MaxMapWidth + j].cantSee = false;
             }
             else{
-                tileData[i * MaxMapWidth + j].Property = 0b00000000;
+                tileData[i * MaxMapWidth + j].cantMove = true;
+                tileData[i * MaxMapWidth + j].cantSee = true;
             }
-            tileData[i * MaxMapWidth + j].State = 0;
+
         }
     }
 
@@ -30,11 +33,13 @@ FloorMap::FloorMap(){
 
     //set testWalls
     for(int i = 20;i < 30 ; i++){
-         tileData[40 * MaxMapWidth + i].Property = 0b00000011;
+        tileData[40 * MaxMapWidth + i].cantMove = false;
+        tileData[40 * MaxMapWidth + i].cantSee = false;
     }
     
     for(int i = 40;i < 50 ; i++){
-         tileData[i * MaxMapWidth + 23].Property = 0b00000011;
+         tileData[i * MaxMapWidth + 23].cantMove = false;
+         tileData[i * MaxMapWidth + 23].cantSee = false;
     }
 
 
@@ -51,9 +56,7 @@ TileData* FloorMap::getData(){
     return tileData;
 }
 
-bool FloorMap::isInSight(int x, int y){
-    return  tileData[y * MaxMapWidth + x].State & 0b00000001;
-}
+
 
 BaseCharacter* FloorMap::getCharacter(int x, int y){
     return  tileData[y * MaxMapWidth + x].character;
@@ -103,27 +106,34 @@ bool FloorMap::characterEnter(Vector2 pos, BaseCharacter* chara){
 }
 
 bool FloorMap::isMovable(int x, int y){
-    return !(tileData[y * MaxMapWidth + x].Property       & 0b00000001);
+    return tileData[y * MaxMapWidth + x].cantMove;
 }
 
 bool FloorMap::hasSeen(int x, int y){
-    return (tileData[y * MaxMapWidth + x].State >> 1) & 0b00000001;
+    return tileData[y * MaxMapWidth + x].hasSeen;
 }
 
 bool FloorMap::isVisible(int x, int y){
-    return (tileData[y * MaxMapWidth + x].Property >> 1) & 0b00000001;
+    return !tileData[y * MaxMapWidth + x].cantSee;
+}
+
+bool FloorMap::isInSight(int x, int y){
+    return  tileData[y * MaxMapWidth + x].onSight ;
 }
 
 void FloorMap::setVisible(int x, int y){
     if( x + y * MaxMapWidth > MaxMapWidth * MaxMapHeight)
         return;
-   tileData[y * MaxMapWidth + x].State = 0b00000011;
+
+    tileData[y * MaxMapWidth + x].onSight = true;
+    tileData[y * MaxMapWidth + x].hasSeen = true;
+
 }
 
 void FloorMap::resetfovData(){
     for( int i = 0;i < MaxMapHeight ; i++){  
         for( int j = 0;j < MaxMapWidth ; j++){
-            tileData[i * MaxMapWidth + j].State =  tileData[i * MaxMapWidth + j].State & 0xb11111110;
+            tileData[i * MaxMapWidth + j].onSight = false;
         }
     }
 }
