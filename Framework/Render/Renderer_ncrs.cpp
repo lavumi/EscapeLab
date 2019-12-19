@@ -160,7 +160,7 @@ bool Renderer_ncrs::drawMap(){
             else{
                 int index = i * MaxMapWidth + j;
                 int tileId = mapTileData[index].Property;
-                drawTile(screenX, screenY, tileId, mapData->isInSight(j,i), mapData->getCharacter(j,i));
+                drawTile(screenX, screenY, tileId, mapData->isInSight(j,i), mapData->hasSeen(j,i),  mapData->getCharacter(j,i));
             }
         }
 
@@ -173,7 +173,7 @@ bool Renderer_ncrs::drawMap(){
     return true;
 }
 
-bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , BaseCharacter* character){
+bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , bool hasSeen, BaseCharacter* character){
     if( isVisible && character != nullptr ){
         attron(COLOR_PAIR(CHAR_TILE));
         char headChar = character->GetNameHead();
@@ -186,11 +186,15 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , BaseChara
         mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(tileID + 1));
     }
+    // else if( hasSeen ){
+    //     attron(COLOR_PAIR(FOG_TILE));
+    //     mvprintw(y,x, "%c", convertToASCII(tileID)); 
+    //     attroff(COLOR_PAIR(FOG_TILE));
+    // }
     else {
         attron(COLOR_PAIR(OOS_TILE));
         mvprintw(y,x, "%c", convertToASCII(tileID)); 
         attroff(COLOR_PAIR(OOS_TILE));
-
     }
     return true;;
 }

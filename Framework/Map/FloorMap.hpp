@@ -25,7 +25,7 @@ class BaseCharacter;
 //
 // State     : on Tile status
 //      0 : onSight
-//      1 : 
+//      1 : hasSeen
 //      2 : 
 //      3 : 
 //      4 : 
@@ -58,6 +58,7 @@ class FloorMap{
         bool isMovable(int x, int y);
         bool isVisible(int x, int y);
         bool isInSight(int x, int y);
+        bool hasSeen(int x, int y);
         BaseCharacter* getCharacter(int x, int y);
         void setVisible(int x, int y);
         bool moveCharacter(Vector2 from, Vector2 to);

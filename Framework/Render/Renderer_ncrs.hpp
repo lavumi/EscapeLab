@@ -30,7 +30,7 @@ class Renderer_ncrs : public Renderer{
         bool initUIFrame();
 
         bool drawMap();
-        bool drawTile(int x, int y,int tileID, bool isVisible = false, BaseCharacter* character = nullptr);
+        bool drawTile(int x, int y,int tileID, bool isVisible = false, bool hasSeen = false, BaseCharacter* character = nullptr);
         bool drawInputModeCursor();
         bool drawPlayer();
         bool drawEnemy();

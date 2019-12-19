@@ -15,6 +15,9 @@ FloorMap::FloorMap(){
             if( i == 0 || j == 0 || i == MaxMapHeight - 1 || j == MaxMapWidth - 1){
                 tileData[i * MaxMapWidth + j].Property = 0b00000011;
             }
+            else if ( i % 2 == 0 && j % 2 == 0 && rand() % 3 == 1){
+                tileData[i * MaxMapWidth + j].Property = 0b00000011;
+            }
             else{
                 tileData[i * MaxMapWidth + j].Property = 0b00000000;
             }
@@ -26,7 +29,6 @@ FloorMap::FloorMap(){
     downstairPos = new Vector2[3];
 
     //set testWalls
-
     for(int i = 20;i < 30 ; i++){
          tileData[40 * MaxMapWidth + i].Property = 0b00000011;
     }
@@ -34,6 +36,9 @@ FloorMap::FloorMap(){
     for(int i = 40;i < 50 ; i++){
          tileData[i * MaxMapWidth + 23].Property = 0b00000011;
     }
+
+
+
 }
 
 
@@ -101,20 +106,24 @@ bool FloorMap::isMovable(int x, int y){
     return !(tileData[y * MaxMapWidth + x].Property       & 0b00000001);
 }
 
+bool FloorMap::hasSeen(int x, int y){
+    return (tileData[y * MaxMapWidth + x].State >> 1) & 0b00000001;
+}
+
 bool FloorMap::isVisible(int x, int y){
-    return tileData[y * MaxMapWidth + x].Property >> 1 & 0b00000001;
+    return (tileData[y * MaxMapWidth + x].Property >> 1) & 0b00000001;
 }
 
 void FloorMap::setVisible(int x, int y){
     if( x + y * MaxMapWidth > MaxMapWidth * MaxMapHeight)
         return;
-   tileData[y * MaxMapWidth + x].State = 0b00000001;
+   tileData[y * MaxMapWidth + x].State = 0b00000011;
 }
 
 void FloorMap::resetfovData(){
     for( int i = 0;i < MaxMapHeight ; i++){  
         for( int j = 0;j < MaxMapWidth ; j++){
-            tileData[i * MaxMapWidth + j].State = 0;
+            tileData[i * MaxMapWidth + j].State =  tileData[i * MaxMapWidth + j].State & 0xb11111110;
         }
     }
 }
