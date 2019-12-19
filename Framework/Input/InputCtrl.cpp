@@ -22,7 +22,7 @@ void InputController::SetPlayer( BaseCharacter* player ){
     this->player = player;
 }
 
-bool InputController::WairForInput(){
+int InputController::WairForInput(){
 
     char ch = getch();
 
@@ -35,10 +35,12 @@ bool InputController::WairForInput(){
             player->Move(0,-1);
         if(ch == 'j')
             player->Move(0,1);
-        if(ch == 'f')
+        if(ch == 'f'){
             changeMode(RANGE_ATTACK);
+            return 2;
+        }
         if(ch == 'q')
-            return false;
+            return 0;
     }
     else if( currentMode == RANGE_ATTACK ){
         if(ch == 'h')
@@ -52,12 +54,14 @@ bool InputController::WairForInput(){
         if(ch == '\n'){
             player->RangeAttack( cursor );
             changeMode(NORMAL);
+            return 1;
         }
         if(ch == 'q'){
             changeMode(NORMAL);
         }
+        return 2;
     }
-    return true;
+    return 1;
 }
 
 void InputController::changeMode(InputMode mode){

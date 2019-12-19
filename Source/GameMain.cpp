@@ -56,7 +56,22 @@ bool GameMain::Initialize(){
 bool GameMain::Update(){
 
     renderer->Render();
-    bool result = inputCtrl->WairForInput();
-    dataCtrl->Update();
-    return result;
+    int processTurn = inputCtrl->WairForInput();
+
+    switch (processTurn)
+    {
+    case 0:
+        return false;
+        break;
+    case 1:
+        dataCtrl->Update();
+        return true;
+        break;
+    case 2:
+        return true;
+        break;
+    default:
+        break;
+    }
+    return true;
 }
