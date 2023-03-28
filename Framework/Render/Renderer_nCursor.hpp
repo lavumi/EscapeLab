@@ -10,13 +10,13 @@ class Renderer_ncrs : public Renderer{
         ~Renderer_ncrs();
 
 
-        bool Initialize();
-        bool ClearScreen();
-        bool inputMapData(void* pMapData );
-        bool RefreshLog(std::string* logContainer ,int logStartPos );
-        bool Render();
+        bool Initialize() override;
+        bool ClearScreen() override;
+        bool inputMapData(void* pMapData ) override;
+        bool RefreshLog(std::string* logContainer ,int logStartPos ) override;
+        bool Render() override;
 
-        bool SetLogContainer( std::string* logContainer , int* logStartPos);
+        bool SetLogContainer( std::string* logContainer , int* logStartPos) override;
 
     private: 
 
@@ -42,11 +42,11 @@ class Renderer_ncrs : public Renderer{
         char convertToASCII( int id );
         bool drawBresenhamLine( Vector2 start, Vector2 end);
 
-        int icon[12];
+        int icon[12]{};
 
-        WINDOW* uiWindow;
-        WINDOW* logWindow;
-        WINDOW* mapWindow;
+        WINDOW* uiWindow{};
+        WINDOW* logWindow{};
+        WINDOW* mapWindow{};
          
         std::string renderTexture;
         std::string uiTexture;
@@ -56,10 +56,10 @@ class Renderer_ncrs : public Renderer{
         Vector2 centerPos;
 
         DataController* dataCtrl;
-        FloorMap* mapData;
+        FloorMap* mapData{};
 
-        std::string* logContainer;
-        int* logStartPos;
+        std::string* logContainer{};
+        int* logStartPos{};
 
 
         InputController* inputCtrl;

@@ -52,9 +52,7 @@ Renderer_ncrs::Renderer_ncrs(){
    
 }
 
-Renderer_ncrs::~Renderer_ncrs(){
-
-}
+Renderer_ncrs::~Renderer_ncrs()= default;
 
 bool Renderer_ncrs::Initialize(){
 
@@ -440,4 +438,8 @@ bool Renderer_ncrs::Render(){
 
 bool Renderer_ncrs::RefreshLog( std::string* logContainer ,int logStartPos ){
     return true;
+}
+
+bool Renderer_ncrs::printStringAt(int x, int y, char singleChar) {
+    return false;
 }
