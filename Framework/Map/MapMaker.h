@@ -12,6 +12,7 @@ using namespace std;
 #define TILE_BASE 0
 #define TILE_WATER 10
 #define TILE_BRIDGE 11
+#define TILE_START 998
 #define TILE_EXIT 999
 
 #define LineDistance 1550
@@ -62,8 +63,11 @@ public:
 	int _get_exit_pos() const {
 		return exit_pos;
 	};
-
+    void initMap();
 	void makeRNDmap(int type);
+
+    int* getMapData();
+
 
 	bool _IsMovable(int pos);
 
@@ -72,19 +76,6 @@ public:
 	int A_Star(int start_x, int start_y, int dest_x, int dest_y);
 
 	void emptymap();
-
-	void print_map();
-	void _onepoint_redraw(int x, int y);
-
-
-	
-	//void PrintMapDirect2D();
-
-
-	//void Render();
-
-
-	//void TestMap();
 
 private:
 
@@ -95,7 +86,7 @@ private:
 	int* region;
 	int maptype;
 
-	void initMap();
+
 	//void print_map();
 
 	void set_exit();

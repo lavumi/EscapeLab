@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
-#include "drawConsole.h"
+//#include "drawConsole.h"
 #include "MapMaker.h"
 using namespace std;
 
@@ -32,43 +32,6 @@ void RandomMap::initMap() {
 }
 void RandomMap::_set_MapTYPE(int type) {
 	maptype = type;
-}
-void RandomMap::print_map()
-{
-
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j <col; j++) {
-//            printf("-%d" , i * col + j);
-            if (region[i * col + j] == TILE_WALL) {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-                DrawStr(j, i, '#');
-            }
-            else if (region[i * col + j] == TILE_WATER) {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
-                DrawStr(j, i, '%');
-            }
-            else if (region[i * col + j] == TILE_BRIDGE) {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-                DrawStr(j, i, '=');
-            }
-            else if (region[i * col + j] == TILE_BASE) {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8);
-                DrawStr(j, i, ' ');
-            }
-            else if (region[i * col + j] == TILE_EXIT) {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
-                DrawStr(j, i, 'S');
-            }
-            else {
-//					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
-                DrawStr(j, i, '+');
-                //cout << region[i*col + j];
-            }
-        }
-//        printf("\n");
-//			cout << "\n";
-    }
-
 }
 
 void RandomMap::emptymap()
@@ -375,10 +338,11 @@ void RandomMap::makeRNDmap(int type)
     default:
             break;
 	}
-	print_map();
 }
 
-
+int* RandomMap::getMapData() {
+    return region;
+}
 //호수 만들기
 //cellular automata를 사용
 //min_size 이하의 크기를 가진 호수는 채워버린다
@@ -556,13 +520,8 @@ void RandomMap::Make_PointIsland_N_Way(int numberof_point) {
 	visited[rand_num] = true;
 
 
-
-
-	///존나 헬인 부분
+    ///헬 구간
 	//만들고도 너무 복잡하다
-	//변수 이름도 병신, 포인트 쓰는법도 병신, 구조체 설계도 병신
-
-
 	for (int j = 0; j < 8; j++) {			//전체 루프
 		int closest_dist = 999999;
 		int closest_point = 99;
@@ -664,6 +623,10 @@ void RandomMap::Make_PointIsland_N_Way(int numberof_point) {
 	for (int i = 0; i < numberof_point; i++) {
 		delete[] Map_point[i].connected_point;
 	}
+
+
+
+    region[ Map_point[0].index ] = TILE_START;
 
 	delete[] Map_point;
 
@@ -1173,8 +1136,8 @@ int RandomMap::A_Star(int start_x, int start_y, int dest_x, int dest_y)
 	}
 
 
-	delete(node);
-	delete(open_node);
+	delete[](node);
+	delete[](open_node);
 
 	return cur_node.idx;
 }
@@ -1308,7 +1271,7 @@ void RandomMap::BSP_print(Section* _sect) {
 	}
 
 }
-//안씀
+//deprecated
 void RandomMap::BSP_bridging(Section* head) {
 
 	Section* room1;
@@ -1541,31 +1504,6 @@ Section* RandomMap::Goto_End(Section* section, int type)
 	else
 		return section;
 }
-//void RandomMap::TestMap()
-//{
-//	delete region;
-//	region = new int[8 * 8];
-//	col = 8;
-//	row = 8;
-//	for (int i = 0; i < 64; i++)
-//		region[i] = TILE_WALL;
-//
-//
-//	for (int i = 9; i < 15; i++)
-//		region[i] = TILE_BRIDGE;
-//	for (int i = 9 + 8; i < 15 + 8; i++)
-//		region[i] = TILE_BRIDGE;
-//
-//	region[25] = region[26] = region[29] = region[30] = TILE_BRIDGE;
-//	region[25 + 8] = region[26 + 8] = region[29 + 8] = region[30 + 8] = TILE_BRIDGE;
-//
-//	for (int i = 9 + 32; i < 15 + 32; i++)
-//		region[i] = TILE_BRIDGE;
-//	for (int i = 9 + 32 + 8; i < 15 + 32 + 8; i++)
-//		region[i] = TILE_BRIDGE;
-//
-//}
-
 
 
 bool RandomMap::_IsMovable(int pos)

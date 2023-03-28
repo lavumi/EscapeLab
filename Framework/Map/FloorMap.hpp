@@ -1,12 +1,6 @@
 #pragma once
 #include "../Variables.hpp"
-enum TileType {
-    T_Base ,
-    T_Obstacle,
-    T_Dark,
-    T_Wall,
-};
-
+#include "./MapMaker.h"
 class BaseCharacter;
 
 
@@ -33,14 +27,15 @@ class BaseCharacter;
 //      6 :
 //      7 : 
 
-typedef struct _singleTile{
+typedef struct singleTile{
     bool cantMove;
     bool cantSee;
     bool onSight;
     bool hasSeen;
+    int tileID;
     BaseCharacter* character;
 
-    _singleTile(){
+    singleTile(){
         cantMove = false;
         cantSee = false;
         onSight = false;
@@ -48,13 +43,11 @@ typedef struct _singleTile{
         character = nullptr;
     };
 
-    int getTileID(){
-        return !cantMove + !cantSee * 2; 
+    char getTileID() const{
+        return tileID;//!cantMove + !cantSee * 2;
     }
 
-    ~_singleTile(){
-
-    };
+    ~singleTile()= default;;
 } TileData;
 
 class FloorMap{
@@ -63,6 +56,7 @@ class FloorMap{
         ~FloorMap();
 
         TileData* getData();
+        void setData( int width, int height , int* mapData );
 
         bool isMovable(int x, int y);
         bool isVisible(int x, int y);
@@ -75,10 +69,12 @@ class FloorMap{
         bool characterEnter(Vector2 pos, BaseCharacter* chara);
         bool removeCharacter(Vector2 pos, BaseCharacter* chara );
         void resetfovData();
-    private : 
-        
+        Vector2 getStartPos();
+    private :
+        RandomMap* rndMap;
         TileData* tileData;
         Vector2* upstairPos;
         Vector2* downstairPos;
+
 
 };

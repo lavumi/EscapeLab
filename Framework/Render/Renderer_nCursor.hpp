@@ -3,11 +3,11 @@
 
 class DataController;
 class InputController;
-class Renderer_ncrs : public Renderer{
+class Renderer_nCursor : public Renderer{
 
     public:
-        Renderer_ncrs();
-        ~Renderer_ncrs();
+        Renderer_nCursor();
+        ~Renderer_nCursor();
 
 
         bool Initialize() override;
@@ -23,7 +23,7 @@ class Renderer_ncrs : public Renderer{
         // bool moveCursor( Vector2 pos);
         // bool moveCursor( int x, int y);
 
-        bool printStringAt( int x, int y, std::string pString );
+        static bool printStringAt( int x, int y, const std::string& pString );
         bool printStringAt( int x, int y, char singleChar);
 
 

@@ -7,7 +7,7 @@
 #include "../UserInterface/DataController.hpp"
 #include "../UserInterface/LogController.hpp"
 #include "../Variables.hpp"
-#include "Renderer_ncrs.hpp"
+#include "Renderer_nCursor.hpp"
 
 // COLOR_BLACK
 // COLOR_RED
@@ -24,6 +24,8 @@ enum TileColorType{
     OBSTACLE_TILE,
     FOG_TILE,
     WALL_TILE,
+    WATER_TILE,
+    BRIDGE_TILE,
     OOS_TILE,
     NS_TILE,
     CHAR_TILE,
@@ -32,7 +34,7 @@ enum TileColorType{
     GUAGE_TILE = 98,
 };
 
-Renderer_ncrs::Renderer_ncrs(){
+Renderer_nCursor::Renderer_nCursor(){
     centerPos = Vector2( MaxMapWindowWidth / 2,  MaxMapWindowHeight / 2);
     renderTexture = "";
     uiTexture = "";
@@ -43,18 +45,21 @@ Renderer_ncrs::Renderer_ncrs(){
     dataCtrl = DataController::getInstance();
     inputCtrl = InputController::getInstance();
 
-    icon[0] = 46;
-    icon[1] = 35; //
-    icon[2] = 43;
-    icon[3] = 35;
+    icon[0] = 46; // .
+    icon[1] = 35; // #
+    icon[2] = 37; // %
+    icon[3] = 35; // #
     icon[4] = 64; // 플레이어   
     icon[5] = 32; //empty (outSide of map)
+    icon[6] = 45; // -
    
 }
 
-Renderer_ncrs::~Renderer_ncrs()= default;
+Renderer_nCursor::~Renderer_nCursor(){
+    endwin();
+}
 
-bool Renderer_ncrs::Initialize(){
+bool Renderer_nCursor::Initialize(){
 
     initscr();
     curs_set(0);
@@ -62,17 +67,23 @@ bool Renderer_ncrs::Initialize(){
 
 
     start_color();
-    init_pair( BASE_TILE, COLOR_GREEN , COLOR_CYAN );
-    init_pair( WALL_TILE, COLOR_BLACK , COLOR_WHITE );
-    init_pair( OBSTACLE_TILE, COLOR_BLACK , COLOR_WHITE );
-    init_pair( FOG_TILE, COLOR_WHITE , COLOR_MAGENTA );
-    init_pair( OOS_TILE, COLOR_WHITE , COLOR_BLACK);
-    init_pair( NS_TILE, COLOR_BLACK , COLOR_BLACK);
-    init_pair( CHAR_TILE, COLOR_CYAN , COLOR_BLACK );
-    init_pair( CURSOR_TILE, COLOR_MAGENTA , COLOR_BLACK );
-    init_pair( 98, COLOR_RED , COLOR_BLACK );
-    init_pair( 99, COLOR_BLUE , COLOR_BLACK );
-    init_pair( UI_TILE ,COLOR_GREEN , COLOR_BLACK );
+
+
+    init_pair( BASE_TILE,       COLOR_BLACK ,       COLOR_WHITE     );
+    init_pair( WALL_TILE,       COLOR_WHITE ,       COLOR_BLACK     );
+    init_pair( WATER_TILE,      COLOR_BLUE ,        COLOR_BLACK     );
+    init_pair( BRIDGE_TILE,     COLOR_MAGENTA ,     COLOR_BLACK     );
+    init_pair( OBSTACLE_TILE,   COLOR_BLACK ,       COLOR_WHITE     );
+
+
+    init_pair( FOG_TILE,        COLOR_WHITE ,       COLOR_CYAN   );
+    init_pair( OOS_TILE,        COLOR_WHITE ,       COLOR_BLACK     );
+    init_pair( NS_TILE,         COLOR_BLACK ,       COLOR_BLACK     );
+    init_pair( CHAR_TILE,       COLOR_CYAN ,        COLOR_WHITE     );
+    init_pair( CURSOR_TILE,     COLOR_MAGENTA ,     COLOR_BLACK     );
+    init_pair( 98,              COLOR_RED ,         COLOR_BLACK     );
+    init_pair( 99,              COLOR_BLUE ,        COLOR_BLACK     );
+    init_pair( UI_TILE ,        COLOR_GREEN ,       COLOR_BLACK     );
     initUIFrame();
     return true;
 }
@@ -97,7 +108,7 @@ bool Renderer_ncrs::Initialize(){
 
 */
 
-bool Renderer_ncrs::initUIFrame(){
+bool Renderer_nCursor::initUIFrame(){
     uiWindow = newwin(MaxUIHeight,MaxUIWidth, 0 , MaxMapWindowWidth + 1);
 
     logWindow = newwin(MaxUIHeight,MaxUIWidth, MaxUIHeight + 1 , MaxMapWindowWidth + 1);
@@ -110,29 +121,29 @@ bool Renderer_ncrs::initUIFrame(){
     return true;
 }
 
-bool Renderer_ncrs::SetLogContainer( std::string* logContainer , int* logStartPos){
+bool Renderer_nCursor::SetLogContainer(std::string* logContainer , int* logStartPos){
     this->logContainer = logContainer;
     this->logStartPos = logStartPos;
     return true;
 }
 
-bool Renderer_ncrs::printStringAt(int x, int y, std::string pString){
+bool Renderer_nCursor::printStringAt(int x, int y, const std::string& pString){
     
     return true;
 }
 
-bool Renderer_ncrs::ClearScreen(){
+bool Renderer_nCursor::ClearScreen(){
 
     return true;
 }
 
-bool Renderer_ncrs::inputMapData(void* pMapData){
+bool Renderer_nCursor::inputMapData(void* pMapData){
     mapData = (FloorMap*) pMapData;
     //mapTileData = (int*)(mapData->getData());
     return true;
 }
 
-bool Renderer_ncrs::drawMap(){
+bool Renderer_nCursor::drawMap(){
 
     TileData* mapTileData = (TileData*)(mapData->getData());
     Vector2 pPos = dataCtrl->GetPlayerPos();
@@ -155,7 +166,7 @@ bool Renderer_ncrs::drawMap(){
                 || i >= MaxMapHeight
                 || j < 0
                 || j >= MaxMapWidth ){
-                    drawTile(screenX, screenY, 5);
+                    drawTile(screenX, screenY, NS_TILE);
             }
             else{
                 int index = i * MaxMapWidth + j;
@@ -173,7 +184,7 @@ bool Renderer_ncrs::drawMap(){
     return true;
 }
 
-bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , bool hasSeen, BaseCharacter* character){
+bool Renderer_nCursor::drawTile(int x, int y, int tileID, bool isVisible , bool hasSeen, BaseCharacter* character){
     if( isVisible && character != nullptr ){
         attron(COLOR_PAIR(CHAR_TILE));
         char headChar = character->GetNameHead();
@@ -182,9 +193,9 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , bool hasS
 
     }
     else if ( isVisible ){
-        attron(COLOR_PAIR(tileID + 1));
+        attron(COLOR_PAIR( BASE_TILE));
         mvprintw(y,x, "%c", convertToASCII(tileID)); 
-        attroff(COLOR_PAIR(tileID + 1));
+        attroff(COLOR_PAIR(BASE_TILE));
     }
     else if( hasSeen ){
         attron(COLOR_PAIR(OOS_TILE));
@@ -199,7 +210,7 @@ bool Renderer_ncrs::drawTile(int x, int y,int tileID, bool isVisible , bool hasS
     return true;;
 }
 
-bool Renderer_ncrs::drawInputModeCursor(){
+bool Renderer_nCursor::drawInputModeCursor(){
     Vector2 curPos = inputCtrl->GetCursorPos();
     if( curPos == Vector2(0,0))
         return false;
@@ -217,14 +228,14 @@ bool Renderer_ncrs::drawInputModeCursor(){
 }
 
 
-bool Renderer_ncrs::drawPlayer(){
+bool Renderer_nCursor::drawPlayer(){
     attron(COLOR_PAIR(CHAR_TILE));
     mvprintw(centerPos.y,centerPos.x,"%c",convertToASCII(4));   
     attroff(COLOR_PAIR(CHAR_TILE));
     return true;
 }
 
-bool Renderer_ncrs::drawEnemy(){
+bool Renderer_nCursor::drawEnemy(){
     attron(COLOR_PAIR(CHAR_TILE));
     int enemySize = dataCtrl->GetEnemyCount();
     Vector2 pPos = dataCtrl->GetPlayerPos();
@@ -240,7 +251,7 @@ bool Renderer_ncrs::drawEnemy(){
     return true;
 }
 
-bool Renderer_ncrs::drawUI(){
+bool Renderer_nCursor::drawUI(){
     wattron(uiWindow, COLOR_PAIR(UI_TILE));
     box(uiWindow,  ACS_VLINE, ACS_HLINE);
     int InitUICursorPosX =  2, InitUICursorPosY = 1;
@@ -332,7 +343,7 @@ bool Renderer_ncrs::drawUI(){
     return true;
 }
 
-bool Renderer_ncrs::drawLog(){
+bool Renderer_nCursor::drawLog(){
     wattron( logWindow, COLOR_PAIR(UI_TILE));
     box(logWindow,  ACS_VLINE, ACS_HLINE);
     int maxLogShowSize = MaxUIHeight - 2;
@@ -348,11 +359,11 @@ bool Renderer_ncrs::drawLog(){
     return true;
 }
 
-char Renderer_ncrs::convertToASCII(int id){
+char Renderer_nCursor::convertToASCII(int id){
     return (char)icon[id]; 
 }
 
-bool Renderer_ncrs::drawBresenhamLine(Vector2 start, Vector2 end ){
+bool Renderer_nCursor::drawBresenhamLine(Vector2 start, Vector2 end ){
     attron(COLOR_PAIR(CURSOR_TILE));
 
     int deltaX, deltaY;
@@ -416,7 +427,7 @@ bool Renderer_ncrs::drawBresenhamLine(Vector2 start, Vector2 end ){
     return true;
 }
 
-bool Renderer_ncrs::Render(){
+bool Renderer_nCursor::Render(){
     ClearScreen();
     //Game Main Draw
     {
@@ -436,10 +447,10 @@ bool Renderer_ncrs::Render(){
     return true;
 }
 
-bool Renderer_ncrs::RefreshLog( std::string* logContainer ,int logStartPos ){
+bool Renderer_nCursor::RefreshLog(std::string* logContainer , int logStartPos ){
     return true;
 }
 
-bool Renderer_ncrs::printStringAt(int x, int y, char singleChar) {
+bool Renderer_nCursor::printStringAt(int x, int y, char singleChar) {
     return false;
 }

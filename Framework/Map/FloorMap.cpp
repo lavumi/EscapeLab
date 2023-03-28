@@ -9,54 +9,70 @@
 
 FloorMap::FloorMap(){
     tileData = new TileData[MaxMapWidth * MaxMapHeight];
-    
-    for( int i = 0;i < MaxMapHeight ; i++){  
-        for( int j = 0;j < MaxMapWidth ; j++){
-            if( i == 0 || j == 0 || i == MaxMapHeight - 1 || j == MaxMapWidth - 1){
-                tileData[i * MaxMapWidth + j].cantMove = false;
-                tileData[i * MaxMapWidth + j].cantSee = false;
-            }
-            else if ( i % 2 == 0 && j % 2 == 0 && rand() % 3 == 1){
-                tileData[i * MaxMapWidth + j].cantMove = false;
-                tileData[i * MaxMapWidth + j].cantSee = false;
-            }
-            else{
-                tileData[i * MaxMapWidth + j].cantMove = true;
-                tileData[i * MaxMapWidth + j].cantSee = true;
-            }
-
-        }
-    }
-
     upstairPos = new Vector2[3];
     downstairPos = new Vector2[3];
 
-    //set testWalls
-    for(int i = 20;i < 30 ; i++){
-        tileData[40 * MaxMapWidth + i].cantMove = false;
-        tileData[40 * MaxMapWidth + i].cantSee = false;
-    }
-    
-    for(int i = 40;i < 50 ; i++){
-         tileData[i * MaxMapWidth + 23].cantMove = false;
-         tileData[i * MaxMapWidth + 23].cantSee = false;
-    }
 
 
+    rndMap = new RandomMap(MaxMapHeight,MaxMapWidth  );
+    rndMap->initMap();
+    rndMap->makeRNDmap(MT_FOREST);
 
+    setData( MaxMapWidth, MaxMapHeight , rndMap->getMapData());
 }
 
 
 FloorMap::~FloorMap(){
     delete[] tileData;
-
+    delete rndMap;
 }
+
 
 TileData* FloorMap::getData(){
     return tileData;
 }
 
+void FloorMap::setData( int width, int height , int *mapData) {
+    for( int i = 0;i < height * width ; i++){
 
+            if( mapData[i] == TILE_WALL ){
+                tileData[i ].cantMove = false;
+                tileData[i ].cantSee = false;
+                tileData[i ].tileID = 1;
+            }
+            else if ( mapData[i] == TILE_BASE){
+                tileData[i].cantMove = true;
+                tileData[i].cantSee =  true;
+                tileData[i ].tileID = 0;
+            }
+            else if ( mapData[i] == TILE_WATER){
+                tileData[i].cantMove = false;
+                tileData[i].cantSee =  true;
+                tileData[i ].tileID = 2;
+            }
+            else if ( mapData[i] == TILE_BRIDGE){
+                tileData[i].cantMove = true;
+                tileData[i].cantSee =  true;
+                tileData[i ].tileID = 6;
+            }
+            else if ( mapData[i] == TILE_START ){
+                tileData[i].cantMove = true;
+                tileData[i].cantSee =  true;
+                tileData[i ].tileID = 0;
+                upstairPos[0] = Vector2( i % width ,(int) ( i / width ));
+            }
+            else{
+                tileData[i ].cantMove = true;
+                tileData[i ].cantSee =  true;
+                tileData[i ].tileID = 0;
+            }
+    }
+}
+
+
+Vector2 FloorMap::getStartPos(){
+    return upstairPos[0];
+}
 
 BaseCharacter* FloorMap::getCharacter(int x, int y){
     return  tileData[y * MaxMapWidth + x].character;
@@ -146,4 +162,8 @@ bool FloorMap::removeCharacter(Vector2 pos, BaseCharacter* chara){
     else{
         return false;
     }
+}
+
+int FloorMap::getTileID(int x, int y) {
+    return 0;
 }

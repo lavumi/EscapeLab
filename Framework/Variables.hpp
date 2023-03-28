@@ -1,7 +1,7 @@
 #pragma once
 
-const int MaxMapWidth = 70;
-const int MaxMapHeight = 50;
+const int MaxMapWidth = 120;
+const int MaxMapHeight = 100;
 
 const int MaxMapWindowWidth = 70;
 const int MaxMapWindowHeight = 40;

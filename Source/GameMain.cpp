@@ -3,7 +3,7 @@
 
 #include "../Framework/Render/Renderer.hpp"
 #include "../Framework/Render/Renderer_CLI.hpp"
-#include "../Framework/Render/Renderer_ncrs.hpp"
+#include "../Framework/Render/Renderer_nCursor.hpp"
 #include "../Framework/Input/InputCtrl.hpp"
 #include "../Framework/UserInterface/LogController.hpp"
 #include "../Framework/UserInterface/DataController.hpp"
@@ -15,7 +15,7 @@
 
 
 GameMain::GameMain(){
-    renderer = new Renderer_ncrs();
+    renderer = new Renderer_nCursor();
     btlCtrl = new BattleCtrl();
     sampleMap = new FloorMap();
 
@@ -27,7 +27,7 @@ GameMain::GameMain(){
 }
 
 GameMain::~GameMain(){
-    delete (Renderer_ncrs*)renderer;
+    delete (Renderer_nCursor*)renderer;
     delete btlCtrl;
     delete sampleMap;
     delete charGenerator;
@@ -40,7 +40,11 @@ bool GameMain::Initialize(){
 
     charGenerator->Initialize(btlCtrl);
 
-    BaseCharacter* player = charGenerator->makeCharacter( Status("Lavumi", 100, 80, 12, 6, 9,5,9,523), sampleMap, Vector2( MaxMapWidth / 2, MaxMapHeight / 2), true);
+    BaseCharacter* player = charGenerator->makeCharacter(
+            Status("Lavumi", 100, 80, 12, 6, 9,5,9,523),
+            sampleMap,
+            sampleMap->getStartPos(),
+            true);
     BaseCharacter* enemy = charGenerator->makeCharacter( Status("TestEnemy", 30, 80, 12, 6, 9,5,9,523), sampleMap, Vector2( 7, 17));
 
     inputCtrl->SetPlayer( player );
